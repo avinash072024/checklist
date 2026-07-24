@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+:root {
+    --font-family: "Outfit", sans-serif;
+}
+
+body {
+    font-family: var(--font-family) !important;
+}
+
+.bg-transparent {
+    background-color: transparent !important;
+}
+
+.text-transparent {
+    color: transparent !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}

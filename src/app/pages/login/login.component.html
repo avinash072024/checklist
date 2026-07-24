@@ -1,0 +1,116 @@
+<div class="bg-body-secondary min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-6 col-xl-4 mx-auto">
+                <div class="card p-4 border-2 rounded-4 shadow">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3rem;"></i>
+                            <h2 class="fw-bold mt-2">Sign In</h2>
+                            <p class="text-secondary text-sm">Access your secure synchronized workspace</p>
+                        </div>
+
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+                            <div class="row g-4">
+
+                                <!-- <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control rounded-4" id="firstName"
+                                            formControlName="firstName" placeholder="First name"
+                                            [class.is-invalid]="loginForm.get('firstName')?.invalid && loginForm.get('firstName')?.touched"
+                                            autocomplete="off">
+                                        <label for="firstName">First name</label>
+                                        <div class="invalid-feedback">Please enter first name.</div>
+                                    </div>
+                                </div> -->
+
+                                <!-- <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control rounded-4" id="lastName" formControlName="lastName"
+                                            placeholder="Last name"
+                                            [class.is-invalid]="loginForm.get('lastName')?.invalid && loginForm.get('lastName')?.touched"
+                                            autocomplete="off">
+                                        <label for="lastName">Last name</label>
+                                        <div class="invalid-feedback">Please enter last name.</div>
+                                    </div>
+                                </div> -->
+
+                                <!-- <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control rounded-4" id="email" formControlName="email"
+                                            placeholder="Email"
+                                            [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                                            autocomplete="off">
+                                        <label for="email">Email address</label>
+                                        <div class="invalid-feedback">Enter a valid email.</div>
+                                    </div>
+                                </div> -->
+
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control rounded-4" id="mobileNumber"
+                                            formControlName="mobileNumber" placeholder="Mobile number" maxlength="10"
+                                            [class.is-invalid]="loginForm.get('mobileNumber')?.invalid && loginForm.get('mobileNumber')?.touched"
+                                            (input)="onInputChange($event, 'mobileNumber')" autocomplete="off">
+                                        <label for="mobileNumber">Mobile Number</label>
+                                        <div class="invalid-feedback">Please enter mobile number.</div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control rounded-4" id="password" formControlName="password"
+                                            placeholder="Password"
+                                            [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                                            autocomplete="off">
+                                        <label for="password">Password</label>
+                                        <div class="invalid-feedback">Please enter password.</div>
+                                    </div>
+                                </div> -->
+
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <div class="form-floating flex-grow-1">
+                                            <input [type]="showPassword() ? 'text' : 'password'"
+                                                class="form-control rounded-start-4" id="password"
+                                                formControlName="password" placeholder="Password"
+                                                [class.is-invalid]="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)"
+                                                autocomplete="off">
+                                            <label for="password">Password</label>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-secondary rounded-end-4 px-3"
+                                            [class.border-danger]="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)"
+                                            (click)="togglePasswordVisibility()">
+                                            <i class="bi fs-5" [class.bi-eye-fill]="!showPassword()"
+                                                [class.bi-eye-slash-fill]="showPassword()"></i>
+                                        </button>
+                                    </div>
+
+                                    @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.touched
+                                    || loginForm.get('password')?.dirty)) {
+                                    <div class="text-danger small mt-1 ms-2">Please enter a valid password.</div>
+                                    }
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm d-inline-flex align-items-center gap-2">
+                                        @if (!isSubmitting()) {
+                                        Login
+                                        } @else {
+                                        <span class="spinner-border spinner-border-sm"></span> Logging...
+                                        }
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+
+                        <p class="mb-0 mt-3 text-center">Don't have an account? <a class="text-decoration-none"
+                                routerLink="/register">Register now</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
