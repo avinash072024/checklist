@@ -1,8 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ValidationsService } from '../../services/validations/validations.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { AuthResponse } from '../../models/auth.model';
+import { SessionService } from '../../services/session/session.service';
+import { Constants } from '../../models/constants';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +17,10 @@ import { ValidationsService } from '../../services/validations/validations.servi
 })
 export class LoginComponent {
   fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly sessionService = inject(SessionService);
+  router = inject(Router);
+  toastr = inject(ToastrService);
 
   isSubmitting = signal(false);
   showPassword = signal<boolean>(false);
@@ -28,10 +37,32 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      debugger;
+      let payload = {
+        mobileNumber: Number(this.loginForm.value.mobileNumber),
+        password: this.loginForm.value.password
+      }
       this.isSubmitting.set(true);
-      console.log('Form Submitted successfully:', this.loginForm.value);
+      this.authService.signIn(payload).subscribe({
+        next: (res: AuthResponse) => {
+          debugger;
+          if (res?.success && res?.token) {
+            this.sessionService.setSession(Constants.token, res?.token)
+            this.isSubmitting.set(false);
+            this.loginForm.reset();
+            this.toastr.success(res.message, 'Success');
+            this.router.navigateByUrl('/dashboard');
+          } else {
+            this.toastr.error(res?.message || 'Failed to login', 'Login failed:');
+          }
+        },
+        error: (err) => {
+          debugger;
+          this.toastr.error(err.error?.message || 'Server error. Please try again', 'Login failed:');
+          this.isSubmitting.set(false);
+        }
+      });
     } else {
-      // Mark all controls as touched to trigger validation visuals if user clicks submit early
       this.loginForm.markAllAsTouched();
     }
   }
@@ -40,16 +71,6 @@ export class LoginComponent {
     let value = event.target.value;
 
     switch (field) {
-      case 'firstName':
-        value = this.validationService.onlyCharacters(value);
-        value = this.validationService.capitalizeFirstLetter(value);
-        break;
-
-      case 'lastName':
-        value = this.validationService.onlyCharacters(value);
-        value = this.validationService.capitalizeFirstLetter(value);
-        break;
-
       case 'mobileNumber':
         value = this.validationService.onlyNumbers(value);
         break;

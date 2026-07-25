@@ -1,11 +1,31 @@
 <div class="container">
     <div class="row">
         <div class="col-md-5 mx-auto">
+            @if(stepOne){
+            <div class="card border-2 rounded-4 shadow mb-4">
+                <div class="card-header">
+                    Create List
+                </div>
+
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" appCapitalizeFirst placeholder="Enter list name"
+                            [(ngModel)]="listName">
+
+                        <button class="btn btn-primary" (click)="enableStepTwo()">
+                            <i class="bi bi-arrow-right-circle"></i> Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            } @else if (stepTwo) {
+
             <!-- Add Item -->
             <div class="card border-2 rounded-4 shadow mb-4">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">Create List</p>
+                        <p class="mb-0">{{listName}}</p>
                         <!-- <p class="mb-0">{{listItems.length}}</p> -->
                         <span class="badge text-bg-primary">{{listItems.length}}</span>
                     </div>
@@ -14,8 +34,8 @@
                 <div class="card-body">
 
                     <div class="input-group">
-                        <input type="text" class="form-control" #itemInputBox appCapitalizeFirst placeholder="Enter Item"
-                            [(ngModel)]="newItemName" name="newItem">
+                        <input type="text" class="form-control" #itemInputBox appCapitalizeFirst
+                            placeholder="Enter Item" [(ngModel)]="newItemName" name="newItem">
 
                         <button class="btn btn-primary" (click)="addItem()">
                             <i class="bi bi-plus-circle"></i> Add
@@ -37,7 +57,8 @@
 
                     <div class="input-group input-group-custom">
 
-                        <input appCapitalizeFirst class="form-control" [(ngModel)]="editItemName" name="edit{{item.id}}">
+                        <input appCapitalizeFirst class="form-control" [(ngModel)]="editItemName"
+                            name="edit{{item.id}}">
 
                         <div class="ms-2 d-flex gap-2">
                             <button class="btn btn-success btn-sm" (click)="updateItem()">
@@ -96,11 +117,12 @@
                 </div>
             </div>
             } @else {
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="badge text-bg-primary mb-0">Total items: {{listItems.length}}</span>
-                    <span class="badge text-bg-success mb-0">Completed items: {{listItems.length}}</span>
-                    <span class="badge text-bg-warning mb-0">Pending items: {{listItems.length}}</span>
-                </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="badge text-bg-primary mb-0">Total items: {{listItems.length}}</span>
+                <span class="badge text-bg-success mb-0">Completed items: {{listItems.length}}</span>
+                <span class="badge text-bg-warning mb-0">Pending items: {{listItems.length}}</span>
+            </div>
+            }
             }
         </div>
     </div>

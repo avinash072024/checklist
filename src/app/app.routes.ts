@@ -32,7 +32,7 @@ export const routes: Routes = [
                 title: 'Checklist - List'
             }
         ],
-        // canActivate: [authGuard]
+        canActivate: [authGuard]
     },
     // {
     //     path: 'todo',

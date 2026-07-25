@@ -19,10 +19,21 @@ export class CreateListComponent {
   mobileInput = viewChild<ElementRef<HTMLInputElement>>('itemInputBox');
 
   listItems: Items[] = [];
+  listName = '';
   newItemName = '';
 
   editingId: number | null = null;
   editItemName = '';
+
+  stepOne: boolean = true;
+  stepTwo: boolean = false;
+
+  enableStepTwo(): void {
+    const listName = this.listName.trim();
+    if (!listName) return;
+    this.stepOne = false;
+    this.stepTwo = true;
+  }
 
   addItem(): void {
     const item = this.newItemName.trim();
