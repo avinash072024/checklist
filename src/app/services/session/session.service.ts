@@ -18,10 +18,11 @@ export class SessionService {
     }
   }
 
-  getSession(key: string): void {
+  getSession(key: string): string | null {
     if (this.isBrowser) {
-      localStorage.getItem(key);
+      return localStorage.getItem(key);
     }
+    return null;
   }
 
   removeItem(key: string): void {

@@ -21,16 +21,11 @@ export class UserDropdownComponent implements OnInit {
   userDetails: any = [];
 
   ngOnInit(): void {
-    const token = localStorage.getItem(Constants.token);
+    const token = this.sessionService.getSession(Constants.token);
 
     if (token) {
       const decodedToken = jwtDecode<User>(token);
       this.userDetails = decodedToken;
-
-      // console.log(decodedToken);
-      // console.log(decodedToken.id);
-      // console.log(decodedToken.name);
-      // console.log(decodedToken.email);
     }
   }
 
