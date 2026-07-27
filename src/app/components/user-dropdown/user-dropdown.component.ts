@@ -21,7 +21,7 @@ export class UserDropdownComponent implements OnInit {
   userDetails: any = [];
 
   ngOnInit(): void {
-    const token = this.sessionService.getSession(Constants.token);
+    const token = this.sessionService.getCookie(Constants.token);
 
     if (token) {
       const decodedToken = jwtDecode<User>(token);
@@ -30,8 +30,8 @@ export class UserDropdownComponent implements OnInit {
   }
 
   logout(): void {
-    this.sessionService.clearSession();
-    this.toastr.success('Logout successfully', 'Success');
+    this.sessionService.deleteCookie(Constants.token);
+    this.toastr.success('Logout successfully');
     this.router.navigateByUrl('/login');
   }
 }

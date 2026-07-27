@@ -70,7 +70,6 @@ export class CreateListComponent {
   }
 
   updateItem(): void {
-    debugger;
     if (this.editingId === null) return;
 
     const item = this.listItems.find(x => x.id === this.editingId);

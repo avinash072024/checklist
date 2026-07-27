@@ -22,7 +22,6 @@ export class AuthService {
    * Sign in an existing user with mobile number and password
    */
   signIn(payload: SignInPayload): Observable<AuthResponse> {
-    debugger;
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/signin`, payload);
   }
 }

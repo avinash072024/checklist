@@ -52,7 +52,6 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      debugger;
       let payload = {
         firstName: this.registerForm.value.firstName,
         lastName: this.registerForm.value.lastName,
@@ -63,20 +62,18 @@ export class RegisterComponent {
       this.isSubmitting.set(true);
       this.authService.register(payload).subscribe({
         next: (res: AuthResponse) => {
-          debugger;
           if (res?.success && res?.token) {
-            this.sessionService.setSession(Constants.token, res?.token)
+            this.sessionService.setCookie(Constants.token, res?.token);
             this.isSubmitting.set(false);
             this.registerForm.reset();
-            this.toastr.success(res.message, 'Success');
+            this.toastr.success(res.message);
             this.router.navigateByUrl('/dashboard');
           } else {
-            this.toastr.error(res?.message || 'Failed to register', 'Registration failed:');
+            this.toastr.error(res?.message || 'Failed to register. Please try again');
           }
         },
         error: (err) => {
-          debugger;
-          this.toastr.error(err.error?.message || 'Server error. Please try again', 'Registration failed:');
+          this.toastr.error(err.error?.message || 'Server error. Please try again');
           this.isSubmitting.set(false);
         }
       });

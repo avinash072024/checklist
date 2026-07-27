@@ -37,7 +37,6 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      debugger;
       let payload = {
         mobileNumber: Number(this.loginForm.value.mobileNumber),
         password: this.loginForm.value.password
@@ -45,20 +44,19 @@ export class LoginComponent {
       this.isSubmitting.set(true);
       this.authService.signIn(payload).subscribe({
         next: (res: AuthResponse) => {
-          debugger;
           if (res?.success && res?.token) {
-            this.sessionService.setSession(Constants.token, res?.token)
+            // this.sessionService.setSession(Constants.token, res?.token)
+            this.sessionService.setCookie(Constants.token, res?.token);
             this.isSubmitting.set(false);
             this.loginForm.reset();
-            this.toastr.success(res.message, 'Success');
+            this.toastr.success(res.message);
             this.router.navigateByUrl('/dashboard');
           } else {
-            this.toastr.error(res?.message || 'Failed to login', 'Login failed:');
+            this.toastr.error(res?.message || 'Failed to login');
           }
         },
         error: (err) => {
-          debugger;
-          this.toastr.error(err.error?.message || 'Server error. Please try again', 'Login failed:');
+          this.toastr.error(err.error?.message || 'Server error. Please try again');
           this.isSubmitting.set(false);
         }
       });
