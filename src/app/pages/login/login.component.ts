@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -15,7 +15,8 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+
   fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly sessionService = inject(SessionService);
@@ -30,6 +31,14 @@ export class LoginComponent {
     mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     password: ['', [Validators.required]]
   });
+
+  ngOnInit(): void {
+    let token = this.sessionService.getCookie(Constants.token);
+    if (token) {
+      this.router.navigateByUrl('/dashboard');
+    }
+
+  }
 
   togglePasswordVisibility(): void {
     this.showPassword.update(visible => !visible);

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
 import { ListService } from '../../services/list/list.service';
@@ -19,7 +19,7 @@ interface Items {
   templateUrl: './create-list.component.html',
   styleUrl: './create-list.component.scss'
 })
-export class CreateListComponent {
+export class CreateListComponent implements OnDestroy {
   mobileInput = viewChild<ElementRef<HTMLInputElement>>('itemInputBox');
   listService = inject(ListService);
   toastr = inject(ToastrService);
@@ -82,10 +82,11 @@ export class CreateListComponent {
         {
           ...this.listItems
         }
-      ]
+      ],
+      isFreeze: listDetails.isFreeze
     };
 
-    this.listService.updateChecklist(payload).subscribe({
+    this.listService.updateChecklist(payload.id, payload).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
@@ -105,6 +106,38 @@ export class CreateListComponent {
     })
   }
 
+  addListItem(): void {
+    debugger;
+    const listDetailsString = this.sessionService.getSession(Constants.listDetails);
+
+    if (!listDetailsString) {
+      return;
+    }
+
+    const listDetails = JSON.parse(listDetailsString);
+
+    this.listService.addItemToChecklist(listDetails._id, this.newItemName).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.toastr.success(res?.message);
+          this.newItemName = '';
+          this.mobileInput()?.nativeElement.focus();
+        } else {
+          this.toastr.error(res?.message);
+          this.mobileInput()?.nativeElement.focus();
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error(err?.message);
+        this.mobileInput()?.nativeElement.focus();
+      }
+    })
+  }
+
+  getChecklistById(): void {
+    
+  }
+
   addItem(): void {
     const item = this.newItemName.trim();
 
@@ -121,7 +154,7 @@ export class CreateListComponent {
     }
 
     this.listItems.push({
-      // id: Date.now(),
+      id: Date.now(),
       // itemName: item,
       // isCheck: false
       text: item
@@ -169,5 +202,13 @@ export class CreateListComponent {
   cancelEdit(): void {
     this.editingId = null;
     this.editItemName = '';
+  }
+
+  // Called automatically before the component is removed from the DOM
+  ngOnDestroy() {
+    const session = this.sessionService.getSession(Constants.listDetails);
+    if (session) {
+      this.sessionService.removeItem(Constants.listDetails);
+    }
   }
 }
