@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
+import { ListService } from '../../services/list/list.service';
+import { ToastrService } from 'ngx-toastr';
+import { SessionService } from '../../services/session/session.service';
+import { Constants } from '../../models/constants';
 
 interface Items {
   id: number;
@@ -17,8 +21,11 @@ interface Items {
 })
 export class CreateListComponent {
   mobileInput = viewChild<ElementRef<HTMLInputElement>>('itemInputBox');
+  listService = inject(ListService);
+  toastr = inject(ToastrService);
+  sessionService = inject(SessionService);
 
-  listItems: Items[] = [];
+  listItems: any[] = [];
   listName = '';
   newItemName = '';
 
@@ -31,8 +38,71 @@ export class CreateListComponent {
   enableStepTwo(): void {
     const listName = this.listName.trim();
     if (!listName) return;
-    this.stepOne = false;
-    this.stepTwo = true;
+
+    if (listName) {
+      const payload = {
+        title: listName
+      }
+      this.listService.createChecklist(payload).subscribe({
+        next: (res: any) => {
+          if (res.success) {
+            this.toastr.success(res?.message);
+            this.sessionService.setSession(Constants.listDetails, JSON.stringify(res?.data));
+            this.stepOne = false;
+            this.stepTwo = true;
+          } else {
+            this.stepOne = true;
+            this.stepTwo = false;
+            this.toastr.error(res?.message);
+          }
+        },
+        error: (err: any) => {
+          this.stepOne = true;
+          this.stepTwo = false;
+          this.toastr.error(err?.message);
+        }
+      })
+    }
+  }
+
+  updateChecklist(): void {
+    debugger;
+    const listDetailsString = this.sessionService.getSession(Constants.listDetails);
+
+    if (!listDetailsString) {
+      return;
+    }
+
+    const listDetails = JSON.parse(listDetailsString);
+
+    const payload = {
+      id: listDetails._id,
+      title: listDetails.title,
+      listItems: [
+        {
+          ...this.listItems
+        }
+      ]
+    };
+
+    this.listService.updateChecklist(payload).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.toastr.success(res?.message);
+          this.stepOne = true;
+          this.stepTwo = false;
+        } else {
+          this.toastr.error(res?.message);
+          this.stepOne = true;
+          this.stepTwo = false;
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error(err?.message);
+        this.stepOne = true;
+        this.stepTwo = false;
+      }
+    })
   }
 
   addItem(): void {
@@ -51,9 +121,10 @@ export class CreateListComponent {
     }
 
     this.listItems.push({
-      id: Date.now(),
-      itemName: item,
-      isCheck: false
+      // id: Date.now(),
+      // itemName: item,
+      // isCheck: false
+      text: item
     });
 
     this.newItemName = '';
