@@ -18,14 +18,20 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto">
+        @for (item of navLinks; track item?.id) {
         <li class="nav-item">
+          <a class="nav-link" [routerLink]="item?.path" routerLinkActive="active" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent">{{item?.label}}</a>
+        </li>
+        }
+        <!-- <li class="nav-item">
           <a class="nav-link" routerLink="dashboard" routerLinkActive="active" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent">Dashboard</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="create-list" routerLinkActive="active" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent">Create List</a>
-        </li>
+        </li> -->
       </ul>
       <app-user-dropdown [dynamicClass]="'d-none d-md-none d-lg-block'"></app-user-dropdown>
     </div>

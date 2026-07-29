@@ -85,6 +85,20 @@ export class ListService {
     );
   }
 
+  getChecklistsByMe(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/checklists/my-lists`,
+      this.getAuthHeaders()
+    );
+  }
+
+  getChecklistsByOther(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/checklists/other-lists`,
+      this.getAuthHeaders()
+    );
+  }
+
   getNameOfListCreated(data: any): string {
     const token = this.sessionService.getCookie(Constants.token);
     let userDetails: any;

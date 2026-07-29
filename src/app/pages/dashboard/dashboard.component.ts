@@ -1,109 +1,120 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe, NgClass } from '@angular/common';
-import { SessionService } from '../../services/session/session.service';
-import { Constants } from '../../models/constants';
-import { jwtDecode } from 'jwt-decode';
-import { User } from '../../models/user.model';
-import { Router, RouterLink } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-declare var $: any;
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DatePipe, NgClass, RouterLink],
+  imports: [],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('staticBackdrop')
-  modalElement!: ElementRef;
 
-  listItems: any[] = [];
-  deleteDetails: any;
+  dashboard = signal({
+    totalLists: 0,
+    myLists: 0,
+    otherLists: 0
+  });
+
+  totalListItems: any;
+  totalListItemsByMe: any;
+  totalListItemsByOther: any;
 
   listService = inject(ListService);
   toastr = inject(ToastrService);
   spinner = inject(NgxSpinnerService);
-  sessionService = inject(SessionService);
-  router = inject(Router);
 
   ngOnInit(): void {
-    this.getLists(true);
+    // this.getLists();
+    // this.getListsByMe();
+    // this.getListsByOther();
+    this.getDashboardData();
   }
 
-  getLists(showSpinner: boolean): void {
-    debugger;
-    if(showSpinner){
-      this.spinner.show();
-    }
-      
-    this.listService.getChecklists().subscribe({
-      next: (res: any) => {
-        if (res?.success) {
-          debugger;
-          this.listItems = res?.data || [];
-          this.spinner.hide();
-        } else {
-          debugger;
-          this.spinner.hide();
-          this.toastr.error(res?.message);
-        }
+  getDashboardData(): void {
+    this.spinner.show();
+
+    forkJoin({
+      totalLists: this.listService.getChecklists(),
+      myLists: this.listService.getChecklistsByMe(),
+      otherLists: this.listService.getChecklistsByOther()
+    }).subscribe({
+      next: ({ totalLists, myLists, otherLists }) => {
+
+        this.dashboard.set({
+          totalLists: totalLists?.success ? (totalLists.count || 0) : 0,
+          myLists: myLists?.success ? (myLists.count || 0) : 0,
+          otherLists: otherLists?.success ? (otherLists.count || 0) : 0
+        });
+
+        this.spinner.hide();
       },
       error: (err) => {
-        debugger;
         this.spinner.hide();
-        this.toastr.error(err?.message);
+        this.toastr.error(err?.message || 'Something went wrong.');
       }
-    })
+    });
   }
 
-  getNameOfListCreated(data: any): string {
-    const token = this.sessionService.getCookie(Constants.token);
-    let userDetails: any;
-    let userName: string;
+  // getLists(): void {
+  //   this.spinner.show();
+  //   this.listService.getChecklists().subscribe({
+  //     next: (res: any) => {
+  //       if (res?.success) {
+  //         this.totalListItems = res?.count || 0;
+  //         console.log('this.listItems', this.totalListItems)
+  //         this.spinner.hide();
+  //       } else {
+  //         this.spinner.hide();
+  //         this.toastr.error(res?.message);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.spinner.hide();
+  //       this.toastr.error(err?.message);
+  //     }
+  //   })
+  // }
 
-    if (token) {
-      const decodedToken = jwtDecode<User>(token);
-      userDetails = decodedToken;
-    }
+  // getListsByMe(): void {
+  //   this.spinner.show();
+  //   this.listService.getChecklistsByMe().subscribe({
+  //     next: (res: any) => {
+  //       if (res?.success) {
+  //         this.totalListItemsByMe = res?.count || 0;
+  //         console.log('this.listItems', this.totalListItemsByMe)
+  //         this.spinner.hide();
+  //       } else {
+  //         this.spinner.hide();
+  //         this.toastr.error(res?.message);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.spinner.hide();
+  //       this.toastr.error(err?.message);
+  //     }
+  //   })
+  // }
 
-    userName = userDetails?.id == data?.id ? 'You' : data?.fullname;
-    return userName;
-  }
-
-  deleteChecklist(): void {
-    this.listService.deleteChecklist(this.deleteDetails?._id).subscribe({
-      next: (res: any) => {
-        if (res?.success) {
-          this.getLists(false);
-          this.closeModal();
-          this.toastr.success(res?.message);
-        } else {
-          this.toastr.error(res?.message);
-        }
-      },
-      error: (err: any) => {
-        this.toastr.error(err);
-      }
-    })
-  }
-
-  viewChecklist(checklistId: string): void {
-    this.router.navigateByUrl(`/view-checklist/${checklistId}`);
-  }
-
-  openModal(data: any): void {
-    if (data) {
-      this.deleteDetails = data;
-      $('#staticBackdrop').modal('show');
-    }
-  }
-
-  closeModal(): void {
-    this.deleteDetails = null;
-    $('#staticBackdrop').modal('hide');
-  }
-
+  // getListsByOther(): void {
+  //   this.spinner.show();
+  //   this.listService.getChecklistsByOther().subscribe({
+  //     next: (res: any) => {
+  //       if (res?.success) {
+  //         this.totalListItemsByOther = res?.count || 0;
+  //         console.log('this.listItems', this.totalListItemsByOther);
+  //         this.spinner.hide();
+  //       } else {
+  //         this.spinner.hide();
+  //         this.toastr.error(res?.message);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.spinner.hide();
+  //       this.toastr.error(err?.message);
+  //     }
+  //   })
+  // }
 }

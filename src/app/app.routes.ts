@@ -32,6 +32,11 @@ export const routes: Routes = [
                 title: 'Checklist - List'
             },
             {
+                path: 'lists',
+                loadComponent: () => import('./pages/lists/lists.component').then(m => m.ListsComponent),
+                title: 'Checklist - Lists'
+            },
+            {
                 path: 'view-checklist/:id',
                 loadComponent: () => import('./pages/view-checklist/view-checklist.component').then(m => m.ViewChecklistComponent),
                 title: 'Checklist - View Checklist'

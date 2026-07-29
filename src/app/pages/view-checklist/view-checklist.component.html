@@ -15,7 +15,7 @@
 
                 <div class="card-body">
                     <p class="text-muted mb-0">Created By : <span
-                            class="text-dark">{{checklistDetails?.createdBy?.fullname}}</span>
+                            class="text-dark">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
                     </p>
                     <!-- <p class="text-muted mb-0">Created By : <span
                             class="text-dark">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
@@ -29,6 +29,10 @@
                             <i class="bi bi-plus-circle"></i> Add
                         </button>
                     </div>
+                    } @else {
+                    <p class="text-muted mb-0">Completed By : <span
+                            class="text-dark">{{listService.getNameOfListCreated(checklistDetails?.frozenBy)}}</span>
+                    </p>
                     }
 
                 </div>
@@ -38,11 +42,11 @@
             <div class="card border-2 rounded-4 shadow mb-2 border-0 border-5 border-start border-end"
                 [ngClass]="item?.completed ? 'border-success' : 'border-danger'">
                 <div class="card-header">
-                    <!-- <p class="text-muted mb-0">Created By : <span
-                            class="text-dark">{{listService.getNameOfListCreated(item?.createdBy)}}</span> -->
-                    <!-- Item Created By: {{item?.createdBy?.fullname}} -->
                     <p class="text-muted mb-0">Created By : <span
-                            class="text-dark">{{item?.createdBy?.fullname}}</span></p>
+                            class="text-dark">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
+                        <!-- Item Created By: {{item?.createdBy?.fullname}} -->
+                        <!-- <p class="text-muted mb-0">Created By : <span
+                            class="text-dark">{{item?.createdBy?.fullname}}</span></p> -->
                 </div>
                 <div class="card-body py-2 d-flex justify-content-between align-items-center">
                     <div class="form-check">
@@ -58,10 +62,10 @@
                         (click)="deleteItem(item?._id)"><i class="bi bi-trash3"></i></button>
                 </div>
                 <div class="card-footer">
-                    <p class="text-muted mb-0">Completed By : <span
-                            class="text-dark">{{item?.completedBy?.fullname}}</span></p>
                     <!-- <p class="text-muted mb-0">Completed By : <span
-                            class="text-dark">{{listService.getNameOfListCreated(item?.completedBy)}}</span> -->
+                            class="text-dark">{{item?.completedBy?.fullname}}</span></p> -->
+                    <p class="text-muted mb-0">Completed By : <span
+                            class="text-dark">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
                 </div>
             </div>
             }
@@ -71,6 +75,9 @@
                 <button type="button" class="btn btn-primary px-3" (click)="freezeChecklist()"><i
                         class="bi bi-check-lg"></i> Done</button>
             </div>
+            } @else {
+            <button type="button" class="btn btn-link text-decoration-none" (click)="back()"><i
+                    class="bi bi-arrow-left"></i> Back</button>
             }
         </div>
     </div>

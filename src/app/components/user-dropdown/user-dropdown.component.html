@@ -1,10 +1,21 @@
 <div [class]="`dropdown ${dynamicClass}`">
-    <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        {{userDetails?.name?.split(' ')[0]}}
+    <!-- <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-fill"></i> {{userDetails?.name?.split(' ')[0]}}
+    </a> -->
+    <a class="d-block d-md-none btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-fill"></i>
+    </a>
+    <a class="d-none d-md-block btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-fill"></i> {{userDetails?.name}}
     </a>
 
     <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" routerLink="">Change Password</a></li>
+        <li><a class="dropdown-item"><i class="bi bi-person-fill"></i> {{userDetails?.name}}</a></li>
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        <li><a class="dropdown-item" routerLink="/my-profile">My Profile</a></li>
+        <li><a class="dropdown-item" routerLink="/change-password">Change Password</a></li>
         <!-- <li><a class="dropdown-item" routerLink="">Another action</a></li> -->
         <!-- <li><a class="dropdown-item" routerLink="">Something else here</a></li> -->
         <li>

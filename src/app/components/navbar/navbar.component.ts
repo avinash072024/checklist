@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { UserDropdownComponent } from "../user-dropdown/user-dropdown.component";
 
+interface NavLinks {
+  id: number;
+  label: string;
+  path: string;
+}
+
 @Component({
   selector: 'app-navbar',
   imports: [CommonModule, RouterModule, UserDropdownComponent],
@@ -12,6 +18,12 @@ import { UserDropdownComponent } from "../user-dropdown/user-dropdown.component"
 export class NavbarComponent {
   isScrolled = false;
   isLoggedIn = false; // Bind to Auth Service later
+
+  navLinks: NavLinks[] = [
+    { id: 1, label: 'Dashboard', path: '/dashboard' },
+    { id: 1, label: 'Lists', path: '/lists' },
+    { id: 1, label: 'Create List', path: '/create-list' }
+  ]
 
   constructor(private router: Router) { }
 

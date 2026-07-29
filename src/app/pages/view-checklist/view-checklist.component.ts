@@ -1,4 +1,5 @@
-import { Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { timer, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ListService } from '../../services/list/list.service';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +15,7 @@ import { CapitalizeFirstDirective } from '../../directives/capitalize-first.dire
   templateUrl: './view-checklist.component.html',
   styleUrl: './view-checklist.component.scss'
 })
-export class ViewChecklistComponent implements OnInit {
+export class ViewChecklistComponent implements OnInit, OnDestroy {
   itemTextInput = viewChild<ElementRef<HTMLInputElement>>('itemInputBox');
 
   id!: any;
@@ -27,36 +28,22 @@ export class ViewChecklistComponent implements OnInit {
   toastr = inject(ToastrService);
   location = inject(Location);
 
+  private refreshSubscription!: Subscription;
+
   constructor(private route: ActivatedRoute) {
     this.id = this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
-    this.getChecklistById(this.id);
+    // this.getChecklistById(this.id);
+    this.refreshSubscription = timer(0, 5000).subscribe(() => {
+      this.getChecklistById(this.id);
+    });
   }
-
-  // getListById(): void {
-  //   this.listService.getChecklistById(this.id).subscribe({
-  //     next: (res: any) => {
-  //       if (res?.success) {
-  //         console.log('result: ', res?.data);
-  //         this.checklistDetails = res?.data;
-  //       }
-  //     },
-  //     error: (err: any) => {
-
-  //     }
-  //   })
-  // }
 
   addListItem(): void {
     const itemText = this.newItemName.trim();
     if (!itemText) return;
-
-    // const listDetailsString = this.sessionService.getSession(Constants.listDetails);
-    // if (!listDetailsString) return;
-
-    // const listDetails = JSON.parse(listDetailsString);
 
     this.listService.addItemToChecklist(this.id, itemText).subscribe({
       next: (res: any) => {
@@ -82,9 +69,7 @@ export class ViewChecklistComponent implements OnInit {
     this.listService.getChecklistById(checklistId).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          // this.checklist = res.data;
           this.checklistDetails = res?.data;
-          console.log('this.checklistDetails: ', this.checklistDetails)
         }
       },
       error: (err) => {
@@ -146,5 +131,9 @@ export class ViewChecklistComponent implements OnInit {
         this.toastr.error(err?.message);
       }
     })
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSubscription?.unsubscribe();
   }
 }
