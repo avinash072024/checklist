@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { timer, Subscription } from 'rxjs';
 import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -26,15 +27,19 @@ export class DashboardComponent implements OnInit {
   toastr = inject(ToastrService);
   spinner = inject(NgxSpinnerService);
 
+  private refreshSubscription!: Subscription;
+
   ngOnInit(): void {
-    // this.getLists();
-    // this.getListsByMe();
-    // this.getListsByOther();
-    this.getDashboardData();
+    this.getDashboardData(true);
+    this.refreshSubscription = timer(0, 3000).subscribe(() => {
+      this.getDashboardData(false);
+    });
   }
 
-  getDashboardData(): void {
-    this.spinner.show();
+  getDashboardData(showSpinner: boolean): void {
+    if(showSpinner) {
+      this.spinner.show();
+    }
 
     forkJoin({
       totalLists: this.listService.getChecklists(),
@@ -42,7 +47,6 @@ export class DashboardComponent implements OnInit {
       otherLists: this.listService.getChecklistsByOther()
     }).subscribe({
       next: ({ totalLists, myLists, otherLists }) => {
-
         this.dashboard.set({
           totalLists: totalLists?.success ? (totalLists.count || 0) : 0,
           myLists: myLists?.success ? (myLists.count || 0) : 0,
@@ -56,6 +60,10 @@ export class DashboardComponent implements OnInit {
         this.toastr.error(err?.message || 'Something went wrong.');
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSubscription?.unsubscribe();
   }
 
   // getLists(): void {

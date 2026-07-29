@@ -8,6 +8,7 @@ import { Constants } from '../../models/constants';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule, Location } from '@angular/common';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
+declare var $: any;
 
 @Component({
   selector: 'app-view-checklist',
@@ -22,6 +23,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   checklistDetails: any;
   listName = '';
   newItemName = '';
+  deleteDetails: any;
 
   listService = inject(ListService);
   sessionService = inject(SessionService);
@@ -36,7 +38,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // this.getChecklistById(this.id);
-    this.refreshSubscription = timer(0, 5000).subscribe(() => {
+    this.refreshSubscription = timer(0, 3000).subscribe(() => {
       this.getChecklistById(this.id);
     });
   }
@@ -121,6 +123,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
     this.listService.freezeChecklist(this.id, true).subscribe({
       next: (res: any) => {
         if (res?.success) {
+          this.closeModal();
           this.toastr.success(res?.message);
           this.getChecklistById(this.id);
         } else {
@@ -131,6 +134,16 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         this.toastr.error(err?.message);
       }
     })
+  }
+
+  openModal(data: any): void {
+    this.deleteDetails = data;
+    $('#staticBackdrop').modal('show');
+  }
+
+  closeModal(): void {
+    this.deleteDetails = null;
+    $('#staticBackdrop').modal('hide');
   }
 
   ngOnDestroy(): void {

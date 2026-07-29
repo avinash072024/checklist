@@ -1,4 +1,5 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { timer, Subscription } from 'rxjs';
 import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe, NgClass } from '@angular/common';
@@ -16,7 +17,7 @@ declare var $: any;
   templateUrl: './lists.component.html',
   styleUrl: './lists.component.scss'
 })
-export class ListsComponent implements OnInit {
+export class ListsComponent implements OnInit, OnDestroy {
 
   listItems: any[] = [];
   deleteDetails: any;
@@ -27,8 +28,13 @@ export class ListsComponent implements OnInit {
   sessionService = inject(SessionService);
   router = inject(Router);
 
+  private refreshSubscription!: Subscription;
+
   ngOnInit(): void {
     this.getLists(true);
+    this.refreshSubscription = timer(0, 3000).subscribe(() => {
+      this.getLists(false);
+    });
   }
 
   getLists(showSpinner: boolean): void {
@@ -98,5 +104,9 @@ export class ListsComponent implements OnInit {
   closeModal(): void {
     this.deleteDetails = null;
     $('#staticBackdrop').modal('hide');
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSubscription?.unsubscribe();
   }
 }

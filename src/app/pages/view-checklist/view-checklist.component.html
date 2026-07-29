@@ -39,7 +39,7 @@
             </div>
 
             @for (item of checklistDetails?.listItems; track $index) {
-            <div class="card border-2 rounded-4 shadow mb-2 border-0 border-5 border-start border-end"
+            <div class="card border-2 rounded-4 shadow mb-3 border-0 border-5 border-start border-end"
                 [ngClass]="item?.completed ? 'border-success' : 'border-danger'">
                 <div class="card-header">
                     <p class="text-muted mb-0">Created By : <span
@@ -58,7 +58,7 @@
                         </label>
                     </div>
                     <button type="button" class="btn btn-danger btn-sm"
-                        [disabled]="item?.completedBy?.fullname || checklistDetails?.isFreeze"
+                        [ngClass]="item?.completedBy?.fullname || checklistDetails?.isFreeze ? 'd-none': ''"
                         (click)="deleteItem(item?._id)"><i class="bi bi-trash3"></i></button>
                 </div>
                 <div class="card-footer">
@@ -72,13 +72,40 @@
 
             @if (!checklistDetails?.isFreeze && checklistDetails?.listItems?.length > 0) {
             <div class="text-center mt-5">
-                <button type="button" class="btn btn-primary px-3" (click)="freezeChecklist()"><i
-                        class="bi bi-check-lg"></i> Done</button>
+                <button type="button" class="btn btn-primary px-3" (click)="openModal(checklistDetails)"><i
+                        class="bi bi-check-lg"></i> Finish List</button>
             </div>
-            } @else {
+            }
+
+            @if (checklistDetails?.isFreeze) {
             <button type="button" class="btn btn-link text-decoration-none" (click)="back()"><i
                     class="bi bi-arrow-left"></i> Back</button>
             }
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Finish Checklist</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to finish <strong>{{deleteDetails?.title}}</strong> checklist?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
+                        class="bi bi-x"></i> Close</button>
+                <button type="button" class="btn btn-danger" (click)="freezeChecklist()"><i class="bi bi-trash3"></i>
+                    Delete</button>
+            </div>
         </div>
     </div>
 </div>
