@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe, NgClass } from '@angular/common';
@@ -6,43 +6,54 @@ import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { jwtDecode } from 'jwt-decode';
 import { User } from '../../models/user.model';
-import * as bootstrap from 'bootstrap';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+declare var $: any;
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DatePipe, NgClass],
+  imports: [DatePipe, NgClass, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit {
   @ViewChild('staticBackdrop')
   modalElement!: ElementRef;
-  modal!: bootstrap.Modal;
 
   listItems: any[] = [];
   deleteDetails: any;
 
   listService = inject(ListService);
   toastr = inject(ToastrService);
+  spinner = inject(NgxSpinnerService);
   sessionService = inject(SessionService);
   router = inject(Router);
 
   ngOnInit(): void {
-    this.getLists();
+    this.getLists(true);
   }
 
-  getLists(): void {
+  getLists(showSpinner: boolean): void {
+    debugger;
+    if(showSpinner){
+      this.spinner.show();
+    }
+      
     this.listService.getChecklists().subscribe({
       next: (res: any) => {
         if (res?.success) {
+          debugger;
           this.listItems = res?.data || [];
-          console.log('this.listItems', this.listItems);
+          this.spinner.hide();
         } else {
+          debugger;
+          this.spinner.hide();
           this.toastr.error(res?.message);
         }
       },
       error: (err) => {
+        debugger;
+        this.spinner.hide();
         this.toastr.error(err?.message);
       }
     })
@@ -66,40 +77,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.listService.deleteChecklist(this.deleteDetails?._id).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          this.toastr.success(res?.message);
-          this.getLists();
+          this.getLists(false);
           this.closeModal();
-        } else {
           this.toastr.success(res?.message);
+        } else {
+          this.toastr.error(res?.message);
         }
       },
       error: (err: any) => {
-        this.toastr.success(err);
+        this.toastr.error(err);
       }
     })
   }
 
-  ngAfterViewInit(): void {
-    this.modal = new bootstrap.Modal(this.modalElement.nativeElement, {
-      backdrop: 'static',
-      keyboard: false
-    });
+  viewChecklist(checklistId: string): void {
+    this.router.navigateByUrl(`/view-checklist/${checklistId}`);
   }
 
   openModal(data: any): void {
-    debugger;
-    this.deleteDetails = data;
-    console.log('this.deleteDetails', this.deleteDetails);
-    this.modal.show();
+    if (data) {
+      this.deleteDetails = data;
+      $('#staticBackdrop').modal('show');
+    }
   }
 
   closeModal(): void {
     this.deleteDetails = null;
-    this.modal.hide();
-  }
-
-  viewChecklist(checklistId: string): void {
-    this.router.navigateByUrl(`/view-checklist/${checklistId}`);
+    $('#staticBackdrop').modal('hide');
   }
 
 }

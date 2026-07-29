@@ -273,11 +273,11 @@ import { ToastrService } from 'ngx-toastr';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { Checklist } from '../../models/checklist.model';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-create-list',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, RouterLink],
   templateUrl: './create-list.component.html',
   styleUrl: './create-list.component.scss'
 })
@@ -296,6 +296,7 @@ export class CreateListComponent implements OnDestroy {
 
   stepOne: boolean = true;
   stepTwo: boolean = false;
+  listDetails: any;
 
   enableStepTwo(): void {
     const listName = this.listName.trim();
@@ -326,22 +327,6 @@ export class CreateListComponent implements OnDestroy {
     });
   }
 
-  // Since items are added immediately via addListItem(), 
-  // "Done" simply finalizes the creation workflow and resets.
-  onFinishList(): void {
-    const session = this.sessionService.getSession(Constants.listDetails);
-    if (session) {
-      this.sessionService.removeItem(Constants.listDetails);
-    }
-    this.toastr.success('List created successfully!');
-    this.stepOne = true;
-    this.stepTwo = false;
-    this.listName = '';
-    this.listItems = [];
-    // Optional: navigate somewhere else if needed
-    // this.router.navigate(['/checklists']);
-  }
-
   addListItem(): void {
     const itemText = this.newItemName.trim();
     if (!itemText) return;
@@ -349,12 +334,12 @@ export class CreateListComponent implements OnDestroy {
     const listDetailsString = this.sessionService.getSession(Constants.listDetails);
     if (!listDetailsString) return;
 
-    const listDetails = JSON.parse(listDetailsString);
+    this.listDetails = JSON.parse(listDetailsString);
 
-    this.listService.addItemToChecklist(listDetails._id, itemText).subscribe({
+    this.listService.addItemToChecklist(this.listDetails._id, itemText).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          this.getChecklistById(listDetails._id);
+          this.getChecklistById(this.listDetails._id);
           this.toastr.success(res?.message);
           this.newItemName = '';
           // Refresh list items from the updated checklist response
@@ -384,6 +369,22 @@ export class CreateListComponent implements OnDestroy {
         this.toastr.error(err?.error?.message || err?.message);
       }
     });
+  }
+
+  deleteItem(itemId: string): void {
+    this.listService.deleteChecklistItem(this.listDetails._id, itemId).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.toastr.success(res?.message);
+          this.getChecklistById(this.listDetails._id);
+        } else {
+          this.toastr.error(res?.message);
+        }
+      },
+      error: (err) => {
+        this.toastr.error(err?.message);
+      }
+    })
   }
 
   ngOnDestroy() {
