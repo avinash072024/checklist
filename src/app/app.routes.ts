@@ -30,7 +30,12 @@ export const routes: Routes = [
             {
                 path: 'create-list',
                 loadComponent: () => import('./pages/create-list/create-list.component').then(m => m.CreateListComponent),
-                title: `${Constants?.appName} - List`
+                title: `${Constants?.appName} - Create List`
+            },
+            {
+                path: 'lists',
+                loadComponent: () => import('./pages/lists/lists.component').then(m => m.ListsComponent),
+                title: `${Constants?.appName} - Lists`
             },
             {
                 path: 'view-checklist/:id',
