@@ -3,6 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { AuthResponse, RegisterPayload, SignInPayload } from '../../models/auth.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { Constants } from '../../models/constants';
+import { SessionService } from '../session/session.service';
+import { jwtDecode } from 'jwt-decode';
+import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +14,7 @@ import { environment } from '../../../environments/environment.development';
 export class AuthService {
 
   private readonly http = inject(HttpClient);
+  private readonly sessionService = inject(SessionService);
 
   /**
    * Register a new user

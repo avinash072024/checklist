@@ -30,6 +30,11 @@ export const routes: Routes = [
                 path: 'create-list',
                 loadComponent: () => import('./pages/create-list/create-list.component').then(m => m.CreateListComponent),
                 title: 'Checklist - List'
+            },
+            {
+                path: 'view-checklist/:id',
+                loadComponent: () => import('./pages/view-checklist/view-checklist.component').then(m => m.ViewChecklistComponent),
+                title: 'Checklist - View Checklist'
             }
         ],
         canActivate: [authGuard]
