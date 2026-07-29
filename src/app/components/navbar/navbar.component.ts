@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { UserDropdownComponent } from "../user-dropdown/user-dropdown.component";
+import { Constants } from '../../models/constants';
 
 interface NavLinks {
   id: number;
@@ -18,6 +19,7 @@ interface NavLinks {
 export class NavbarComponent {
   isScrolled = false;
   isLoggedIn = false; // Bind to Auth Service later
+  appName: string = Constants.appName;
 
   navLinks: NavLinks[] = [
     { id: 1, label: 'Dashboard', path: '/dashboard' },
