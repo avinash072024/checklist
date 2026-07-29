@@ -1,0 +1,155 @@
+.pwa-overlay {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 480px;
+    z-index: 9999;
+    pointer-events: none; // Let clicks pass through outside the card
+}
+
+.pwa-card {
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s ease;
+
+    @media (prefers-color-scheme: dark) {
+        background: rgba(30, 30, 35, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+}
+
+.app-icon-container {
+    position: relative;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+
+    .app-icon {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        object-fit: cover;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative;
+        z-index: 2;
+    }
+
+    .pulse-ring {
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border-radius: 16px;
+        border: 2px solid #6366f1;
+        animation: pulse 2s infinite;
+        z-index: 1;
+        opacity: 0.6;
+    }
+}
+
+.pwa-content {
+    flex-grow: 1;
+
+    h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+        color: inherit;
+    }
+
+    p {
+        font-size: 13px;
+        margin: 0;
+        color: #6b7280;
+        line-height: 1.4;
+
+        @media (prefers-color-scheme: dark) {
+            color: #9ca3af;
+        }
+    }
+}
+
+.pwa-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+
+    .btn-install {
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+        }
+
+        &:active {
+            transform: translateY(1px);
+        }
+    }
+
+    .btn-close {
+        background: transparent;
+        border: none;
+        padding: 8px;
+        border-radius: 50%;
+        color: #9ca3af;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, color 0.2s;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4b5530;
+
+            @media (prefers-color-scheme: dark) {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+            }
+        }
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    70% {
+        transform: scale(1.15);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
