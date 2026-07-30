@@ -10,7 +10,10 @@ export class SocketService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io(environment.socketUrl || 'http://localhost:5000');
+    this.socket = io(environment.socketUrl || 'http://localhost:5000', {
+      transports: ['websocket', 'polling'],
+      upgrade: false
+    });
   }
 
   // Listen to a specific event and return an Observable

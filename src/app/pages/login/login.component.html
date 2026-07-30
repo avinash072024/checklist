@@ -45,6 +45,9 @@
                                     || loginForm.get('password')?.dirty)) {
                                     <div class="text-danger small mt-1 ms-2">Please enter a valid password.</div>
                                     }
+                                    <div class="text-end mt-2">
+                                        <a routerLink="/forgot-password" class="text-decoration-none small text-primary fw-semibold">Forgot Password?</a>
+                                    </div>
                                 </div>
 
                                 <div class="col-12 text-center">
@@ -61,7 +64,7 @@
                             </div>
                         </form>
 
-                        <p class="mb-0 mt-3 text-center">Don't have an account? <a class="text-decoration-none"
+                        <p class="mb-0 mt-3 text-center">Don't have an account? <a class="text-decoration-none fw-semibold"
                                 routerLink="/register">Register now</a></p>
                     </div>
                 </div>

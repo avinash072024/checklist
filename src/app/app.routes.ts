@@ -19,6 +19,11 @@ export const routes: Routes = [
         title: `${Constants?.appName} - Register`
     },
     {
+        path: 'forgot-password',
+        loadComponent: () => import('./pages/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
+        title: `${Constants?.appName} - Forgot Password`
+    },
+    {
         path: '',
         loadComponent: () => import('./pages/layout/layout.component').then(m => m.LayoutComponent),
         children: [
@@ -60,7 +65,7 @@ export const routes: Routes = [
             },
             {
                 path: 'change-password',
-                loadComponent: () => import('./pages/page-under-construction/page-under-construction.component').then(m => m.PageUnderConstructionComponent),
+                loadComponent: () => import('./pages/change-password/change-password.component').then(m => m.ChangePasswordComponent),
                 title: `${Constants?.appName} - Change Password`
             }
         ],

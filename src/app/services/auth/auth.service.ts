@@ -1,12 +1,19 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AuthResponse, RegisterPayload, SignInPayload } from '../../models/auth.model';
+import {
+  AuthResponse,
+  ChangePasswordPayload,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
+  RegisterPayload,
+  ResetPasswordPayload,
+  SignInPayload,
+  VerifyOTPPayload
+} from '../../models/auth.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { Constants } from '../../models/constants';
 import { SessionService } from '../session/session.service';
-import { jwtDecode } from 'jwt-decode';
-import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +22,14 @@ export class AuthService {
 
   private readonly http = inject(HttpClient);
   private readonly sessionService = inject(SessionService);
+
+  private getAuthHeaders() {
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.sessionService.getCookie(Constants.token) || ''}`
+      })
+    };
+  }
 
   /**
    * Register a new user
@@ -28,5 +43,48 @@ export class AuthService {
    */
   signIn(payload: SignInPayload): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/signin`, payload);
+  }
+
+  /**
+   * Request OTP for Forgot Password
+   */
+  forgotPassword(payload: ForgotPasswordPayload): Observable<ForgotPasswordResponse> {
+    return this.http.post<ForgotPasswordResponse>(`${environment.apiUrl}/auth/forgot-password`, payload);
+  }
+
+  /**
+   * Verify OTP for Forgot Password
+   */
+  verifyOTP(payload: VerifyOTPPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/verify-otp`, payload);
+  }
+
+  /**
+   * Reset password using OTP
+   */
+  resetPassword(payload: ResetPasswordPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/reset-password`, payload);
+  }
+
+  /**
+   * Authenticated: Send OTP for Change Password
+   */
+  sendChangePasswordOTP(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${environment.apiUrl}/auth/send-change-password-otp`,
+      {},
+      this.getAuthHeaders()
+    );
+  }
+
+  /**
+   * Authenticated: Change Password using Current Password and/or OTP
+   */
+  changePassword(payload: ChangePasswordPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${environment.apiUrl}/auth/change-password`,
+      payload,
+      this.getAuthHeaders()
+    );
   }
 }
