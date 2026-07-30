@@ -4,11 +4,10 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import * as AOS from 'aos';
 import { NetworkService } from './services/network/network.service';
 import { OfflinePageComponent } from './pages/offline-page/offline-page.component';
-import { PwaInstallBannerComponent } from './components/pwa-install-banner/pwa-install-banner.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgxSpinnerModule, OfflinePageComponent, PwaInstallBannerComponent],
+  imports: [RouterOutlet, NgxSpinnerModule, OfflinePageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
