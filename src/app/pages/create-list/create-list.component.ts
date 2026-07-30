@@ -8,10 +8,11 @@ import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { Checklist } from '../../models/checklist.model';
 import { Router, RouterLink } from '@angular/router';
+import { BackButtonComponent } from "../../components/back-button/back-button.component";
 
 @Component({
   selector: 'app-create-list',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, RouterLink],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, RouterLink, BackButtonComponent],
   templateUrl: './create-list.component.html',
   styleUrl: './create-list.component.scss'
 })

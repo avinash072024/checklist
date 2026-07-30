@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { timer, Subscription } from 'rxjs';
 import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe, Location, NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { jwtDecode } from 'jwt-decode';
@@ -13,12 +13,12 @@ import { BackButtonComponent } from "../../components/back-button/back-button.co
 declare var $: any;
 
 @Component({
-  selector: 'app-lists',
+  selector: 'app-my-lists',
   imports: [DatePipe, NgClass, RouterLink, BackButtonComponent],
-  templateUrl: './lists.component.html',
-  styleUrl: './lists.component.scss'
+  templateUrl: './my-lists.component.html',
+  styleUrl: './my-lists.component.scss'
 })
-export class ListsComponent implements OnInit, OnDestroy {
+export class MyListsComponent implements OnInit, OnDestroy {
 
   listItems: any[] = [];
   deleteDetails: any;
@@ -43,7 +43,7 @@ export class ListsComponent implements OnInit, OnDestroy {
       this.spinner.show();
     }
 
-    this.listService.getChecklists().subscribe({
+    this.listService.getChecklistsByMe().subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.listItems = res?.data || [];

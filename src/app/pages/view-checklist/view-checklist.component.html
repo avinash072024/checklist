@@ -1,12 +1,25 @@
 <div class="container">
+    <div class="row mb-4">
+        <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
+            <app-back-button></app-back-button>
+            <h2 class="fw-bold mb-2">View Checklist</h2>
+            @if (!checklistDetails?.isFreeze) {
+            <p class="text-muted lead">You can add items here until the list is complete.</p>
+            }
+        </div>
+        <!-- <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
+            <a routerLink="/create-list" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+                <i class="bi bi-plus-circle me-2"></i>Create New Checklist
+            </a>
+        </div> -->
+    </div>
     <div class="row">
-        <div class="col-md-5 mx-auto">
-            <button type="button" class="btn btn-link text-decoration-none" (click)="back()"><i
-                    class="bi bi-arrow-left"></i> Back</button>
+        <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
+            <!-- <app-back-button></app-back-button> -->
             <div class="card border-2 rounded-4 shadow mt-2 mb-4">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">{{checklistDetails?.title}}</p>
+                        <p class="mb-0 fw-semibold">{{checklistDetails?.title}}</p>
                         <!-- <p class="mb-0">{{listItems.length}}</p> -->
                         <p class="mb-0">Total Items: <span
                                 class="badge text-bg-primary">{{checklistDetails?.listItems?.length}}</span></p>
@@ -73,13 +86,12 @@
             @if (!checklistDetails?.isFreeze && checklistDetails?.listItems?.length > 0) {
             <div class="text-center mt-5">
                 <button type="button" class="btn btn-primary px-3" (click)="openModal(checklistDetails)"><i
-                        class="bi bi-check-lg"></i> Finish List</button>
+                        class="bi bi-check-lg"></i> Complete List</button>
             </div>
             }
 
             @if (checklistDetails?.isFreeze) {
-            <button type="button" class="btn btn-link text-decoration-none" (click)="back()"><i
-                    class="bi bi-arrow-left"></i> Back</button>
+            <app-back-button></app-back-button>
             }
         </div>
     </div>
@@ -103,8 +115,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
                         class="bi bi-x"></i> Close</button>
-                <button type="button" class="btn btn-danger" (click)="freezeChecklist()"><i class="bi bi-check-lg"></i>
-                    Finish</button>
+                <button type="button" class="btn btn-primary" (click)="freezeChecklist()"><i class="bi bi-check-lg"></i>
+                    Complete</button>
             </div>
         </div>
     </div>

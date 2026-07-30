@@ -8,10 +8,11 @@ import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { User } from '../../models/user.model';
 import { jwtDecode } from 'jwt-decode';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

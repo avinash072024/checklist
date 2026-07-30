@@ -23,8 +23,8 @@ export class NavbarComponent {
 
   navLinks: NavLinks[] = [
     { id: 1, label: 'Dashboard', path: '/dashboard' },
-    { id: 1, label: 'Lists', path: '/lists' },
-    { id: 1, label: 'Create List', path: '/create-list' }
+    { id: 2, label: 'Lists', path: '/lists' },
+    { id: 3, label: 'Create List', path: '/create-list' }
   ]
 
   constructor(private router: Router) { }

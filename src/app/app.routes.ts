@@ -41,6 +41,27 @@ export const routes: Routes = [
                 path: 'view-checklist/:id',
                 loadComponent: () => import('./pages/view-checklist/view-checklist.component').then(m => m.ViewChecklistComponent),
                 title: `${Constants?.appName} - View Checklist`
+            },
+            {
+                path: 'lists/my-lists',
+                loadComponent: () => import('./pages/my-lists/my-lists.component').then(m => m.MyListsComponent),
+                title: `${Constants?.appName} - My Lists`
+            },
+            {
+                path: 'lists/other-lists',
+                loadComponent: () => import('./pages/other-lists/other-lists.component').then(m => m.OtherListsComponent),
+                title: `${Constants?.appName} - Other Lists`
+            },
+            // page under construction
+            {
+                path: 'my-profile',
+                loadComponent: () => import('./pages/page-under-construction/page-under-construction.component').then(m => m.PageUnderConstructionComponent),
+                title: `${Constants?.appName} - My Profile`
+            },
+            {
+                path: 'change-password',
+                loadComponent: () => import('./pages/page-under-construction/page-under-construction.component').then(m => m.PageUnderConstructionComponent),
+                title: `${Constants?.appName} - Change Password`
             }
         ],
         canActivate: [authGuard]

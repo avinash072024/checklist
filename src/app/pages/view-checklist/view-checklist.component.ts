@@ -8,11 +8,12 @@ import { Constants } from '../../models/constants';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule, Location } from '@angular/common';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
+import { BackButtonComponent } from "../../components/back-button/back-button.component";
 declare var $: any;
 
 @Component({
   selector: 'app-view-checklist',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, BackButtonComponent],
   templateUrl: './view-checklist.component.html',
   styleUrl: './view-checklist.component.scss'
 })
@@ -28,7 +29,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   listService = inject(ListService);
   sessionService = inject(SessionService);
   toastr = inject(ToastrService);
-  location = inject(Location);
 
   private refreshSubscription!: Subscription;
 
@@ -94,10 +94,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         this.toastr.error(err?.message);
       }
     })
-  }
-
-  back(): void {
-    this.location.back();
   }
 
   completeListItem(itemId: string, event: Event): void {
