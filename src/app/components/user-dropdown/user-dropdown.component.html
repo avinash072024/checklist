@@ -2,25 +2,23 @@
     <!-- <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-person-fill"></i> {{userDetails?.name?.split(' ')[0]}}
     </a> -->
-    <a class="d-block d-md-none btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-fill"></i>
+    <a class="d-block d-md-block d-lg-none btn btn-primary pb-0 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-fill fs-4"></i>
     </a>
-    <a class="d-none d-md-block btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-fill"></i> {{userDetails?.name}}
+    <a class="d-none d-md-none d-lg-flex btn btn-primary pb-0 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-fill fs-4"></i> <span style="padding: 4px 0 0 5px;">{{userDetails?.name}}</span>
     </a>
 
     <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item"><i class="bi bi-person-fill"></i> {{userDetails?.name}}</a></li>
+        <li><a class="dropdown-item"><i class="bi bi-person-fill me-2"></i> {{userDetails?.name}}</a></li>
         <li>
             <hr class="dropdown-divider">
         </li>
-        <li><a class="dropdown-item" routerLink="/my-profile">My Profile</a></li>
-        <li><a class="dropdown-item" routerLink="/change-password">Change Password</a></li>
-        <!-- <li><a class="dropdown-item" routerLink="">Another action</a></li> -->
-        <!-- <li><a class="dropdown-item" routerLink="">Something else here</a></li> -->
+        <li><a class="dropdown-item" routerLink="/my-profile"><i class="bi bi-person-circle me-2"></i> My Profile</a></li>
+        <li><a class="dropdown-item" routerLink="/change-password"><i class="bi bi-key-fill me-2"></i> Change Password</a></li>
         <li>
             <hr class="dropdown-divider">
         </li>
-        <li><a class="dropdown-item cursor-pointer" (click)="logout()">Logout</a></li>
+        <li><a class="dropdown-item text-danger cursor-pointer" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
     </ul>
 </div>

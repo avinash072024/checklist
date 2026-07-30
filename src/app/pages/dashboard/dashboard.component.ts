@@ -4,6 +4,10 @@ import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { forkJoin } from 'rxjs';
+import { SessionService } from '../../services/session/session.service';
+import { Constants } from '../../models/constants';
+import { User } from '../../models/user.model';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,28 +23,32 @@ export class DashboardComponent implements OnInit {
     otherLists: 0
   });
 
-  totalListItems: any;
-  totalListItemsByMe: any;
-  totalListItemsByOther: any;
+  userDetails: any;
 
   listService = inject(ListService);
   toastr = inject(ToastrService);
   spinner = inject(NgxSpinnerService);
+  sessionService = inject(SessionService);
 
   private refreshSubscription!: Subscription;
 
   ngOnInit(): void {
-    this.getDashboardData(true);
+    // this.getDashboardData(true);
     this.refreshSubscription = timer(0, 3000).subscribe(() => {
       this.getDashboardData(false);
     });
+
+    const token = this.sessionService.getCookie(Constants.token);
+    if (token) {
+      const decodedToken = jwtDecode<User>(token);
+      this.userDetails = decodedToken;
+    }
   }
 
   getDashboardData(showSpinner: boolean): void {
-    if(showSpinner) {
+    if (showSpinner) {
       this.spinner.show();
     }
-
     forkJoin({
       totalLists: this.listService.getChecklists(),
       myLists: this.listService.getChecklistsByMe(),
@@ -65,64 +73,4 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy(): void {
     this.refreshSubscription?.unsubscribe();
   }
-
-  // getLists(): void {
-  //   this.spinner.show();
-  //   this.listService.getChecklists().subscribe({
-  //     next: (res: any) => {
-  //       if (res?.success) {
-  //         this.totalListItems = res?.count || 0;
-  //         console.log('this.listItems', this.totalListItems)
-  //         this.spinner.hide();
-  //       } else {
-  //         this.spinner.hide();
-  //         this.toastr.error(res?.message);
-  //       }
-  //     },
-  //     error: (err) => {
-  //       this.spinner.hide();
-  //       this.toastr.error(err?.message);
-  //     }
-  //   })
-  // }
-
-  // getListsByMe(): void {
-  //   this.spinner.show();
-  //   this.listService.getChecklistsByMe().subscribe({
-  //     next: (res: any) => {
-  //       if (res?.success) {
-  //         this.totalListItemsByMe = res?.count || 0;
-  //         console.log('this.listItems', this.totalListItemsByMe)
-  //         this.spinner.hide();
-  //       } else {
-  //         this.spinner.hide();
-  //         this.toastr.error(res?.message);
-  //       }
-  //     },
-  //     error: (err) => {
-  //       this.spinner.hide();
-  //       this.toastr.error(err?.message);
-  //     }
-  //   })
-  // }
-
-  // getListsByOther(): void {
-  //   this.spinner.show();
-  //   this.listService.getChecklistsByOther().subscribe({
-  //     next: (res: any) => {
-  //       if (res?.success) {
-  //         this.totalListItemsByOther = res?.count || 0;
-  //         console.log('this.listItems', this.totalListItemsByOther);
-  //         this.spinner.hide();
-  //       } else {
-  //         this.spinner.hide();
-  //         this.toastr.error(res?.message);
-  //       }
-  //     },
-  //     error: (err) => {
-  //       this.spinner.hide();
-  //       this.toastr.error(err?.message);
-  //     }
-  //   })
-  // }
 }
