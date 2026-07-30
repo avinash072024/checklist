@@ -1,14 +1,14 @@
 import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
-import { timer, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ListService } from '../../services/list/list.service';
+import { SocketService } from '../../services/socket/socket.service';
 import { FormsModule } from '@angular/forms';
 import { SessionService } from '../../services/session/session.service';
-import { Constants } from '../../models/constants';
 import { ToastrService } from 'ngx-toastr';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
+import { Subscription } from 'rxjs';
 declare var $: any;
 
 @Component({
@@ -27,19 +27,24 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   deleteDetails: any;
 
   listService = inject(ListService);
+  socketService = inject(SocketService);
   sessionService = inject(SessionService);
   toastr = inject(ToastrService);
 
-  private refreshSubscription!: Subscription;
+  private socketSub!: Subscription;
 
   constructor(private route: ActivatedRoute) {
     this.id = this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
-    // this.getChecklistById(this.id);
-    this.refreshSubscription = timer(0, 3000).subscribe(() => {
-      this.getChecklistById(this.id);
+    this.getChecklistById(this.id);
+
+    // Listen to real-time events and update if this checklist or item was modified
+    this.socketSub = this.socketService.onChecklistChange().subscribe((data) => {
+      if (!data.checklistId || data.checklistId === this.id) {
+        this.getChecklistById(this.id);
+      }
     });
   }
 
@@ -50,10 +55,8 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
     this.listService.addItemToChecklist(this.id, itemText).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          this.getChecklistById(this.id);
           this.toastr.success(res?.message);
           this.newItemName = '';
-          // Refresh list items from the updated checklist response
           this.itemTextInput()?.nativeElement.focus();
         } else {
           this.toastr.error(res?.message);
@@ -85,7 +88,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
-          this.getChecklistById(this.id);
         } else {
           this.toastr.error(res?.message);
         }
@@ -93,7 +95,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.toastr.error(err?.message);
       }
-    })
+    });
   }
 
   completeListItem(itemId: string, event: Event): void {
@@ -104,7 +106,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
-          this.getChecklistById(this.id);
         } else {
           this.toastr.error(res?.message);
         }
@@ -112,7 +113,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       error: (err: any) => {
         this.toastr.error(err?.message);
       }
-    })
+    });
   }
 
   freezeChecklist(): void {
@@ -121,7 +122,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         if (res?.success) {
           this.closeModal();
           this.toastr.success(res?.message);
-          this.getChecklistById(this.id);
         } else {
           this.toastr.error(res?.message);
         }
@@ -129,7 +129,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       error: (err: any) => {
         this.toastr.error(err?.message);
       }
-    })
+    });
   }
 
   openModal(data: any): void {
@@ -143,6 +143,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.refreshSubscription?.unsubscribe();
+    this.socketSub?.unsubscribe();
   }
 }

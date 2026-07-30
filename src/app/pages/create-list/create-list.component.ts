@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, OnDestroy, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
 import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
-import { Checklist } from '../../models/checklist.model';
 import { Router, RouterLink } from '@angular/router';
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
+import { SocketService } from '../../services/socket/socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-list',
@@ -16,9 +17,10 @@ import { BackButtonComponent } from "../../components/back-button/back-button.co
   templateUrl: './create-list.component.html',
   styleUrl: './create-list.component.scss'
 })
-export class CreateListComponent implements OnDestroy {
+export class CreateListComponent implements OnInit, OnDestroy {
   itemTextInput = viewChild<ElementRef<HTMLInputElement>>('itemInputBox');
   listService = inject(ListService);
+  socketService = inject(SocketService);
   toastr = inject(ToastrService);
   sessionService = inject(SessionService);
   router = inject(Router);
@@ -27,11 +29,37 @@ export class CreateListComponent implements OnDestroy {
   listName = '';
   newItemName = '';
 
-  // checklist: Checklist | null = null;
-
   stepOne: boolean = true;
   stepTwo: boolean = false;
   listDetails: any;
+
+  private socketSub!: Subscription;
+
+  ngOnInit(): void {
+    const listDetailsString = this.sessionService.getSession(Constants.listDetails);
+    if (listDetailsString) {
+      try {
+        this.listDetails = JSON.parse(listDetailsString);
+        if (this.listDetails && this.listDetails._id) {
+          this.listName = this.listDetails.title || '';
+          this.stepOne = false;
+          this.stepTwo = true;
+          this.getChecklistById(this.listDetails._id);
+        }
+      } catch (e) {
+        console.error('Error parsing session listDetails:', e);
+      }
+    }
+
+    // Listen for WebSocket real-time changes across all lists
+    this.socketSub = this.socketService.onChecklistChange().subscribe((data) => {
+      if (this.listDetails && this.listDetails._id) {
+        if (!data.checklistId || data.checklistId === this.listDetails._id) {
+          this.getChecklistById(this.listDetails._id);
+        }
+      }
+    });
+  }
 
   enableStepTwo(): void {
     const listName = this.listName.trim();
@@ -42,16 +70,20 @@ export class CreateListComponent implements OnDestroy {
 
     const payload = {
       title: listName
-    }
+    };
 
     this.listService.createChecklist(payload).subscribe({
       next: (res: any) => {
         if (res.success) {
           this.toastr.success(res?.message);
+          this.listDetails = res?.data;
           this.sessionService.setSession(Constants.listDetails, JSON.stringify(res?.data));
           this.stepOne = false;
           this.stepTwo = true;
           this.listItems = res?.data?.listItems || [];
+          if (this.listDetails?._id) {
+            this.getChecklistById(this.listDetails._id);
+          }
         } else {
           this.toastr.error(res?.message);
         }
@@ -66,18 +98,23 @@ export class CreateListComponent implements OnDestroy {
     const itemText = this.newItemName.trim();
     if (!itemText) return;
 
-    const listDetailsString = this.sessionService.getSession(Constants.listDetails);
-    if (!listDetailsString) return;
+    if (!this.listDetails || !this.listDetails._id) {
+      const listDetailsString = this.sessionService.getSession(Constants.listDetails);
+      if (listDetailsString) {
+        try {
+          this.listDetails = JSON.parse(listDetailsString);
+        } catch (e) {}
+      }
+    }
 
-    this.listDetails = JSON.parse(listDetailsString);
+    if (!this.listDetails || !this.listDetails._id) return;
 
     this.listService.addItemToChecklist(this.listDetails._id, itemText).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          this.getChecklistById(this.listDetails._id);
-          this.toastr.success(res?.message);
           this.newItemName = '';
-          this.listItems = res.data.listItems;
+          this.toastr.success(res?.message);
+          this.getChecklistById(this.listDetails._id);
           this.itemTextInput()?.nativeElement.focus();
         } else {
           this.toastr.error(res?.message);
@@ -92,11 +129,12 @@ export class CreateListComponent implements OnDestroy {
   }
 
   getChecklistById(checklistId: string): void {
+    if (!checklistId) return;
     this.listService.getChecklistById(checklistId).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          // this.checklist = res.data;
-          this.listItems = res.data.listItems;
+          this.listDetails = res.data;
+          this.listItems = res.data?.listItems || [];
         }
       },
       error: (err) => {
@@ -106,6 +144,7 @@ export class CreateListComponent implements OnDestroy {
   }
 
   deleteItem(itemId: string): void {
+    if (!this.listDetails || !this.listDetails._id) return;
     this.listService.deleteChecklistItem(this.listDetails._id, itemId).subscribe({
       next: (res: any) => {
         if (res?.success) {
@@ -118,10 +157,11 @@ export class CreateListComponent implements OnDestroy {
       error: (err) => {
         this.toastr.error(err?.message);
       }
-    })
+    });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
+    this.socketSub?.unsubscribe();
     const session = this.sessionService.getSession(Constants.listDetails);
     if (session) {
       this.sessionService.removeItem(Constants.listDetails);

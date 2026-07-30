@@ -24,7 +24,6 @@ export class ListService {
   }
 
   createChecklist(payload: any): Observable<any> {
-    // return this.http.post(`${environment.apiUrl}/checklists/`, payload);
     return this.http.post(`${environment.apiUrl}/checklists/`, payload, this.getAuthHeaders());
   }
 
@@ -99,17 +98,50 @@ export class ListService {
     );
   }
 
+  getDashboardStats(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/checklists/dashboard-stats`,
+      this.getAuthHeaders()
+    );
+  }
+
   getNameOfListCreated(data: any): string {
+    if (!data) return '';
+
     const token = this.sessionService.getCookie(Constants.token);
-    let userDetails: any;
-    let userName: string;
+    let currentUserId: string | null = null;
 
     if (token) {
-      const decodedToken = jwtDecode<User>(token);
-      userDetails = decodedToken;
+      try {
+        const decodedToken = jwtDecode<any>(token);
+        currentUserId = decodedToken?.id || decodedToken?._id || decodedToken?.userId;
+      } catch (e) {
+        currentUserId = null;
+      }
     }
 
-    userName = userDetails?.id == data?.id ? 'You' : data?.fullname;
-    return userName;
+    const dataUserId = typeof data === 'object' ? (data._id || data.id) : data;
+
+    if (currentUserId && dataUserId && currentUserId.toString() === dataUserId.toString()) {
+      return 'You';
+    }
+
+    if (typeof data === 'object' && data !== null) {
+      if (data.fullname && data.fullname.trim()) {
+        return data.fullname.trim();
+      }
+      const fullNameFromNames = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+      if (fullNameFromNames) {
+        return fullNameFromNames;
+      }
+      if (data.username) {
+        return data.username;
+      }
+      if (data.name) {
+        return data.name;
+      }
+    }
+
+    return '';
   }
 }

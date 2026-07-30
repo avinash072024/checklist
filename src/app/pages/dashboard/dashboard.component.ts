@@ -1,14 +1,14 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { timer, Subscription } from 'rxjs';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ListService } from '../../services/list/list.service';
+import { SocketService } from '../../services/socket/socket.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { forkJoin } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { User } from '../../models/user.model';
 import { jwtDecode } from 'jwt-decode';
 import { RouterLink } from "@angular/router";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +16,7 @@ import { RouterLink } from "@angular/router";
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   dashboard = signal({
     totalLists: 0,
@@ -27,51 +27,52 @@ export class DashboardComponent implements OnInit {
   userDetails: any;
 
   listService = inject(ListService);
+  socketService = inject(SocketService);
   toastr = inject(ToastrService);
   spinner = inject(NgxSpinnerService);
   sessionService = inject(SessionService);
 
-  private refreshSubscription!: Subscription;
+  private socketSub!: Subscription;
 
   ngOnInit(): void {
-    // this.getDashboardData(true);
-    this.refreshSubscription = timer(0, 3000).subscribe(() => {
-      this.getDashboardData(false);
-    });
+    this.getDashboardData();
 
     const token = this.sessionService.getCookie(Constants.token);
     if (token) {
       const decodedToken = jwtDecode<User>(token);
       this.userDetails = decodedToken;
     }
+
+    // Subscribe to socket events for real-time dashboard stats update
+    this.socketSub = this.socketService.onChecklistChange().subscribe(() => {
+      this.getDashboardData(false);
+    });
   }
 
-  getDashboardData(showSpinner: boolean): void {
+  getDashboardData(showSpinner = true): void {
     if (showSpinner) {
       this.spinner.show();
     }
-    forkJoin({
-      totalLists: this.listService.getChecklists(),
-      myLists: this.listService.getChecklistsByMe(),
-      otherLists: this.listService.getChecklistsByOther()
-    }).subscribe({
-      next: ({ totalLists, myLists, otherLists }) => {
-        this.dashboard.set({
-          totalLists: totalLists?.success ? (totalLists.count || 0) : 0,
-          myLists: myLists?.success ? (myLists.count || 0) : 0,
-          otherLists: otherLists?.success ? (otherLists.count || 0) : 0
-        });
-
-        this.spinner.hide();
+    this.listService.getDashboardStats().subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          const { total, mine, others } = res.data;
+          this.dashboard.set({
+            totalLists: total ?? 0,
+            myLists: mine ?? 0,
+            otherLists: others ?? 0
+          });
+        }
+        if (showSpinner) this.spinner.hide();
       },
       error: (err) => {
-        this.spinner.hide();
+        if (showSpinner) this.spinner.hide();
         this.toastr.error(err?.message || 'Something went wrong.');
       }
     });
   }
 
   ngOnDestroy(): void {
-    this.refreshSubscription?.unsubscribe();
+    this.socketSub?.unsubscribe();
   }
 }

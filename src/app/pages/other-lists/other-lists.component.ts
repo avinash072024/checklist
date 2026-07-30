@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { timer, Subscription } from 'rxjs';
 import { ListService } from '../../services/list/list.service';
+import { SocketService } from '../../services/socket/socket.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe, NgClass } from '@angular/common';
 import { SessionService } from '../../services/session/session.service';
@@ -10,6 +10,7 @@ import { User } from '../../models/user.model';
 import { Router, RouterLink } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
+import { Subscription } from 'rxjs';
 declare var $: any;
 
 @Component({
@@ -22,18 +23,25 @@ export class OtherListsComponent implements OnInit, OnDestroy {
 
   listItems: any[] = [];
   deleteDetails: any;
+  userDetails: any;
 
   listService = inject(ListService);
+  socketService = inject(SocketService);
   toastr = inject(ToastrService);
   spinner = inject(NgxSpinnerService);
   sessionService = inject(SessionService);
   router = inject(Router);
 
-  private refreshSubscription!: Subscription;
+  private socketSub!: Subscription;
 
   ngOnInit(): void {
+    const token = this.sessionService.getCookie(Constants.token);
+    if (token) {
+      this.userDetails = jwtDecode<User>(token);
+    }
     this.getLists(true);
-    this.refreshSubscription = timer(0, 3000).subscribe(() => {
+
+    this.socketSub = this.socketService.onChecklistChange().subscribe(() => {
       this.getLists(false);
     });
   }
@@ -47,38 +55,27 @@ export class OtherListsComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res?.success) {
           this.listItems = res?.data || [];
-          this.spinner.hide();
+          if (showSpinner) this.spinner.hide();
         } else {
-          this.spinner.hide();
+          if (showSpinner) this.spinner.hide();
           this.toastr.error(res?.message);
         }
       },
       error: (err) => {
-        this.spinner.hide();
+        if (showSpinner) this.spinner.hide();
         this.toastr.error(err?.message);
       }
-    })
+    });
   }
 
   getNameOfListCreated(data: any): string {
-    const token = this.sessionService.getCookie(Constants.token);
-    let userDetails: any;
-    let userName: string;
-
-    if (token) {
-      const decodedToken = jwtDecode<User>(token);
-      userDetails = decodedToken;
-    }
-
-    userName = userDetails?.id == data?.id ? 'You' : data?.fullname;
-    return userName;
+    return this.userDetails?.id == data?.id ? 'You' : data?.fullname;
   }
 
   deleteChecklist(): void {
     this.listService.deleteChecklist(this.deleteDetails?._id).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          this.getLists(false);
           this.closeModal();
           this.toastr.success(res?.message);
         } else {
@@ -88,7 +85,7 @@ export class OtherListsComponent implements OnInit, OnDestroy {
       error: (err: any) => {
         this.toastr.error(err);
       }
-    })
+    });
   }
 
   viewChecklist(checklistId: string): void {
@@ -108,6 +105,6 @@ export class OtherListsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.refreshSubscription?.unsubscribe();
+    this.socketSub?.unsubscribe();
   }
 }
