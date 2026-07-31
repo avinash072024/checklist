@@ -33,6 +33,7 @@ export class OtherListsComponent implements OnInit, OnDestroy {
   router = inject(Router);
 
   private socketSub!: Subscription;
+  listItemsCount!: number;
 
   ngOnInit(): void {
     const token = this.sessionService.getCookie(Constants.token);
@@ -55,6 +56,7 @@ export class OtherListsComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res?.success) {
           this.listItems = res?.data || [];
+          this.listItemsCount = res?.count;
           if (showSpinner) this.spinner.hide();
         } else {
           if (showSpinner) this.spinner.hide();

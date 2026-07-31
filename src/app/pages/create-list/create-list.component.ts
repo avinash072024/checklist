@@ -28,22 +28,28 @@ export class CreateListComponent implements OnInit, OnDestroy {
   listItems: any[] = [];
   listName = '';
   newItemName = '';
+  autoRedirectUrl: string = '';
 
   stepOne: boolean = true;
   stepTwo: boolean = false;
   listDetails: any;
 
   private socketSub!: Subscription;
+  listPrivate: boolean = false;
 
   ngOnInit(): void {
+    debugger;
     const listDetailsString = this.sessionService.getSession(Constants.listDetails);
     if (listDetailsString) {
       try {
         this.listDetails = JSON.parse(listDetailsString);
+        debugger;
         if (this.listDetails && this.listDetails._id) {
           this.listName = this.listDetails.title || '';
           this.stepOne = false;
           this.stepTwo = true;
+          this.listPrivate = this.listDetails.isPrivate;
+          this.autoRedirectUrl = this.listPrivate ? '/lists/private-lists' : '/lists/my-lists';
           this.getChecklistById(this.listDetails._id);
         }
       } catch (e) {
@@ -61,6 +67,12 @@ export class CreateListComponent implements OnInit, OnDestroy {
     });
   }
 
+  getIsPrivateStatus(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    const isChecked = checkbox.checked;
+    this.listPrivate = isChecked;
+  }
+
   enableStepTwo(): void {
     const listName = this.listName.trim();
     if (!listName) {
@@ -68,14 +80,21 @@ export class CreateListComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // const payload = {
+    //   title: listName
+    // };
+
     const payload = {
-      title: listName
+      title: listName,
+      isPrivate: this.listPrivate, // true if checked
     };
 
     this.listService.createChecklist(payload).subscribe({
       next: (res: any) => {
         if (res.success) {
           this.toastr.success(res?.message);
+          this.autoRedirectUrl = this.listPrivate ? '/lists/private-lists' : '/lists/my-lists';
+          this.listPrivate = false;
           this.listDetails = res?.data;
           this.sessionService.setSession(Constants.listDetails, JSON.stringify(res?.data));
           this.stepOne = false;
@@ -103,7 +122,7 @@ export class CreateListComponent implements OnInit, OnDestroy {
       if (listDetailsString) {
         try {
           this.listDetails = JSON.parse(listDetailsString);
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 

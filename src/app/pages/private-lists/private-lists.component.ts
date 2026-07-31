@@ -14,14 +14,15 @@ import { Subscription } from 'rxjs';
 declare var $: any;
 
 @Component({
-  selector: 'app-lists',
+  selector: 'app-private-lists',
   imports: [DatePipe, NgClass, RouterLink, BackButtonComponent],
-  templateUrl: './lists.component.html',
-  styleUrl: './lists.component.scss'
+  templateUrl: './private-lists.component.html',
+  styleUrl: './private-lists.component.scss'
 })
-export class ListsComponent implements OnInit, OnDestroy {
+export class PrivateListsComponent implements OnInit, OnDestroy {
 
   listItems: any[] = [];
+  listItemsCount!: number;
   deleteDetails: any;
   userDetails: any;
 
@@ -33,7 +34,6 @@ export class ListsComponent implements OnInit, OnDestroy {
   router = inject(Router);
 
   private socketSub!: Subscription;
-  listItemsCount!: number;
 
   ngOnInit(): void {
     const token = this.sessionService.getCookie(Constants.token);
@@ -42,7 +42,6 @@ export class ListsComponent implements OnInit, OnDestroy {
     }
     this.getLists(true);
 
-    // Listen for WebSocket real-time changes across all lists
     this.socketSub = this.socketService.onChecklistChange().subscribe(() => {
       this.getLists(false);
     });
@@ -53,7 +52,7 @@ export class ListsComponent implements OnInit, OnDestroy {
       this.spinner.show();
     }
 
-    this.listService.getChecklists().subscribe({
+    this.listService.getPrivateChecklists().subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.listItems = res?.data || [];

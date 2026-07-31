@@ -14,7 +14,7 @@
 
     <div class="row g-4">
         <!-- Total Lists -->
-        <div class="col-xl-4 col-md-6" routerLink="/lists">
+        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists">
             <div class="dashboard-card bg-primary">
                 <div class="card-icon">
                     <i class="bi bi-card-checklist"></i>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- My Lists -->
-        <div class="col-xl-4 col-md-6" routerLink="/lists/my-lists">
+        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/my-lists">
             <div class="dashboard-card bg-success">
                 <div class="card-icon">
                     <i class="bi bi-person-check-fill"></i>
@@ -50,7 +50,7 @@
         </div>
 
         <!-- Other Lists -->
-        <div class="col-xl-4 col-md-6" routerLink="/lists/other-lists">
+        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/other-lists">
             <div class="dashboard-card bg-warning">
                 <div class="card-icon">
                     <i class="bi bi-people-fill"></i>
@@ -62,6 +62,24 @@
                     </h2>
                     <span>
                         Shared lists
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Lists -->
+        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/private-lists">
+            <div class="dashboard-card bg-danger">
+                <div class="card-icon">
+                    <i class="bi bi-lock-fill"></i>
+                </div>
+                <div>
+                    <small>My Private List</small>
+                    <h2>
+                        {{ dashboard().privateList }}
+                    </h2>
+                    <span>
+                        Only for me
                     </span>
                 </div>
             </div>

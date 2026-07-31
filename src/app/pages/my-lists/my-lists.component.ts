@@ -22,6 +22,7 @@ declare var $: any;
 export class MyListsComponent implements OnInit, OnDestroy {
 
   listItems: any[] = [];
+  listItemsCount!: number;
   deleteDetails: any;
   userDetails: any;
 
@@ -55,6 +56,7 @@ export class MyListsComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res?.success) {
           this.listItems = res?.data || [];
+          this.listItemsCount = res?.count;
           if (showSpinner) this.spinner.hide();
         } else {
           if (showSpinner) this.spinner.hide();

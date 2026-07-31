@@ -98,6 +98,13 @@ export class ListService {
     );
   }
 
+  getPrivateChecklists(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/checklists/my-private-lists`,
+      this.getAuthHeaders()
+    );
+  }
+
   getDashboardStats(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/dashboard-stats`,

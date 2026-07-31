@@ -21,7 +21,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dashboard = signal({
     totalLists: 0,
     myLists: 0,
-    otherLists: 0
+    otherLists: 0,
+    privateList: 0
   });
 
   userDetails: any;
@@ -56,11 +57,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.listService.getDashboardStats().subscribe({
       next: (res: any) => {
         if (res?.success) {
-          const { total, mine, others } = res.data;
+          const { total, mine, others, privateCount } = res.data;
           this.dashboard.set({
             totalLists: total ?? 0,
             myLists: mine ?? 0,
-            otherLists: others ?? 0
+            otherLists: others ?? 0,
+            privateList: privateCount ?? 0
           });
         }
         if (showSpinner) this.spinner.hide();

@@ -5,11 +5,6 @@
             <h2 class="fw-bold mb-2">Create Checklist</h2>
             <p class="text-muted lead">Create your checklist here.</p>
         </div>
-        <!-- <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
-            <a routerLink="/create-list" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
-                <i class="bi bi-plus-circle me-2"></i>Create New Checklist
-            </a>
-        </div> -->
     </div>
     <div class="row">
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
@@ -20,6 +15,12 @@
                 </div>
 
                 <div class="card-body">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="checklistOnlyForMe" (change)="getIsPrivateStatus($event)">
+                        <label class="form-check-label" for="checklistOnlyForMe">
+                            Only for me
+                        </label>
+                    </div>
                     <div class="input-group">
                         <input type="text" class="form-control" appCapitalizeFirst placeholder="Enter list name"
                             [(ngModel)]="listName">
@@ -81,7 +82,7 @@
             </div>
             } @else {
             <div class="text-center mt-4">
-                <a routerLink="/lists" class="btn btn-primary text-decoration-none"><i class="bi bi-check-lg"></i>
+                <a [routerLink]="autoRedirectUrl" class="btn btn-primary text-decoration-none"><i class="bi bi-check-lg"></i>
                     Okay</a>
             </div>
             }

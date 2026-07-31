@@ -57,6 +57,11 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/other-lists/other-lists.component').then(m => m.OtherListsComponent),
                 title: `${Constants?.appName} - Other Lists`
             },
+            {
+                path: 'lists/private-lists',
+                loadComponent: () => import('./pages/private-lists/private-lists.component').then(m => m.PrivateListsComponent),
+                title: `${Constants?.appName} - Private Lists`
+            },
             // page under construction
             {
                 path: 'my-profile',
