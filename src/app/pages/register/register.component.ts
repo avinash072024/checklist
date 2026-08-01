@@ -25,7 +25,7 @@ export class RegisterComponent {
   isSubmitting = signal<boolean>(false);
   showPassword = signal<boolean>(false);
   validationService = inject(ValidationsService);
-  
+
   // OTP Verification signals
   isOTPVerificationPending = signal<boolean>(false);
   isVerifyingOTP = signal<boolean>(false);
@@ -94,13 +94,18 @@ export class RegisterComponent {
         next: (res: AuthResponse) => {
           this.isVerifyingOTP.set(false);
           if (res?.success) {
-            this.toastr.success(res.message || 'Email verified successfully!');
+            // this.toastr.success(res.message || 'Email verified successfully!');
             this.isOTPVerificationPending.set(false);
             this.registerForm.reset();
             this.otpForm.reset();
             this.userIdentifier.set('');
-            // Navigate to login or dashboard
-            this.router.navigateByUrl('/dashboard');
+            if (res?.token) {
+              this.sessionService.setCookie(Constants?.token, res.token);
+              this.toastr.success('User registered successfully');
+              this.router.navigateByUrl('/login');
+            } else {
+              this.toastr.error('No token received after OTP verification. Please try logging in.');
+            }
           } else {
             this.toastr.error(res?.message || 'Failed to verify OTP. Please try again');
           }

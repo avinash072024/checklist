@@ -65,7 +65,7 @@ export const routes: Routes = [
             // page under construction
             {
                 path: 'my-profile',
-                loadComponent: () => import('./pages/my-profile/my-profile.component').then(m => m.MyProfileComponent),
+                loadComponent: () => import('./pages/dummy/dummy.component').then(m => m.DummyComponent),
                 title: `${Constants?.appName} - My Profile`
             },
             {

@@ -1,26 +1,26 @@
-<section class="container profile-page">
-    <div class="profile-hero">
+<section class="container">
+    <div class="profile-hero card bg-white shadow animate-fade-up">
         <div class="hero-decor hero-decor-1"></div>
         <div class="hero-decor hero-decor-2"></div>
         <div class="hero-content">
             <div>
                 <span class="eyebrow">My Profile</span>
-                <h1>Welcome back, {{ displayName }}</h1>
+                <h1>Welcome back, <span class="text-primary">{{ displayName }}</span></h1>
                 <p class="hero-copy">
                     Manage your account details, security settings, and profile preferences in one
                     beautiful dashboard.
                 </p>
             </div>
             <div class="hero-actions d-flex flex-column flex-sm-row gap-2">
-                <a routerLink="/dashboard" class="btn btn-secondary btn-sm">Dashboard</a>
-                <a routerLink="/change-password" class="btn btn-primary btn-sm">Change Password</a>
+                <a routerLink="/dashboard" class="btn btn-secondary btn-sm rounded-3">Dashboard</a>
+                <a routerLink="/change-password" class="btn btn-primary btn-sm rounded-3">Change Password</a>
             </div>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-12 col-lg-6">
-            <article class="profile-card animate-fade-up">
+            <article class="profile-card card bg-white h-100 shadow animate-fade-up">
                 <div class="profile-card-top row align-items-center gx-3 gy-3">
                     <div class="col-auto">
                         <div class="avatar-shell">
@@ -28,30 +28,30 @@
                         </div>
                     </div>
                     <div class="col">
-                        <p class="label">Account holder</p>
+                        <p class="eyebrow">Account holder</p>
                         <h2>{{ displayName || 'User Name' }}</h2>
                         <p class="subtext mb-0">{{ userDetails?.email || 'user@example.com' }}</p>
                     </div>
                 </div>
 
                 <div class="row g-3 profile-details">
-                    <div class="detail-item col-12">
+                    <div class="detail-item col-12 border shadow-sm">
                         <span>First name</span>
                         <strong>{{ firstName || 'Not available' }}</strong>
                     </div>
-                    <div class="detail-item col-12">
+                    <div class="detail-item col-12 border shadow-sm">
                         <span>Last name</span>
                         <strong>{{ lastName || 'Not available' }}</strong>
                     </div>
-                    <div class="detail-item col-12">
+                    <div class="detail-item col-12 border shadow-sm">
                         <span>Email</span>
                         <strong>{{ userDetails?.email || 'Not available' }}</strong>
                     </div>
-                    <div class="detail-item col-12">
+                    <div class="detail-item col-12 border shadow-sm">
                         <span>Mobile</span>
                         <strong>{{ userDetails?.mobileNumber || 'Not available' }}</strong>
                     </div>
-                    <div class="detail-item col-12">
+                    <div class="detail-item col-12 border shadow-sm">
                         <span>Joined</span>
                         <strong>{{ formattedJoinDate() }}</strong>
                     </div>
@@ -59,7 +59,7 @@
             </article>
         </div>
         <div class="col-12 col-lg-6">
-            <article class="profile-panel animate-fade-up delay-1">
+            <article class="profile-panel card bg-white h-100 shadow animate-fade-up delay-1">
                 <div class="panel-header">
                     <div>
                         <p class="eyebrow">Account summary</p>
@@ -72,7 +72,7 @@
                 </p>
 
                 <div *ngIf="!editMode()" class="panel-actions">
-                    <button type="button" class="btn btn-outline-light btn-sm" (click)="toggleEditMode()">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-3" (click)="toggleEditMode()">
                         Edit details
                     </button>
                 </div>
@@ -124,11 +124,11 @@
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row gap-3 mt-3">
-                        <button type="submit" class="btn btn-primary btn-lg w-100 w-sm-auto"
+                        <button type="submit" class="btn btn-primary btn-lg rounded-4 w-100 w-sm-auto"
                             [disabled]="isSubmitting()">
                             {{ isSubmitting() ? 'Saving…' : 'Save changes' }}
                         </button>
-                        <button type="button" class="btn btn-outline-secondary btn-lg w-100 w-sm-auto"
+                        <button type="button" class="btn btn-outline-secondary btn-lg rounded-4 w-100 w-sm-auto"
                             (click)="toggleEditMode()" [disabled]="isSubmitting()">
                             Cancel
                         </button>
@@ -136,21 +136,21 @@
                 </form>
 
                 <div *ngIf="!editMode()" class="panel-list">
-                    <div class="panel-item">
+                    <div class="panel-item border shadow-sm">
                         <i class="bi bi-lock-fill"></i>
                         <div>
                             <h4>Secure access</h4>
                             <p>Strong authentication and token protection for your account.</p>
                         </div>
                     </div>
-                    <div class="panel-item">
+                    <div class="panel-item border shadow-sm">
                         <i class="bi bi-person-circle"></i>
                         <div>
                             <h4>Always available</h4>
                             <p>Your profile is accessible from any device, anytime.</p>
                         </div>
                     </div>
-                    <div class="panel-item">
+                    <div class="panel-item border shadow-sm">
                         <i class="bi bi-speedometer2"></i>
                         <div>
                             <h4>Smooth experience</h4>

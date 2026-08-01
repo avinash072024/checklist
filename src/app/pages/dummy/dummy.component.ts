@@ -12,13 +12,12 @@ import { UpdateProfilePayload } from '../../models/auth.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-my-profile',
-  standalone: true,
+  selector: 'app-dummy',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './my-profile.component.html',
-  styleUrls: ['./my-profile.component.scss']
+  templateUrl: './dummy.component.html',
+  styleUrl: './dummy.component.scss'
 })
-export class MyProfileComponent implements OnInit {
+export class DummyComponent implements OnInit {
   sessionService = inject(SessionService);
   authService = inject(AuthService);
   validationService = inject(ValidationsService);
