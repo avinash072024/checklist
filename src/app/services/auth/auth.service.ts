@@ -8,7 +8,10 @@ import {
   RegisterPayload,
   ResetPasswordPayload,
   SignInPayload,
-  VerifyOTPPayload
+  UpdateProfilePayload,
+  VerifyOTPPayload,
+  VerifyRegistrationOTPPayload,
+  ResendRegistrationOTPPayload
 } from '../../models/auth.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
@@ -36,6 +39,20 @@ export class AuthService {
    */
   register(payload: RegisterPayload): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, payload);
+  }
+
+  /**
+   * Verify registration OTP
+   */
+  verifyRegistrationOTP(payload: VerifyRegistrationOTPPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/verify-registration-otp`, payload);
+  }
+
+  /**
+   * Resend registration OTP
+   */
+  resendRegistrationOTP(payload: ResendRegistrationOTPPayload): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/resend-registration-otp`, payload);
   }
 
   /**
@@ -83,6 +100,17 @@ export class AuthService {
   changePassword(payload: ChangePasswordPayload): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/auth/change-password`,
+      payload,
+      this.getAuthHeaders()
+    );
+  }
+
+  /**
+   * Update authenticated user profile details
+   */
+  updateProfile(payload: UpdateProfilePayload): Observable<AuthResponse> {
+    return this.http.put<AuthResponse>(
+      `${environment.apiUrl}/auth/profile`,
       payload,
       this.getAuthHeaders()
     );

@@ -4,6 +4,8 @@
             <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
                 <div class="card p-4 border-2 rounded-4 shadow">
                     <div class="card-body">
+                        <!-- Registration Form -->
+                        @if (!isOTPVerificationPending()) {
                         <div class="text-center mb-4">
                             <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
                             <h2 class="fw-bold mt-2">Register</h2>
@@ -106,7 +108,8 @@
 
                                 <div class="col-12 text-center">
                                     <button type="submit"
-                                        class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm d-inline-flex align-items-center gap-2">
+                                        class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm d-inline-flex align-items-center gap-2"
+                                        [disabled]="isSubmitting()">
                                         @if (!isSubmitting()) {
                                         Register
                                         } @else {
@@ -120,6 +123,66 @@
 
                         <p class="mb-0 mt-3 text-center">Already have an account? <a class="text-decoration-none fw-semibold"
                                 routerLink="/login">Login now</a></p>
+                        } 
+                        
+                        <!-- OTP Verification Form -->
+                        @else {
+                        <div class="text-center mb-4">
+                            <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
+                            <h2 class="fw-bold mt-2">Verify Email</h2>
+                            <p class="text-secondary text-sm">We've sent an OTP to your email</p>
+                            <p class="text-muted small">{{ userIdentifier() }}</p>
+                        </div>
+
+                        <form [formGroup]="otpForm" (ngSubmit)="onVerifyOTP()" class="needs-validation" novalidate>
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control rounded-4" id="otp"
+                                            formControlName="otp" placeholder="Enter 6-digit OTP"
+                                            maxlength="6"
+                                            [class.is-invalid]="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched"
+                                            autocomplete="off"
+                                            (input)="onInputChange($event, 'otp')">
+                                        <label for="otp">OTP</label>
+                                        <div class="invalid-feedback">Please enter a valid 4-6 digit OTP.</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm d-inline-flex align-items-center gap-2"
+                                        [disabled]="isVerifyingOTP()">
+                                        @if (!isVerifyingOTP()) {
+                                        Verify OTP
+                                        } @else {
+                                        <span class="spinner-border spinner-border-sm"></span> Verifying...
+                                        }
+                                    </button>
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <p class="text-muted text-sm mb-2">Didn't receive OTP?</p>
+                                    <button type="button" class="btn btn-link text-decoration-none fw-semibold"
+                                        (click)="onResendOTP()"
+                                        [disabled]="isResendingOTP()">
+                                        @if (!isResendingOTP()) {
+                                        Resend OTP
+                                        } @else {
+                                        <span class="spinner-border spinner-border-sm me-1"></span> Resending...
+                                        }
+                                    </button>
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-4 py-2"
+                                        (click)="goBackToRegister()">
+                                        Back to Register
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        }
                     </div>
                 </div>
             </div>

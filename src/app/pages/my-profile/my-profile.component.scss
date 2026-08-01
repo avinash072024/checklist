@@ -1,0 +1,349 @@
+.profile-page {
+//   min-height: 100vh;
+//   padding: 3rem 1.5rem 2.5rem;
+//   background: radial-gradient(circle at top left, rgba(96, 123, 255, 0.16), transparent 22%),
+//     radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.16), transparent 18%),
+//     linear-gradient(180deg, #0f172a 0%, #020617 100%);
+  color: #f8fafc;
+}
+
+.profile-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.35);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-decor {
+  position: absolute;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  filter: blur(34px);
+  opacity: 0.48;
+  animation: float 10s ease-in-out infinite;
+}
+
+.hero-decor-1 {
+  top: -2rem;
+  left: -2rem;
+  background: rgba(96, 165, 250, 0.33);
+}
+
+.hero-decor-2 {
+  bottom: -3rem;
+  right: -2rem;
+  background: rgba(52, 211, 153, 0.28);
+  animation-delay: 4s;
+}
+
+.hero-content {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: #38bdf8;
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-content h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  line-height: 1.05;
+}
+
+.hero-copy {
+  max-width: 55ch;
+  margin: 1rem 0 0;
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(250px, 1.15fr) minmax(250px, 0.85fr);
+  gap: 1.5rem;
+}
+
+.profile-card,
+.profile-panel {
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.75rem;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.28);
+  backdrop-filter: blur(18px);
+  padding: 2rem;
+}
+
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-card-top {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.avatar-shell {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #0f172a;
+  background: linear-gradient(135deg, #38bdf8, #22d3ee);
+  box-shadow: 0 18px 30px rgba(56, 189, 248, 0.28);
+  animation: pop-in 0.8s ease forwards;
+}
+
+.profile-details {
+  display: grid;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.detail-item span {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.detail-item strong {
+  color: #f8fafc;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.profile-panel h3 {
+  margin: 0.5rem 0 0;
+  font-size: 1.8rem;
+}
+
+.panel-copy {
+  color: #cbd5e1;
+  line-height: 1.8;
+  margin: 1.5rem 0;
+}
+
+.panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.profile-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-control {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.65);
+  color: #f8fafc;
+  padding: 0.95rem 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+}
+
+.form-control.ng-invalid.ng-touched {
+  border-color: #f87171;
+}
+
+.invalid-feedback {
+  color: #f87171;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-primary {
+  min-width: 160px;
+}
+
+.btn-outline-light {
+  min-width: 160px;
+}
+
+.panel-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.panel-item i {
+  font-size: 1.5rem;
+  color: #38bdf8;
+  min-width: 2.2rem;
+}
+
+.panel-item h4 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.panel-item p {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.7s ease-out forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@media (max-width: 900px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-page {
+    padding: 2rem 1rem 1.5rem;
+  }
+
+  .profile-hero {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .hero-actions a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-actions,
+  .form-actions {
+    justify-content: stretch;
+  }
+}

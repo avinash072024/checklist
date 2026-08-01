@@ -1,0 +1,150 @@
+<section class="container profile-page">
+    <div class="profile-hero">
+        <div class="hero-decor hero-decor-1"></div>
+        <div class="hero-decor hero-decor-2"></div>
+        <div class="hero-content">
+            <div>
+                <span class="eyebrow">My Profile</span>
+                <h1>Welcome back, {{ userDetails?.name || 'Valued User' }}</h1>
+                <p class="hero-copy">
+                    Manage your account details, security settings, and profile preferences in one
+                    beautiful dashboard.
+                </p>
+            </div>
+            <div class="hero-actions">
+                <a routerLink="/dashboard" class="btn btn-secondary btn-sm">Dashboard</a>
+                <a routerLink="/change-password" class="btn btn-primary btn-sm">Change Password</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-grid">
+        <article class="profile-card animate-fade-up">
+            <div class="profile-card-top">
+                <div class="avatar-shell">
+                    <div class="profile-avatar">{{ avatarInitials() }}</div>
+                </div>
+                <div>
+                    <p class="label">Account holder</p>
+                    <h2>{{ userDetails?.name || 'User Name' }}</h2>
+                    <p class="subtext">{{ userDetails?.email || 'user@example.com' }}</p>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-item">
+                    <span>Full name</span>
+                    <strong>{{ userDetails?.name || 'Not available' }}</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Email</span>
+                    <strong>{{ userDetails?.email || 'Not available' }}</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Mobile</span>
+                    <strong>{{ userDetails?.mobileNumber || 'Not available' }}</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Joined</span>
+                    <strong>{{ formattedJoinDate() }}</strong>
+                </div>
+            </div>
+        </article>
+
+        <article class="profile-panel animate-fade-up delay-1">
+            <div class="panel-header">
+                <div>
+                    <p class="eyebrow">Account summary</p>
+                    <h3>Personal details & security</h3>
+                </div>
+            </div>
+            <p class="panel-copy">
+                Keep your profile updated and secure. Use the links above to review credentials,
+                change your password, or switch between your dashboard and settings.
+            </p>
+
+            <!-- <div class="panel-actions">
+                <button type="button" class="btn btn-outline-light btn-sm" (click)="toggleEditMode()">
+                    {{ editMode() ? 'Cancel editing' : 'Edit details' }}
+                </button>
+            </div> -->
+
+            @if (!editMode()) {
+            <div class="panel-actions">
+                <button type="button" class="btn btn-outline-light btn-sm" (click)="toggleEditMode()">
+                    Edit details
+                </button>
+            </div>
+            }
+
+            <form *ngIf="editMode()" [formGroup]="profileForm" class="profile-form" (ngSubmit)="saveProfile()">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full name</label>
+                        <input id="name" type="text" class="form-control" formControlName="name"
+                            placeholder="Your full name" (input)="onInputChange($event, 'name')" autocomplete="name" />
+                        <div class="invalid-feedback"
+                            *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched">
+                            Enter your full name (min 3 characters).
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input id="email" type="email" class="form-control" formControlName="email"
+                            placeholder="you@example.com" autocomplete="email" />
+                        <div class="invalid-feedback"
+                            *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+                            Enter a valid email address.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mobileNumber">Mobile number</label>
+                        <input id="mobileNumber" type="text" class="form-control" formControlName="mobileNumber"
+                            placeholder="1234567890" maxlength="10" (input)="onInputChange($event, 'mobileNumber')"
+                            autocomplete="tel" />
+                        <div class="invalid-feedback"
+                            *ngIf="profileForm.get('mobileNumber')?.invalid && profileForm.get('mobileNumber')?.touched">
+                            Enter a valid 10-digit mobile number.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitting()">
+                        {{ isSubmitting() ? 'Saving…' : 'Save changes' }}
+                    </button>
+                    <button type="button" class="btn btn-outline-light btn-lg" (click)="toggleEditMode()"
+                        [disabled]="isSubmitting()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
+            <div *ngIf="!editMode()" class="panel-list">
+                <div class="panel-item">
+                    <i class="bi bi-lock-fill"></i>
+                    <div>
+                        <h4>Secure access</h4>
+                        <p>Strong authentication and token protection for your account.</p>
+                    </div>
+                </div>
+                <div class="panel-item">
+                    <i class="bi bi-person-circle"></i>
+                    <div>
+                        <h4>Always available</h4>
+                        <p>Your profile is accessible from any device, anytime.</p>
+                    </div>
+                </div>
+                <div class="panel-item">
+                    <i class="bi bi-speedometer2"></i>
+                    <div>
+                        <h4>Smooth experience</h4>
+                        <p>Responsive design and subtle motion for a modern user flow.</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>

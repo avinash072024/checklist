@@ -21,6 +21,19 @@ export interface VerifyOTPPayload {
     otp: string;
 }
 
+export interface VerifyRegistrationOTPPayload {
+    identifier?: string;
+    email?: string;
+    mobileNumber?: string | number;
+    otp: string;
+}
+
+export interface ResendRegistrationOTPPayload {
+    identifier?: string;
+    email?: string;
+    mobileNumber?: string | number;
+}
+
 export interface ResetPasswordPayload {
     identifier: string;
     otp: string;
@@ -33,11 +46,17 @@ export interface ChangePasswordPayload {
     otp?: string;
 }
 
+export interface UpdateProfilePayload {
+    name: string;
+    email: string;
+    mobileNumber: number;
+}
+
 // Response Interfaces
 export interface AuthResponse {
     success: boolean;
     message: string;
-    token?: string;
+    token: string;
 }
 
 export interface ForgotPasswordResponse {
