@@ -15,56 +15,56 @@ export class ListService {
   http = inject(HttpClient);
   sessionService = inject(SessionService);
 
-  private getAuthHeaders() {
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.getCookie(Constants.token) || ''}`
-      })
-    };
-  }
+  // private getAuthHeaders() {
+  //   return {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${this.sessionService.getCookie(Constants.token) || ''}`
+  //     })
+  //   };
+  // }
 
   createChecklist(payload: any): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/checklists/`, payload, this.getAuthHeaders());
+    return this.http.post(`${environment.apiUrl}/checklists/`, payload, this.sessionService.getAuthHeaders());
   }
 
   // Update checklist API call
   updateChecklist(id: string, payload: { title?: string; listItems?: any[]; isFreeze?: boolean }): Observable<any> {
-    return this.http.put<any>(`${environment.apiUrl}/checklists/${id}`, payload, this.getAuthHeaders());
+    return this.http.put<any>(`${environment.apiUrl}/checklists/${id}`, payload, this.sessionService.getAuthHeaders());
   }
 
   addItemToChecklist(checklistId: string, text: string): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/checklists/${checklistId}/items`,
       { text },
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   getChecklistById(checklistId: string): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/${checklistId}`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   getChecklists(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/all`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   deleteChecklist(checklistId: string): Observable<any> {
     return this.http.delete<any>(
       `${environment.apiUrl}/checklists/${checklistId}`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   deleteChecklistItem(checklistId: string, itemId: string): Observable<any> {
     return this.http.delete<any>(
       `${environment.apiUrl}/checklists/${checklistId}/items/${itemId}`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
@@ -72,7 +72,7 @@ export class ListService {
     return this.http.patch<any>(
       `${environment.apiUrl}/checklists/${checklistId}/items/${itemId}/complete`,
       { completed },
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
@@ -80,35 +80,35 @@ export class ListService {
     return this.http.patch<any>(
       `${environment.apiUrl}/checklists/${checklistId}/freeze`,
       { isFreeze },
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   getChecklistsByMe(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/my-lists`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   getChecklistsByOther(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/other-lists`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   getPrivateChecklists(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/my-private-lists`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
   getDashboardStats(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/dashboard-stats`,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 

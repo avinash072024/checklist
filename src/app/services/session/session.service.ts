@@ -1,5 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
+import { HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Constants } from '../../models/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +69,14 @@ export class SessionService {
     if (!this.isBrowser) return;
 
     document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+  }
+
+  getAuthHeaders() {
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.getCookie(Constants.token) || ''}`
+      })
+    };
   }
 
 }

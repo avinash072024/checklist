@@ -100,7 +100,7 @@ export class RegisterComponent {
             this.otpForm.reset();
             this.userIdentifier.set('');
             // Navigate to login or dashboard
-            this.router.navigateByUrl('/login');
+            this.router.navigateByUrl('/dashboard');
           } else {
             this.toastr.error(res?.message || 'Failed to verify OTP. Please try again');
           }

@@ -136,7 +136,7 @@
 
                         <form [formGroup]="otpForm" (ngSubmit)="onVerifyOTP()" class="needs-validation" novalidate>
                             <div class="row g-4">
-                                <div class="col-12">
+                                <div class="col-12 col-md-8 col-lg-7 mx-auto">
                                     <div class="form-floating">
                                         <input type="text" class="form-control rounded-4" id="otp"
                                             formControlName="otp" placeholder="Enter 6-digit OTP"
@@ -145,7 +145,7 @@
                                             autocomplete="off"
                                             (input)="onInputChange($event, 'otp')">
                                         <label for="otp">OTP</label>
-                                        <div class="invalid-feedback">Please enter a valid 4-6 digit OTP.</div>
+                                        <div class="invalid-feedback">Please enter a valid 6 digit OTP.</div>
                                     </div>
                                 </div>
 

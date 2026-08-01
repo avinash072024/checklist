@@ -26,13 +26,13 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly sessionService = inject(SessionService);
 
-  private getAuthHeaders() {
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.sessionService.getCookie(Constants.token) || ''}`
-      })
-    };
-  }
+  // private getAuthHeaders() {
+  //   return {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${this.sessionService.getCookie(Constants.token) || ''}`
+  //     })
+  //   };
+  // }
 
   /**
    * Register a new user
@@ -90,7 +90,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/auth/send-change-password-otp`,
       {},
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
@@ -101,7 +101,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/auth/change-password`,
       payload,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 
@@ -112,7 +112,7 @@ export class AuthService {
     return this.http.put<AuthResponse>(
       `${environment.apiUrl}/auth/profile`,
       payload,
-      this.getAuthHeaders()
+      this.sessionService.getAuthHeaders()
     );
   }
 }
