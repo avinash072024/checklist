@@ -71,11 +71,11 @@
                     change your password, or switch between your dashboard and settings.
                 </p>
 
-                <div *ngIf="!editMode()" class="panel-actions">
+                <!-- <div *ngIf="!editMode()" class="panel-actions">
                     <button type="button" class="btn btn-outline-primary btn-sm rounded-3" (click)="toggleEditMode()">
                         Edit details
                     </button>
-                </div>
+                </div> -->
 
                 <form *ngIf="editMode()" [formGroup]="profileForm" class="profile-form" (ngSubmit)="saveProfile()">
                     <div class="row g-3">
