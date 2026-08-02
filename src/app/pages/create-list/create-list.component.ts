@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
 import { ListService } from '../../services/list/list.service';
@@ -25,6 +25,8 @@ export class CreateListComponent implements OnInit, OnDestroy {
   sessionService = inject(SessionService);
   router = inject(Router);
 
+  isSubmitting = signal(false);
+
   listItems: any[] = [];
   listName = '';
   newItemName = '';
@@ -38,12 +40,10 @@ export class CreateListComponent implements OnInit, OnDestroy {
   listPrivate: boolean = false;
 
   ngOnInit(): void {
-    debugger;
     const listDetailsString = this.sessionService.getSession(Constants.listDetails);
     if (listDetailsString) {
       try {
         this.listDetails = JSON.parse(listDetailsString);
-        debugger;
         if (this.listDetails && this.listDetails._id) {
           this.listName = this.listDetails.title || '';
           this.stepOne = false;
@@ -89,9 +89,11 @@ export class CreateListComponent implements OnInit, OnDestroy {
       isPrivate: this.listPrivate, // true if checked
     };
 
+    this.isSubmitting.set(true);
     this.listService.createChecklist(payload).subscribe({
       next: (res: any) => {
         if (res.success) {
+          this.isSubmitting.set(false);
           this.toastr.success(res?.message);
           this.autoRedirectUrl = this.listPrivate ? '/lists/private-lists' : '/lists/my-lists';
           this.listPrivate = false;
@@ -108,6 +110,7 @@ export class CreateListComponent implements OnInit, OnDestroy {
         }
       },
       error: (err: any) => {
+        this.isSubmitting.set(false);
         this.toastr.error(err?.error?.message || err?.message);
       }
     });

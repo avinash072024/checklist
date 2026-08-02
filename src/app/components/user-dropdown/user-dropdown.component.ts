@@ -44,7 +44,7 @@ export class UserDropdownComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.sessionService.deleteCookie(Constants.token);
+    this.sessionService.logout();
     this.toastr.success('Logout successfully');
     this.router.navigateByUrl('/login');
   }
