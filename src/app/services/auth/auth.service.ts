@@ -5,6 +5,7 @@ import {
   ChangePasswordPayload,
   ForgotPasswordPayload,
   ForgotPasswordResponse,
+  ProfileResponse,
   RegisterPayload,
   ResetPasswordPayload,
   SignInPayload,
@@ -106,10 +107,20 @@ export class AuthService {
   }
 
   /**
+   * Get authenticated user's profile
+   */
+  getProfile(): Observable<ProfileResponse> {
+    return this.http.get<ProfileResponse>(
+      `${environment.apiUrl}/auth/profile`,
+      this.sessionService.getAuthHeaders()
+    );
+  }
+
+  /**
    * Update authenticated user profile details
    */
-  updateProfile(payload: UpdateProfilePayload): Observable<AuthResponse> {
-    return this.http.put<AuthResponse>(
+  updateProfile(payload: UpdateProfilePayload): Observable<ProfileResponse> {
+    return this.http.put<ProfileResponse>(
       `${environment.apiUrl}/auth/profile`,
       payload,
       this.sessionService.getAuthHeaders()

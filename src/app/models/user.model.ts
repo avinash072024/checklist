@@ -1,8 +1,12 @@
 export interface User {
     id: string;
-    name: string;
+    firstName?: string;
+    lastName?: string;
+    name?: string;
     email: string;
     mobileNumber: number;
-    iat: number;
-    exp: number;
+    isVerified?: boolean;
+    iat?: number;
+    exp?: number;
+    createdAt?: string;
 }

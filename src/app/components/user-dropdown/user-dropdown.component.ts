@@ -1,9 +1,9 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user.model';
-import { jwtDecode } from 'jwt-decode';
 import { Constants } from '../../models/constants';
 
 @Component({
@@ -12,21 +12,35 @@ import { Constants } from '../../models/constants';
   templateUrl: './user-dropdown.component.html',
   styleUrl: './user-dropdown.component.scss'
 })
-export class UserDropdownComponent implements OnInit {
+export class UserDropdownComponent implements OnInit, OnDestroy {
 
   @Input() dynamicClass: string = '';
   sessionService = inject(SessionService);
   router = inject(Router);
   toastr = inject(ToastrService);
-  userDetails: any = [];
+  userDetails: User | null = null;
+  private subscription: Subscription | null = null;
+
+  get displayName(): string {
+    if (!this.userDetails) {
+      return 'User';
+    }
+    const firstName = this.userDetails.firstName?.trim();
+    const lastName = this.userDetails.lastName?.trim();
+    if (firstName || lastName) {
+      return [firstName, lastName].filter(Boolean).join(' ');
+    }
+    return this.userDetails.name || 'User';
+  }
 
   ngOnInit(): void {
-    const token = this.sessionService.getCookie(Constants.token);
+    this.subscription = this.sessionService.currentUser$.subscribe(user => {
+      this.userDetails = user;
+    });
+  }
 
-    if (token) {
-      const decodedToken = jwtDecode<User>(token);
-      this.userDetails = decodedToken;
-    }
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   logout(): void {

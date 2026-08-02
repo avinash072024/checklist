@@ -2,13 +2,12 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 import { SessionService } from '../../services/session/session.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { ValidationsService } from '../../services/validations/validations.service';
 import { Constants } from '../../models/constants';
 import { User } from '../../models/user.model';
-import { UpdateProfilePayload } from '../../models/auth.model';
+import { ProfileResponse, UpdateProfilePayload } from '../../models/auth.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -36,11 +35,11 @@ export class MyProfileComponent implements OnInit {
   });
 
   get firstName(): string {
-    return this.splitName(this.userDetails?.name).firstName;
+    return this.userDetails?.firstName || this.splitName(this.userDetails?.name).firstName;
   }
 
   get lastName(): string {
-    return this.splitName(this.userDetails?.name).lastName;
+    return this.userDetails?.lastName || this.splitName(this.userDetails?.name).lastName;
   }
 
   get displayName(): string {
@@ -49,22 +48,25 @@ export class MyProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const token = this.sessionService.getCookie(Constants.token);
-    if (token) {
-      try {
-        this.userDetails = jwtDecode<User>(token);
-        this.patchForm();
-      } catch (error) {
-        console.error('Unable to decode user token', error);
+    this.authService.getProfile().subscribe({
+      next: (res: ProfileResponse) => {
+        if (res?.success && res?.data) {
+          this.userDetails = res.data as User;
+          this.patchForm();
+        }
+      },
+      error: (err: any) => {
+        console.error('Unable to load profile', err);
       }
-    }
+    });
   }
 
   patchForm(): void {
     if (!this.userDetails) {
       return;
     }
-    const { firstName, lastName } = this.splitName(this.userDetails.name);
+    const firstName = this.userDetails.firstName || this.splitName(this.userDetails?.name).firstName;
+    const lastName = this.userDetails.lastName || this.splitName(this.userDetails?.name).lastName;
     this.profileForm.patchValue({
       firstName,
       lastName,
@@ -82,7 +84,8 @@ export class MyProfileComponent implements OnInit {
   }
 
   avatarInitials(): string {
-    const { firstName, lastName } = this.splitName(this.userDetails?.name || '');
+    const firstName = this.userDetails?.firstName || this.splitName(this.userDetails?.name).firstName;
+    const lastName = this.userDetails?.lastName || this.splitName(this.userDetails?.name).lastName;
     if (!firstName && !lastName) {
       return 'UD';
     }
@@ -94,15 +97,27 @@ export class MyProfileComponent implements OnInit {
   }
 
   formattedJoinDate(): string {
-    if (!this.userDetails?.iat) {
-      return 'Unknown';
+    const createdAt = this.userDetails?.createdAt;
+    const iat = this.userDetails?.iat;
+    if (createdAt) {
+      const date = new Date(createdAt);
+      if (!Number.isNaN(date.getTime())) {
+        return date.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
     }
-    const date = new Date(this.userDetails.iat * 1000);
-    return date.toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    if (iat) {
+      const date = new Date(iat * 1000);
+      return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+    return 'Unknown';
   }
 
   toggleEditMode(): void {
@@ -136,16 +151,9 @@ export class MyProfileComponent implements OnInit {
       return;
     }
 
-    const fullName = [
-      this.profileForm.value.firstName,
-      this.profileForm.value.lastName
-    ]
-      .filter((part: string) => part && part.trim())
-      .join(' ')
-      .trim();
-
     const payload: UpdateProfilePayload = {
-      name: fullName,
+      firstName: this.profileForm.value.firstName,
+      lastName: this.profileForm.value.lastName,
       email: this.profileForm.value.email,
       mobileNumber: Number(this.profileForm.value.mobileNumber)
     };
@@ -154,15 +162,15 @@ export class MyProfileComponent implements OnInit {
     this.authService.updateProfile(payload).subscribe({
       next: res => {
         this.isSubmitting.set(false);
-        if (res?.success) {
+        if (res?.success && res?.data) {
           if (res.token) {
             this.sessionService.setCookie(Constants.token, res.token);
-            this.toastr.success('Profile updated successfully!', 'Success');
           }
           this.userDetails = {
             ...this.userDetails,
-            ...payload
+            ...res.data
           } as User;
+          this.toastr.success('Profile updated successfully!', 'Success');
           this.editMode.set(false);
           this.patchForm();
         }

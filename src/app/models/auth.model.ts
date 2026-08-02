@@ -47,16 +47,36 @@ export interface ChangePasswordPayload {
 }
 
 export interface UpdateProfilePayload {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     mobileNumber: number;
+}
+
+export interface UserProfile {
+    id?: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    mobileNumber: number;
+    isVerified?: boolean;
+    iat?: number;
+    exp?: number;
+    createdAt?: string;
+}
+
+export interface ProfileResponse {
+    success: boolean;
+    message?: string;
+    data: UserProfile;
+    token?: string;
 }
 
 // Response Interfaces
 export interface AuthResponse {
     success: boolean;
     message: string;
-    token: string;
+    token?: string;
 }
 
 export interface ForgotPasswordResponse {
