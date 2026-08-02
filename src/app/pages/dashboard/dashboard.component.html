@@ -15,7 +15,7 @@
     <div class="row g-4">
         <!-- Total Lists -->
         <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists">
-            <div class="dashboard-card bg-primary">
+            <div class="dashboard-card h-100 bg-primary">
                 <div class="card-icon">
                     <i class="bi bi-card-checklist"></i>
                 </div>
@@ -33,17 +33,17 @@
 
         <!-- My Lists -->
         <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/my-lists">
-            <div class="dashboard-card bg-success">
+            <div class="dashboard-card h-100 bg-success">
                 <div class="card-icon">
                     <i class="bi bi-person-check-fill"></i>
                 </div>
                 <div>
-                    <small>Created By Me</small>
+                    <small>My Public Lists</small>
                     <h2>
                         {{ dashboard().myLists }}
                     </h2>
                     <span>
-                        Lists created by you
+                        Publically created by you
                     </span>
                 </div>
             </div>
@@ -51,7 +51,7 @@
 
         <!-- Other Lists -->
         <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/other-lists">
-            <div class="dashboard-card bg-warning">
+            <div class="dashboard-card h-100 bg-warning">
                 <div class="card-icon">
                     <i class="bi bi-people-fill"></i>
                 </div>
@@ -69,7 +69,7 @@
 
         <!-- My Lists -->
         <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/private-lists">
-            <div class="dashboard-card bg-danger">
+            <div class="dashboard-card h-100 bg-danger">
                 <div class="card-icon">
                     <i class="bi bi-lock-fill"></i>
                 </div>
