@@ -94,7 +94,7 @@ export class ListsComponent implements OnInit, OnDestroy {
   }
 
   viewChecklist(checklistId: string): void {
-    this.router.navigateByUrl(`/view-checklist/${checklistId}`);
+    this.router.navigateByUrl(`/lists/view-checklist/${checklistId}`);
   }
 
   openModal(data: any): void {
