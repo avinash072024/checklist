@@ -43,7 +43,7 @@ export const routes: Routes = [
                 title: `${Constants?.appName} - Lists`
             },
             {
-                path: 'view-checklist/:id',
+                path: 'lists/view-checklist/:id',
                 loadComponent: () => import('./pages/view-checklist/view-checklist.component').then(m => m.ViewChecklistComponent),
                 title: `${Constants?.appName} - View Checklist`
             },
@@ -62,7 +62,6 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/private-lists/private-lists.component').then(m => m.PrivateListsComponent),
                 title: `${Constants?.appName} - Private Lists`
             },
-            // page under construction
             {
                 path: 'my-profile',
                 loadComponent: () => import('./pages/dummy/dummy.component').then(m => m.DummyComponent),

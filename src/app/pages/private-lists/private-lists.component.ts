@@ -66,7 +66,8 @@ export class PrivateListsComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         if (showSpinner) this.spinner.hide();
-        this.toastr.error(err?.message);
+        // this.toastr.error(err?.message);
+        this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
       }
     });
   }

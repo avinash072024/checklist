@@ -67,9 +67,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
         if (showSpinner) this.spinner.hide();
       },
-      error: (err) => {
+      error: (err: any) => {
         if (showSpinner) this.spinner.hide();
-        this.toastr.error(err?.message || 'Something went wrong.');
+        this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
       }
     });
   }

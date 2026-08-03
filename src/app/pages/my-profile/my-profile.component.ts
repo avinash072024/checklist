@@ -65,6 +65,8 @@ export class MyProfileComponent implements OnInit {
       error: (err: any) => {
         this.spinner.hide();
         console.error('Unable to load profile', err);
+        // this.toastr.error(err?.message);
+        this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
       }
     });
   }
