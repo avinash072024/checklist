@@ -131,19 +131,23 @@ export class CreateListComponent implements OnInit, OnDestroy {
 
     if (!this.listDetails || !this.listDetails._id) return;
 
+    this.isSubmitting.set(true);
     this.listService.addItemToChecklist(this.listDetails._id, itemText).subscribe({
       next: (res: any) => {
         if (res?.success) {
+          this.isSubmitting.set(false);
           this.newItemName = '';
           this.toastr.success(res?.message);
           this.getChecklistById(this.listDetails._id);
           this.itemTextInput()?.nativeElement.focus();
         } else {
+          this.isSubmitting.set(false);
           this.toastr.error(res?.message);
           this.itemTextInput()?.nativeElement.focus();
         }
       },
       error: (err: any) => {
+        this.isSubmitting.set(false);
         this.toastr.error(err?.error?.message || err?.message);
         this.itemTextInput()?.nativeElement.focus();
       }

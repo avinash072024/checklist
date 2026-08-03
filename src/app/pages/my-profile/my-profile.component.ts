@@ -9,6 +9,7 @@ import { Constants } from '../../models/constants';
 import { User } from '../../models/user.model';
 import { ProfileResponse, UpdateProfilePayload } from '../../models/auth.model';
 import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-my-profile',
@@ -23,6 +24,7 @@ export class MyProfileComponent implements OnInit {
   validationService = inject(ValidationsService);
   fb = inject(FormBuilder);
   toastr = inject(ToastrService);
+  spinner = inject(NgxSpinnerService);
 
   userDetails: User | null = null;
   editMode = signal(false);
@@ -48,14 +50,20 @@ export class MyProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.authService.getProfile().subscribe({
       next: (res: ProfileResponse) => {
         if (res?.success && res?.data) {
           this.userDetails = res.data as User;
           this.patchForm();
+          this.spinner.hide();
+        }else {
+          this.spinner.hide();
+          this.toastr.error(res?.message || 'Failed to load profile.', 'Error');
         }
       },
       error: (err: any) => {
+        this.spinner.hide();
         console.error('Unable to load profile', err);
       }
     });

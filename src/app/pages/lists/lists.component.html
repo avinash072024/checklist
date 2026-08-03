@@ -61,13 +61,16 @@
         </div>
         }
 
-        @if (listItems.length <= 0) { <div class="col-12 mb-4">
-            <div class="card rounded-4 shadow">
+        @if (listItems.length <= 0) { 
+        <div class="col-12 mb-4">
+            <!-- <div class="card rounded-4 shadow">
                 <div class="card-body text-center">
                     No list found. Please <a routerLink="/create-list" class="text-decoration-none">click here</a> to
                     create list.
                 </div>
-            </div>
+            </div> -->
+
+            <app-list-not-found-card></app-list-not-found-card>
     </div>
     }
 </div>

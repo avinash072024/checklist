@@ -11,11 +11,12 @@ import { Router, RouterLink } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
 import { Subscription } from 'rxjs';
+import { ListNotFoundCardComponent } from "../../components/list-not-found-card/list-not-found-card.component";
 declare var $: any;
 
 @Component({
   selector: 'app-private-lists',
-  imports: [DatePipe, NgClass, RouterLink, BackButtonComponent],
+  imports: [DatePipe, NgClass, RouterLink, BackButtonComponent, ListNotFoundCardComponent],
   templateUrl: './private-lists.component.html',
   styleUrl: './private-lists.component.scss'
 })
