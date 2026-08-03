@@ -11,8 +11,8 @@
                     beautiful dashboard.
                 </p>
             </div>
-            <div class="hero-actions d-flex flex-column flex-sm-row gap-2">
-                <a routerLink="/dashboard" class="btn btn-secondary btn-sm rounded-3">Dashboard</a>
+            <div class="d-flex flex-row align-items-center gap-2">
+                <a routerLink="/dashboard" class="btn btn-secondary btn-sm rounded-3 px-4">Dashboard</a>
                 <a routerLink="/change-password" class="btn btn-primary btn-sm rounded-3">Change Password</a>
             </div>
         </div>
@@ -175,7 +175,7 @@
 
     <div class="row g-4 mt-4">
         <div class="col-12">
-            <div class="card rounded-4 overflow-hidden shadow animate-fade-up delay-2">
+            <div class="d-none card rounded-4 overflow-hidden shadow animate-fade-up delay-2">
                 <div class="card-header fs-5 cursor-pointer" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
                     Danger Zone
@@ -183,13 +183,38 @@
                 <div id="collapseOne" class="card-body accordion-collapse collapse show"
                     data-bs-parent="#accordionExample">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div>
+                        <div class="me-4">
                             <h4 class="mb-1">Delete an account</h4>
                             <p class="mb-0 text-muted">Permanently delete your account and all associated data.</p>
                         </div>
                         <button type="button" class="btn btn-danger px-4 rounded-3" (click)="openModal('')">
                             Delete
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item rounded-4 overflow-hidden shadow animate-fade-up delay-2">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-danger text-white fs-5" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Danger Zone
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="me-4">
+                                    <h4 class="mb-1">Delete an account</h4>
+                                    <p class="mb-0 text-dark">Permanently delete your account and all associated data.
+                                    </p>
+                                </div>
+                                <button type="button" class="btn btn-danger px-4 rounded-3" (click)="openModal('')">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -201,37 +226,35 @@
 <div class="modal fade" id="deleteStaticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="deleteStaticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content rounded-4">
+        <form class="modal-content rounded-4" [formGroup]="deleteForm" (ngSubmit)="deleteAccount()">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="deleteStaticBackdropLabel">Delete an account</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     (click)="closeModal()"></button>
             </div>
-            <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()">
-                <div class="modal-body">
-                    <p class="mb-3">Once you delete an account, there is no going back. Please check once again.</p>
-                    <div class="mb-3">
-                        <label for="deletePassword" class="form-label">Current password</label>
-                        <input id="deletePassword" type="password" class="form-control rounded-4"
+            <div class="modal-body">
+                <p class="mb-3">Once you delete an account, there is no going back. Please check once again.</p>
+                <div class="mb-3">
+                    <label for="deletePassword" class="form-label">Current password</label>
+                    <input id="deletePassword" type="password" class="form-control rounded-4"
                         [class.is-invalid]="deletePasswordControl.invalid && deletePasswordControl.touched"
-                            formControlName="password" placeholder="Enter current password"
-                            autocomplete="current-password" />
-                        <div class="invalid-feedback d-block"
-                            *ngIf="deletePasswordControl.invalid && deletePasswordControl.touched">
-                            <span *ngIf="deletePasswordControl.errors?.['required']">Password is required to delete
-                                account.</span>
-                        </div>
+                        formControlName="password" placeholder="Enter current password"
+                        autocomplete="current-password" />
+                    <div class="invalid-feedback d-block"
+                        *ngIf="deletePasswordControl.invalid && deletePasswordControl.touched">
+                        <span *ngIf="deletePasswordControl.errors?.['required']">Password is required to delete
+                            account.</span>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
-                            class="bi bi-x position-relative" style="top: 1.4px"></i> Cancel</button>
-                    <button type="submit" class="btn btn-danger" [disabled]="isDeleting()">
-                        <i class="bi bi-trash3"></i>
-                        {{ isDeleting() ? 'Deleting…' : 'Delete' }}
-                    </button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
+                        class="bi bi-x position-relative" style="top: 1.4px"></i> Cancel</button>
+                <button type="submit" class="btn btn-danger" [disabled]="isDeleting()">
+                    <i class="bi bi-trash3"></i>
+                    {{ isDeleting() ? 'Deleting…' : 'Delete' }}
+                </button>
+            </div>
+        </form>
     </div>
 </div>
