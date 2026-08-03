@@ -12,7 +12,8 @@ import {
   UpdateProfilePayload,
   VerifyOTPPayload,
   VerifyRegistrationOTPPayload,
-  ResendRegistrationOTPPayload
+  ResendRegistrationOTPPayload,
+  DeleteAccountPayload
 } from '../../models/auth.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
@@ -113,6 +114,19 @@ export class AuthService {
     return this.http.get<ProfileResponse>(
       `${environment.apiUrl}/auth/profile`,
       this.sessionService.getAuthHeaders()
+    );
+  }
+
+  /**
+   * Delete authenticated user account
+   */
+  deleteAccount(payload: DeleteAccountPayload): Observable<AuthResponse> {
+    return this.http.delete<AuthResponse>(
+      `${environment.apiUrl}/auth/profile`,
+      {
+        body: payload,
+        ...this.sessionService.getAuthHeaders()
+      }
     );
   }
 

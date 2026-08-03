@@ -53,6 +53,10 @@ export interface UpdateProfilePayload {
     mobileNumber: number;
 }
 
+export interface DeleteAccountPayload {
+    password: string;
+}
+
 export interface UserProfile {
     id?: string;
     firstName: string;

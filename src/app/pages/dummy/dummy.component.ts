@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../services/session/session.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { ValidationsService } from '../../services/validations/validations.service';
@@ -10,6 +10,7 @@ import { User } from '../../models/user.model';
 import { ProfileResponse, UpdateProfilePayload } from '../../models/auth.model';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+declare var $: any;
 
 @Component({
   selector: 'app-dummy',
@@ -22,17 +23,23 @@ export class DummyComponent implements OnInit {
   authService = inject(AuthService);
   validationService = inject(ValidationsService);
   fb = inject(FormBuilder);
+  router = inject(Router);
   toastr = inject(ToastrService);
   spinner = inject(NgxSpinnerService);
 
   userDetails: User | null = null;
   editMode = signal(false);
   isSubmitting = signal(false);
+  isDeleting = signal(false);
   profileForm: FormGroup = this.fb.group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+  });
+
+  deleteForm: FormGroup = this.fb.group({
+    password: ['', [Validators.required]]
   });
 
   get firstNameControl(): AbstractControl {
@@ -49,6 +56,10 @@ export class DummyComponent implements OnInit {
 
   get mobileNumberControl(): AbstractControl {
     return this.profileForm.get('mobileNumber') as AbstractControl;
+  }
+
+  get deletePasswordControl(): AbstractControl {
+    return this.deleteForm.get('password') as AbstractControl;
   }
 
   get firstName(): string {
@@ -208,4 +219,47 @@ export class DummyComponent implements OnInit {
       }
     });
   }
+
+  openModal(data: any): void {
+    // if (data) {
+    //   // this.deleteDetails = data;
+    //   $('#deleteStaticBackdrop').modal('show');
+    // }
+    $('#deleteStaticBackdrop').modal('show');
+  }
+
+  closeModal(): void {
+    // this.deleteDetails = null;
+    this.deleteForm.reset();
+    $('#deleteStaticBackdrop').modal('hide');
+  }
+
+  deleteAccount(): void {
+    if (this.deleteForm.invalid) {
+      this.deleteForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = { password: this.deleteForm.value.password };
+    this.isDeleting.set(true);
+
+    this.authService.deleteAccount(payload).subscribe({
+      next: res => {
+        this.isDeleting.set(false);
+        if (res?.success) {
+          this.toastr.success(res.message || 'Account deleted successfully');
+          this.sessionService.logout();
+          this.router.navigateByUrl('/login');
+          this.closeModal();
+        } else {
+          this.toastr.error(res?.message || 'Failed to delete account', 'Error');
+        }
+      },
+      error: (err: any) => {
+        this.isDeleting.set(false);
+        this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
+      }
+    });
+  }
+
 }

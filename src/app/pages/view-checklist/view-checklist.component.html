@@ -7,20 +7,13 @@
             <p class="text-muted lead">You can add items here until the list is complete.</p>
             }
         </div>
-        <!-- <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
-            <a routerLink="/create-list" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
-                <i class="bi bi-plus-circle me-2"></i>Create New Checklist
-            </a>
-        </div> -->
     </div>
     <div class="row">
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
-            <!-- <app-back-button></app-back-button> -->
             <div class="card border-2 rounded-4 shadow mt-2 mb-4">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="mb-0 fw-semibold">{{checklistDetails?.title}}</p>
-                        <!-- <p class="mb-0">{{listItems.length}}</p> -->
                         <p class="mb-0">Total Items: <span
                                 class="badge text-bg-primary">{{checklistDetails?.listItems?.length}}</span></p>
                     </div>
@@ -30,9 +23,6 @@
                     <p class="text-muted mb-0">Created By : <span
                             class="text-dark">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
                     </p>
-                    <!-- <p class="text-muted mb-0">Created By : <span
-                            class="text-dark">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
-                    </p> -->
                     @if (!checklistDetails?.isFreeze) {
                     <div class="input-group mt-2">
                         <input type="text" class="form-control" #itemInputBox appCapitalizeFirst
@@ -54,13 +44,13 @@
             @for (item of checklistDetails?.listItems; track $index) {
             <div class="card border-2 rounded-4 shadow mb-3 border-0 border-5 border-start border-end"
                 [ngClass]="item?.completed ? 'border-success' : 'border-danger'">
+                @if (!checklistDetails?.isPrivate) {
                 <div class="card-header">
                     <p class="text-muted mb-0">Created By : <span
                             class="text-dark">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
-                        <!-- Item Created By: {{item?.createdBy?.fullname}} -->
-                        <!-- <p class="text-muted mb-0">Created By : <span
-                            class="text-dark">{{item?.createdBy?.fullname}}</span></p> -->
+                    </p>
                 </div>
+                }
                 <div class="card-body py-2 d-flex justify-content-between align-items-center">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" [value]="item?._id" [id]="item?._id"
@@ -70,16 +60,16 @@
                             {{item.text}}
                         </label>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm"
-                        [ngClass]="item?.completedBy?.fullname || checklistDetails?.isFreeze ? 'd-none': ''"
-                        (click)="deleteItem(item?._id)"><i class="bi bi-trash3"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteItem(item?._id)"
+                        [disabled]="checklistDetails?.isFreeze"><i class="bi bi-trash3"></i></button>
                 </div>
+                @if (!checklistDetails?.isPrivate) {
                 <div class="card-footer">
-                    <!-- <p class="text-muted mb-0">Completed By : <span
-                            class="text-dark">{{item?.completedBy?.fullname}}</span></p> -->
                     <p class="text-muted mb-0">Completed By : <span
                             class="text-dark">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
+                    </p>
                 </div>
+                }
             </div>
             }
 

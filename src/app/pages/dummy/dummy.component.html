@@ -1,5 +1,5 @@
 <section class="container">
-    <div class="profile-hero card bg-white shadow animate-fade-up">
+    <div class="profile-hero card bg-white shadow rounded-4 animate-fade-up">
         <div class="hero-decor hero-decor-1"></div>
         <div class="hero-decor hero-decor-2"></div>
         <div class="hero-content">
@@ -20,7 +20,7 @@
 
     <div class="row g-4">
         <div class="col-12 col-lg-6">
-            <article class="profile-card card bg-white h-100 shadow animate-fade-up">
+            <article class="profile-card card bg-white h-100 rounded-4 shadow animate-fade-up">
                 <div class="profile-card-top row align-items-center gx-3 gy-3">
                     <div class="col-auto">
                         <div class="avatar-shell">
@@ -59,7 +59,7 @@
             </article>
         </div>
         <div class="col-12 col-lg-6">
-            <article class="profile-panel card bg-white h-100 shadow animate-fade-up delay-1">
+            <article class="profile-panel card bg-white h-100 rounded-4 shadow animate-fade-up delay-1">
                 <div class="panel-header">
                     <div>
                         <p class="eyebrow">Account summary</p>
@@ -85,10 +85,10 @@
                                 [class.is-invalid]="firstNameControl.invalid && firstNameControl.touched"
                                 placeholder="First name" (input)="onInputChange($event, 'firstName')"
                                 autocomplete="given-name" />
-                            <div class="invalid-feedback"
-                                *ngIf="firstNameControl.invalid && firstNameControl.touched">
+                            <div class="invalid-feedback" *ngIf="firstNameControl.invalid && firstNameControl.touched">
                                 <span *ngIf="firstNameControl.errors?.['required']">Enter your first name.</span>
-                                <span *ngIf="firstNameControl.errors?.['minlength']">First name must be at least 2 characters.</span>
+                                <span *ngIf="firstNameControl.errors?.['minlength']">First name must be at least 2
+                                    characters.</span>
                             </div>
                         </div>
 
@@ -98,10 +98,10 @@
                                 [class.is-invalid]="lastNameControl.invalid && lastNameControl.touched"
                                 placeholder="Last name" (input)="onInputChange($event, 'lastName')"
                                 autocomplete="family-name" />
-                            <div class="invalid-feedback"
-                                *ngIf="lastNameControl.invalid && lastNameControl.touched">
+                            <div class="invalid-feedback" *ngIf="lastNameControl.invalid && lastNameControl.touched">
                                 <span *ngIf="lastNameControl.errors?.['required']">Enter your last name.</span>
-                                <span *ngIf="lastNameControl.errors?.['minlength']">Last name must be at least 2 characters.</span>
+                                <span *ngIf="lastNameControl.errors?.['minlength']">Last name must be at least 2
+                                    characters.</span>
                             </div>
                         </div>
 
@@ -110,8 +110,7 @@
                             <input id="email" type="email" class="form-control rounded-4" formControlName="email"
                                 [class.is-invalid]="emailControl.invalid && emailControl.touched"
                                 placeholder="you@example.com" autocomplete="email" />
-                            <div class="invalid-feedback"
-                                *ngIf="emailControl.invalid && emailControl.touched">
+                            <div class="invalid-feedback" *ngIf="emailControl.invalid && emailControl.touched">
                                 <span *ngIf="emailControl.errors?.['required']">Enter your email address.</span>
                                 <span *ngIf="emailControl.errors?.['email']">Enter a valid email address.</span>
                             </div>
@@ -126,7 +125,8 @@
                             <div class="invalid-feedback"
                                 *ngIf="mobileNumberControl.invalid && mobileNumberControl.touched">
                                 <span *ngIf="mobileNumberControl.errors?.['required']">Enter your mobile number.</span>
-                                <span *ngIf="mobileNumberControl.errors?.['pattern']">Enter a valid 10-digit mobile number.</span>
+                                <span *ngIf="mobileNumberControl.errors?.['pattern']">Enter a valid 10-digit mobile
+                                    number.</span>
                             </div>
                         </div>
                     </div>
@@ -172,4 +172,66 @@
             </article>
         </div>
     </div>
+
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="card rounded-4 overflow-hidden shadow animate-fade-up delay-2">
+                <div class="card-header fs-5 cursor-pointer" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+                    Danger Zone
+                </div>
+                <div id="collapseOne" class="card-body accordion-collapse collapse show"
+                    data-bs-parent="#accordionExample">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1">Delete an account</h4>
+                            <p class="mb-0 text-muted">Permanently delete your account and all associated data.</p>
+                        </div>
+                        <button type="button" class="btn btn-danger px-4 rounded-3" (click)="openModal('')">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteStaticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="deleteStaticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteStaticBackdropLabel">Delete an account</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="closeModal()"></button>
+            </div>
+            <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()">
+                <div class="modal-body">
+                    <p class="mb-3">Once you delete an account, there is no going back. Please check once again.</p>
+                    <div class="mb-3">
+                        <label for="deletePassword" class="form-label">Current password</label>
+                        <input id="deletePassword" type="password" class="form-control rounded-4"
+                        [class.is-invalid]="deletePasswordControl.invalid && deletePasswordControl.touched"
+                            formControlName="password" placeholder="Enter current password"
+                            autocomplete="current-password" />
+                        <div class="invalid-feedback d-block"
+                            *ngIf="deletePasswordControl.invalid && deletePasswordControl.touched">
+                            <span *ngIf="deletePasswordControl.errors?.['required']">Password is required to delete
+                                account.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
+                            class="bi bi-x position-relative" style="top: 1.4px"></i> Cancel</button>
+                    <button type="submit" class="btn btn-danger" [disabled]="isDeleting()">
+                        <i class="bi bi-trash3"></i>
+                        {{ isDeleting() ? 'Deleting…' : 'Delete' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
