@@ -112,6 +112,17 @@ export class ListService {
     );
   }
 
+  downloadChecklistReport(checklistId: string): Observable<Blob> {
+    const headers = this.sessionService.getAuthHeaders().headers;
+    return this.http.get(
+      `${environment.apiUrl}/checklists/${checklistId}/download`,
+      {
+        headers,
+        responseType: 'blob'
+      }
+    );
+  }
+
   getNameOfListCreated(data: any): string {
     if (!data) return '';
 

@@ -83,12 +83,37 @@ export class ListsComponent implements OnInit, OnDestroy {
         if (res?.success) {
           this.closeModal();
           this.toastr.success(res?.message);
+          this.getLists(false);
         } else {
           this.toastr.error(res?.message);
         }
       },
       error: (err: any) => {
-        this.toastr.error(err);
+        this.toastr.error(err?.error?.message || 'Failed to delete checklist.');
+      }
+    });
+  }
+
+  downloadChecklistReport(checklistId: string): void {
+    const checklist = this.listItems.find(item => item?._id === checklistId);
+    const fileName = `checklist-${(checklist?.title || checklistId).replace(/[^a-z0-9_-]+/gi, '_').toLowerCase()}.pdf`;
+
+    this.spinner.show();
+    this.listService.downloadChecklistReport(checklistId).subscribe({
+      next: (blob: Blob) => {
+        this.spinner.hide();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err: any) => {
+        this.spinner.hide();
+        this.toastr.error(err?.error?.message || 'Failed to download checklist report.', err?.statusText || 'Error');
       }
     });
   }
