@@ -73,6 +73,7 @@
             </div>
             }
 
+            @if (checklistDetails?.listItems?.length > 0) {
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
                 <p class="mb-2 mb-md-0">Total Items: <span class="badge text-bg-primary">{{checklistDetails?.totalItems
                         || 0}}</span></p>
@@ -81,6 +82,7 @@
                 <p class="mb-2 mb-md-0">Pending Items: <span
                         class="badge text-bg-danger">{{checklistDetails?.pendingItems || 0}}</span></p>
             </div>
+            }
 
             @if (!checklistDetails?.isFreeze && checklistDetails?.listItems?.length > 0) {
             @if(listService.getNameOfListCreated(checklistDetails?.createdBy) === 'You') {
@@ -91,7 +93,7 @@
             }
             }
 
-            @if (checklistDetails?.isFreeze) {
+            @if (checklistDetails?.listItems?.length > 0) {
             <div class="mt-4">
                 <app-back-button></app-back-button>
             </div>
