@@ -96,7 +96,7 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   downloadChecklistReport(checklistId: string): void {
     const checklist = this.listItems.find(item => item?._id === checklistId);
-    const fileName = `checklist-${(checklist?.title || checklistId).replace(/[^a-z0-9_-]+/gi, '_').toLowerCase()}.pdf`;
+    const fileName = `Checklist - ${(checklist?.title || checklistId)}.pdf`;
 
     this.spinner.show();
     this.listService.downloadChecklistReport(checklistId).subscribe({

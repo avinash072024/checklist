@@ -48,7 +48,7 @@
                         <div class="col-5">Pending Items</div>
                         <div class="col-7 text-muted"> {{item?.pendingItems || 0}}</div>
                     </div>
-                    
+
                     <div class="row mb-2">
                         <div class="col-5">Status</div>
                         <div class="col-7 fw-semibold" [ngClass]="item?.isFreeze ? 'text-danger' : 'text-success'">
@@ -61,9 +61,17 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-end align-items-center">
-                    <button type="button" class="btn btn-outline-primary btn-sm rounded-3"
+                    <!-- <button type="button" class="btn btn-outline-primary btn-sm rounded-3"
                         (click)="viewChecklist(item?._id)"><i class="bi bi-eye"
-                            style="position: relative; top: 1.4px"></i> View</button>
+                            style="position: relative; top: 1.4px"></i> View</button> -->
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-3"
+                            (click)="downloadChecklistReport(item?._id)"><i class="bi bi-download"
+                                style="position: relative; top: 1.4px"></i> Download</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm rounded-3"
+                            (click)="viewChecklist(item?._id)"><i class="bi bi-eye"
+                                style="position: relative; top: 1.4px"></i> View</button>
+                    </div>
                 </div>
             </div>
         </div>
