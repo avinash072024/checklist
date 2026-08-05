@@ -94,30 +94,6 @@ export class ListsComponent implements OnInit, OnDestroy {
     });
   }
 
-  downloadChecklistReport(checklistId: string): void {
-    const checklist = this.listItems.find(item => item?._id === checklistId);
-    const fileName = `Checklist - ${(checklist?.title || checklistId)}.pdf`;
-
-    this.spinner.show();
-    this.listService.downloadChecklistReport(checklistId).subscribe({
-      next: (blob: Blob) => {
-        this.spinner.hide();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      },
-      error: (err: any) => {
-        this.spinner.hide();
-        this.toastr.error(err?.error?.message || 'Failed to download checklist report.', err?.statusText || 'Error');
-      }
-    });
-  }
-
   viewChecklist(checklistId: string): void {
     this.router.navigateByUrl(`/lists/view-checklist/${checklistId}`);
   }

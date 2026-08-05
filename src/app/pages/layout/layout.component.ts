@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from "../../components/footer/footer.component";
+import { ScrollTopComponent } from "../../components/scroll-top/scroll-top.component";
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
+  standalone: true,
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, ScrollTopComponent],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.scss'
+  styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent {
 
