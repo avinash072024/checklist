@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListService } from '../../services/list/list.service';
 import { ToastrService } from 'ngx-toastr';
@@ -12,7 +12,7 @@ import { AvatarService } from '../../services/avatar/avatar.service';
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
   users = signal<any[]>([]);
   isLoading = signal(false);
 
@@ -27,7 +27,7 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers(true);
 
-    this.socketSub = this.socketService.onChecklistChange().subscribe(() => {
+    this.socketSub = this.socketService.onUserChange().subscribe(() => {
       this.loadUsers(false);
     });
   }
@@ -49,5 +49,9 @@ export class UserListComponent implements OnInit {
         this.toastr.error(err?.error?.message || 'Unable to load users.', 'Error');
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.socketSub?.unsubscribe();
   }
 }

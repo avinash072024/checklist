@@ -55,4 +55,28 @@ export class SocketService {
       };
     });
   }
+
+  // Helper stream to listen to all user mutations
+  onUserChange(): Observable<any> {
+    return new Observable((subscriber) => {
+      const events = [
+        'user:created',
+        'user:updated',
+        'user:verified',
+        'user:deleted'
+      ];
+
+      const handlers = events.map(event => {
+        const handler = (data: any) => subscriber.next({ event, ...data });
+        this.socket.on(event, handler);
+        return { event, handler };
+      });
+
+      return () => {
+        handlers.forEach(({ event, handler }) => {
+          this.socket.off(event, handler);
+        });
+      };
+    });
+  }
 }
