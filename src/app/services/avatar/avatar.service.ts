@@ -61,6 +61,6 @@ export class AvatarService {
     const textColor = this.getTextColor(bgColor);
     const formattedName = safeName.replace(/ /g, '+');
 
-    return `https://ui-avatars.com/api/?name=${formattedName}&background=${bgColor}&color=${textColor}&rounded=true&size=28`;
+    return `https://ui-avatars.com/api/?name=${formattedName}&background=${bgColor}&color=${textColor}&rounded=true&size=25`;
   }
 }
