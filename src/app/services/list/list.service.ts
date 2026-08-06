@@ -112,6 +112,13 @@ export class ListService {
     );
   }
 
+  getUserList(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/auth/users`,
+      this.sessionService.getAuthHeaders()
+    );
+  }
+
   getNameOfListCreated(data: any): string {
     if (!data) return '';
 

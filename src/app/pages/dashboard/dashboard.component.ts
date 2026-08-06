@@ -9,10 +9,11 @@ import { User } from '../../models/user.model';
 import { jwtDecode } from 'jwt-decode';
 import { RouterLink } from "@angular/router";
 import { Subscription } from 'rxjs';
+import { UserListComponent } from '../user-list/user-list.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink],
+  imports: [RouterLink, UserListComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

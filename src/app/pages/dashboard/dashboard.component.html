@@ -1,9 +1,8 @@
 <div class="container">
     <div class="row mb-4">
         <div class="col-lg-8">
-            <h2 class="fw-bold mb-2">Welcome back, <span class="text-primary">{{userDetails?.name?.split('
-                    ')[0]}}</span></h2>
-            <p class="text-muted lead">Here's a quick overview of your checkilists.</p>
+            <h2 class="fw-bold mb-2">Welcome, <span class="text-primary">{{userDetails?.name}}</span></h2>
+            <p class="text-muted lead">Here's a quick overview of your checklists.</p>
         </div>
         <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
             <a routerLink="/create-list" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
@@ -43,7 +42,7 @@
                         {{ dashboard().myLists }}
                     </h2>
                     <span>
-                        Publically created by you
+                        Created by you
                     </span>
                 </div>
             </div>
@@ -85,4 +84,6 @@
             </div>
         </div>
     </div>
+
+    <app-user-list></app-user-list>
 </div>
