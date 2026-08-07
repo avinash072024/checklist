@@ -49,16 +49,16 @@
                         <div class="col-7 text-muted"> {{item?.pendingItems || 0}}</div>
                     </div>
 
-                    <div class="row mb-2">
+                    <div class="row mb-0">
                         <div class="col-5">Status</div>
                         <div class="col-7 fw-semibold" [ngClass]="item?.isFreeze ? 'text-danger' : 'text-success'">
                             {{item?.isFreeze ? 'Completed' : 'Active'}}</div>
                     </div>
 
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-5">Completed&nbsp;By</div>
                         <div class="col-7 text-muted"> {{listService.getNameOfListCreated(item?.frozenBy) || '-'}}</div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-center">
                     @if(listService.getNameOfListCreated(item?.createdBy) === 'You') {
@@ -77,13 +77,6 @@
         }
 
         @if (listItems.length <= 0) { <div class="col-12 mb-4">
-            <!-- <div class="card rounded-4 shadow">
-                <div class="card-body text-center">
-                    No list found. Please <a routerLink="/create-list" class="text-decoration-none">click here</a> to
-                    create list.
-
-                </div>
-            </div> -->
             <app-list-not-found-card></app-list-not-found-card>
     </div>
     }
