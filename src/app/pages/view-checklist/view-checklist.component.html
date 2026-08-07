@@ -24,8 +24,8 @@
                             class="text-dark fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
                     </p> -->
                     <div class="row">
-                        <div class="col-3">Created By : </div>
-                        <div class="col-9 fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</div>
+                        <div class="col-4">Created By</div>
+                        <div class="col-8 fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</div>
                     </div>
                     @if (!checklistDetails?.isFreeze) {
                     <div class="input-group mt-2">
@@ -41,8 +41,8 @@
                             class="text-dark">{{listService.getNameOfListCreated(checklistDetails?.frozenBy)}}</span>
                     </p> -->
                     <div class="row">
-                        <div class="col-3">Status : </div>
-                        <div class="col-9 fw-semibold" [ngClass]="checklistDetails?.isFreeze ? 'text-danger' : 'text-success'">{{checklistDetails?.isFreeze ? 'Completed' : 'Active'}}</div>
+                        <div class="col-4">Status</div>
+                        <div class="col-8 fw-semibold" [ngClass]="checklistDetails?.isFreeze ? 'text-danger' : 'text-success'">{{checklistDetails?.isFreeze ? 'Completed' : 'Active'}}</div>
                     </div>
                     <!-- <p class="text-dark mb-0">Status : <span class="fw-semibold"
                             [ngClass]="checklistDetails?.isFreeze ? 'text-danger' : 'text-success'">{{checklistDetails?.isFreeze ? 'Completed' : 'Active'}}</span>
@@ -83,17 +83,6 @@
                 }
             </div>
             }
-
-            <!-- @if (checklistDetails?.listItems?.length > 0) {
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                <p class="mb-2 mb-md-0">Total Items: <span class="badge text-bg-primary">{{checklistDetails?.totalItems
-                        || 0}}</span></p>
-                <p class="mb-2 mb-md-0">Completed Items: <span
-                        class="badge text-bg-success">{{checklistDetails?.completedItems || 0}}</span></p>
-                <p class="mb-2 mb-md-0">Pending Items: <span
-                        class="badge text-bg-danger">{{checklistDetails?.pendingItems || 0}}</span></p>
-            </div>
-            } -->
 
             @if (checklistDetails?.listItems?.length > 0) {
             <div class="card border-2 rounded-4 shadow border-0 border-5 border-top border-success mt-4">
