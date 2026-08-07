@@ -72,11 +72,9 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   }
 
    getChecklistById(checklistId: string): void {
-    debugger;
     this.listService.getChecklistById(checklistId).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          debugger;
           this.checklistDetails = res?.data || [];
         }
       },
