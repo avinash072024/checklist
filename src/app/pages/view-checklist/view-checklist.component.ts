@@ -9,11 +9,12 @@ import { CommonModule } from '@angular/common';
 import { CapitalizeFirstDirective } from '../../directives/capitalize-first.directive';
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
 import { Subscription } from 'rxjs';
+import { NotFoundCardComponent } from '../../components/not-found-card/not-found-card.component';
 declare var $: any;
 
 @Component({
   selector: 'app-view-checklist',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, BackButtonComponent],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, BackButtonComponent, NotFoundCardComponent],
   templateUrl: './view-checklist.component.html',
   styleUrl: './view-checklist.component.scss'
 })
@@ -70,17 +71,19 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
     });
   }
 
-  getChecklistById(checklistId: string): void {
+   getChecklistById(checklistId: string): void {
+    debugger;
     this.listService.getChecklistById(checklistId).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          this.checklistDetails = res?.data;
+          debugger;
+          this.checklistDetails = res?.data || [];
         }
       },
       error: (err) => {
         // this.toastr.error(err?.error?.message || err?.message);
         // this.toastr.error(err?.message);
-        this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
+        // this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
       }
     });
   }
