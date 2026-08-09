@@ -10,6 +10,7 @@ import { CapitalizeFirstDirective } from '../../directives/capitalize-first.dire
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
 import { Subscription } from 'rxjs';
 import { NotFoundCardComponent } from '../../components/not-found-card/not-found-card.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
 
 @Component({
@@ -31,6 +32,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   socketService = inject(SocketService);
   sessionService = inject(SessionService);
   toastr = inject(ToastrService);
+  spinner = inject(NgxSpinnerService);
 
   private socketSub!: Subscription;
 
@@ -72,16 +74,21 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   }
 
    getChecklistById(checklistId: string): void {
+    this.spinner.show();
     this.listService.getChecklistById(checklistId).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.checklistDetails = res?.data || [];
+          this.spinner.hide();
+        } else {
+          this.spinner.hide();
         }
       },
       error: (err) => {
+        this.spinner.hide();
         // this.toastr.error(err?.error?.message || err?.message);
         // this.toastr.error(err?.message);
-        // this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
+        this.toastr.error(err?.error?.message || 'Something went wrong.');
       }
     });
   }
