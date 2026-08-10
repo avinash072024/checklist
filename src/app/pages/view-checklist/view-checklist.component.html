@@ -2,7 +2,7 @@
     <div class="row mb-3">
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
             <app-back-button></app-back-button>
-            <h2 class="fw-bold mb-2">View Checklist</h2>
+            <h2 class="fw-bold mb-2">View Checklist {{checklistDetails?.isPrivate ? '(Private)' : ''}}</h2>
             @if (!checklistDetails?.isFreeze) {
             <p class="text-muted lead mb-0">You can add items here until the list is complete.</p>
             }
@@ -14,14 +14,23 @@
             <div class="card border-2 rounded-4 shadow mt-2 mb-4">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0 fw-semibold">{{checklistDetails?.title}}</p>
+                        <p class="d-flex align-items-center gap-2 text-truncate mb-0 fw-semibold">
+                            @if(checklistDetails?.isPrivate) {
+                                <i class="bi bi-lock-fill text-primary fs-5"></i>
+                            } @else {
+                                <i class="bi bi-globe2 text-primary fs-5 position-relative" style="top:2px"></i>
+                            }
+                            {{checklistDetails?.title}}
+                        </p>
+
+                        <!-- <p class="mb-0 fw-semibold">{{checklistDetails?.title}}</p> -->
                         <p class="mb-0">Total Items: <span
                                 class="badge text-bg-primary">{{checklistDetails?.listItems?.length}}</span></p>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    <p class="mb-0">Created By : <span class="text-dark fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span></p>
+                    <!-- <p class="mb-0">Created By : <span class="text-dark fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span></p> -->
                     @if (!checklistDetails?.isFreeze) {
                     <div class="input-group mt-2">
                         <input type="text" class="form-control" #itemInputBox appCapitalizeFirst
@@ -32,7 +41,9 @@
                         </button>
                     </div>
                     } @else {
-                    <p class="mb-0">Status : <span class="fw-semibold" [ngClass]="checklistDetails?.isFreeze ? 'text-danger' : 'text-success'">{{checklistDetails?.isFreeze ? 'Completed' : 'Active'}}</span></p>
+                    <p class="mb-0">Status : <span class="fw-semibold"
+                            [ngClass]="checklistDetails?.isFreeze ? 'text-danger' : 'text-success'">{{checklistDetails?.isFreeze
+                            ? 'Completed' : 'Active'}}</span></p>
                     }
 
                 </div>
@@ -103,9 +114,9 @@
             }
         </div>
         } @else {
-            <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
-                <app-not-found-card></app-not-found-card>
-            </div>
+        <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
+            <app-not-found-card></app-not-found-card>
+        </div>
         }
     </div>
 </div>
