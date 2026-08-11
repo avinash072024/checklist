@@ -22,7 +22,7 @@ declare var $: any;
 export class ViewChecklistComponent implements OnInit, OnDestroy {
   itemTextInput = viewChild<ElementRef<HTMLInputElement>>('itemInputBox');
 
-  id!: any;
+  checkListId!: any;
   checklistDetails: any;
   listName = '';
   newItemName = '';
@@ -37,25 +37,29 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   private socketSub!: Subscription;
 
   constructor(private route: ActivatedRoute) {
-    this.id = this.route.snapshot.paramMap.get('id');
+    this.checkListId = this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
-    this.getChecklistById(this.id);
+    this.getChecklistById(this.checkListId, true);
 
     // Listen to real-time events and update if this checklist or item was modified
     this.socketSub = this.socketService.onChecklistChange().subscribe((data) => {
-      if (!data.checklistId || data.checklistId === this.id) {
-        this.getChecklistById(this.id);
+      if (!data.checklistId || data.checklistId === this.checkListId) {
+        this.getChecklistById(this.checkListId, false);
       }
     });
   }
 
   addListItem(): void {
     const itemText = this.newItemName.trim();
-    if (!itemText) return;
+    // if (!itemText) return;
+    if(!itemText) {
+      this.toastr.error('Please enter item name');
+      return;
+    }
 
-    this.listService.addItemToChecklist(this.id, itemText).subscribe({
+    this.listService.addItemToChecklist(this.checkListId, itemText).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
@@ -73,8 +77,11 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
     });
   }
 
-   getChecklistById(checklistId: string): void {
-    this.spinner.show();
+  getChecklistById(checklistId: string, showSpinner: boolean): void {
+    if(showSpinner) {
+      this.spinner.show();
+    }
+    
     this.listService.getChecklistById(checklistId).subscribe({
       next: (res: any) => {
         if (res?.success) {
@@ -94,7 +101,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   }
 
   deleteItem(itemId: string): void {
-    this.listService.deleteChecklistItem(this.id, itemId).subscribe({
+    this.listService.deleteChecklistItem(this.checkListId, itemId).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
@@ -112,7 +119,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
     const checkbox = event.target as HTMLInputElement;
     const isChecked = checkbox.checked;
 
-    this.listService.toggleItemComplete(this.id, itemId, isChecked).subscribe({
+    this.listService.toggleItemComplete(this.checkListId, itemId, isChecked).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
@@ -127,7 +134,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   }
 
   freezeChecklist(): void {
-    this.listService.freezeChecklist(this.id, true).subscribe({
+    this.listService.freezeChecklist(this.checkListId, true).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.closeModal();
