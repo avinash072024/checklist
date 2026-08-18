@@ -118,7 +118,10 @@ export class CreateListComponent implements OnInit, OnDestroy {
 
   addListItem(): void {
     const itemText = this.newItemName.trim();
-    if (!itemText) return;
+    if (!itemText) {
+      this.toastr.warning('Please enter an item');
+      return;
+    }
 
     if (!this.listDetails || !this.listDetails._id) {
       const listDetailsString = this.sessionService.getSession(Constants.listDetails);
