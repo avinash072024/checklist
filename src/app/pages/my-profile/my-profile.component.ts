@@ -13,12 +13,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
 
 @Component({
-  selector: 'app-dummy',
+  selector: 'app-my-profile',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './dummy.component.html',
-  styleUrl: './dummy.component.scss'
+  templateUrl: './my-profile.component.html',
+  styleUrl: './my-profile.component.scss'
 })
-export class DummyComponent implements OnInit {
+export class MyProfileComponent implements OnInit {
   sessionService = inject(SessionService);
   authService = inject(AuthService);
   validationService = inject(ValidationsService);
@@ -261,5 +261,4 @@ export class DummyComponent implements OnInit {
       }
     });
   }
-
 }

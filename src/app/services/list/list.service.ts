@@ -15,19 +15,10 @@ export class ListService {
   http = inject(HttpClient);
   sessionService = inject(SessionService);
 
-  // private getAuthHeaders() {
-  //   return {
-  //     headers: new HttpHeaders({
-  //       Authorization: `Bearer ${this.sessionService.getCookie(Constants.token) || ''}`
-  //     })
-  //   };
-  // }
-
   createChecklist(payload: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}/checklists/`, payload, this.sessionService.getAuthHeaders());
   }
 
-  // Update checklist API call
   updateChecklist(id: string, payload: { title?: string; listItems?: any[]; isFreeze?: boolean }): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/checklists/${id}`, payload, this.sessionService.getAuthHeaders());
   }

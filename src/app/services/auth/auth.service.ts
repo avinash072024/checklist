@@ -28,14 +28,6 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly sessionService = inject(SessionService);
 
-  // private getAuthHeaders() {
-  //   return {
-  //     headers: new HttpHeaders({
-  //       Authorization: `Bearer ${this.sessionService.getCookie(Constants.token) || ''}`
-  //     })
-  //   };
-  // }
-
   /**
    * Register a new user
    */

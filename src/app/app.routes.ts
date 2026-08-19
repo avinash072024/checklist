@@ -64,7 +64,7 @@ export const routes: Routes = [
             },
             {
                 path: 'my-profile',
-                loadComponent: () => import('./pages/dummy/dummy.component').then(m => m.DummyComponent),
+                loadComponent: () => import('./pages/my-profile/my-profile.component').then(m => m.MyProfileComponent),
                 title: `${Constants?.appName} - My Profile`
             },
             {
