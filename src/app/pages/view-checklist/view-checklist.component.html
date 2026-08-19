@@ -33,7 +33,7 @@
 
                 <div class="card-body">
                     <p class="mb-0">Created By : <span
-                            class="text-dark fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
+                            class="fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
                     </p>
                     @if (!checklistDetails?.isFreeze) {
                     <div class="input-group mt-2">
@@ -59,7 +59,7 @@
                 @if (!checklistDetails?.isPrivate) {
                 <div class="card-header">
                     <p class="text-muted mb-0">Created By : <span
-                            class="text-dark">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
+                            class="fw-semibold">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
                     </p>
                 </div>
                 }
@@ -78,7 +78,7 @@
                 @if (!checklistDetails?.isPrivate) {
                 <div class="card-footer">
                     <p class="text-muted mb-0">Completed By : <span
-                            class="text-dark">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
+                            class="fw-semibold">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
                     </p>
                 </div>
                 }

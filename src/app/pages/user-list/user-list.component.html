@@ -32,7 +32,7 @@
                                     <td class="text-center">{{ users().indexOf(user) + 1 }}.</td>
                                     <td>
                                         <div style="min-width: 10rem;"
-                                            class="fw-medium text-dark d-flex align-items-center">
+                                            class="fw-medium d-flex align-items-center">
                                             <img [src]="avatarService.getAvatar(user?.fullname)" class="me-2" />
                                             <span class="mb-0">{{ user?.fullname ||
                                                 'Anonymous' }}</span>

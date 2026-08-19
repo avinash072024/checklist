@@ -13,13 +13,17 @@
 
 .private-card {
     // border-top: 5px solid #ffc107;
-    background: linear-gradient(135deg, #fffdf5 0%, #fff7d6 100%);
+    // background: linear-gradient(135deg, #fffdf5 0%, #fff7d6 100%);
 
     .card-header {
         background: rgba(255, 193, 7, .08);
     }
 
-    .card-footer {
+    .card-body {
         background: rgba(255, 193, 7, .05);
+    }
+
+    .card-footer {
+        background: rgba(255, 193, 7, .08);
     }
 }

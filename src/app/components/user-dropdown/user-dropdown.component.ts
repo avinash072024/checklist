@@ -5,10 +5,11 @@ import { SessionService } from '../../services/session/session.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user.model';
 import { Constants } from '../../models/constants';
+import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
 
 @Component({
   selector: 'app-user-dropdown',
-  imports: [RouterLink],
+  imports: [RouterLink, ThemeSwitcherComponent],
   templateUrl: './user-dropdown.component.html',
   styleUrl: './user-dropdown.component.scss'
 })
