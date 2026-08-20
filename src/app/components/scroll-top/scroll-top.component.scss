@@ -4,8 +4,10 @@
     right: 1.5rem;
     // bottom: 2.5rem;
     bottom: 4.5rem;
-    width: 44px;
-    height: 44px;
+    // width: 44px;
+    // height: 44px;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
     background-color: var(--bs-primary, #0d6efd);
     color: #fff;
@@ -21,6 +23,11 @@
     opacity: 0;
     transform: translateY(12px);
     pointer-events: none;
+
+    i {
+        position: relative;
+        top: 2px;
+    }
 }
 
 .scroll-top:hover {

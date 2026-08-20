@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Constants } from '../../models/constants';
 
 @Component({
   selector: 'app-footer',
@@ -8,4 +9,5 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
   currentYear: number = new Date().getFullYear();
+  appName: string = Constants.appName;
 }

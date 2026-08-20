@@ -55,7 +55,7 @@
 
             @for (item of checklistDetails?.listItems; track $index) {
             <div class="card border-2 rounded-4 shadow mb-3 border-0 border-5 border-start border-end"
-                [ngClass]="item?.completed ? 'border-success' : 'border-danger'">
+                [ngClass]="item?.completed ? 'border-primary' : 'border-danger'">
                 @if (!checklistDetails?.isPrivate) {
                 <div class="card-header">
                     <p class="text-muted mb-0">Created By : <span
@@ -86,8 +86,8 @@
             }
 
             @if (checklistDetails?.listItems?.length > 0) {
-            <div class="card border-2 rounded-4 shadow border-0 border-5 border-top border-success mt-4">
-                <div class="card-header">Item Summary</div>
+            <div class="card border-2 rounded-4 shadow border-0 border-5 border-top border-primary mt-4">
+                <div class="card-header">Items Summary</div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="mb-0">Total: <span class="badge text-bg-primary">{{checklistDetails?.totalItems
