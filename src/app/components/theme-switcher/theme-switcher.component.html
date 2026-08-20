@@ -1,7 +1,11 @@
-<button type="button" class="btn btn-primary" (click)="toggleTheme();">
+<button type="button" class="btn btn-primary rounded-pill" [title]="currentTheme === 'dark' ? 'Light' : 'Dark'" (click)="toggleTheme();">
     @if(currentTheme === 'light'){
-        <i class="bi bi-moon-fill"></i>
+        <i class="bi bi-moon-stars-fill"></i>
     } @else {
         <i class="bi bi-sun-fill"></i>
     }
 </button>
+
+<!-- <button type="button" class="btn btn-primary btn-sm d-flex align-items-center gap-1 border border-white rounded-pill px-3" [title]="currentTheme === 'dark' ? 'Light' : 'Dark'" (click)="toggleTheme();">
+    <i class="bi" [ngClass]="currentTheme === 'light' ? 'bi-moon-stars-fill' : 'bi-sun-fill'"></i> <span class="position-relative">{{currentTheme === 'dark' ? 'Light': 'Dark'}}</span>
+</button> -->

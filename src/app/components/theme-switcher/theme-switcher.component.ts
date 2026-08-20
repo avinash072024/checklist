@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { ThemeService } from '../../services/theme/theme.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-theme-switcher',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './theme-switcher.component.html',
   styleUrl: './theme-switcher.component.scss'
 })

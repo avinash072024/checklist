@@ -8,10 +8,11 @@ import { AuthResponse } from '../../models/auth.model';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { ToastrService } from 'ngx-toastr';
+import { ThemeSwitcherComponent } from "../../components/theme-switcher/theme-switcher.component";
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ThemeSwitcherComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

@@ -27,6 +27,20 @@ body {
     text-align: justify !important;
 }
 
+.card {
+    overflow: hidden !important;
+}
+
+// theme toggler
+.theme-toggler {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 /* ==========================================================================
    Modern ngx-toastr Customization

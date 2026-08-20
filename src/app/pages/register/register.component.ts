@@ -8,10 +8,11 @@ import { SessionService } from '../../services/session/session.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthResponse } from '../../models/auth.model';
 import { Constants } from '../../models/constants';
+import { ThemeSwitcherComponent } from "../../components/theme-switcher/theme-switcher.component";
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ThemeSwitcherComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
