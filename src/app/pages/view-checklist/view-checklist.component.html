@@ -48,6 +48,9 @@
                     <p class="mb-0">Status : <span class="fw-semibold"
                             [ngClass]="checklistDetails?.isFreeze ? 'text-danger' : 'text-success'">{{checklistDetails?.isFreeze
                             ? 'Completed' : 'Active'}}</span></p>
+                    <p class="mb-0">Completed Date : <span
+                            class="fw-semibold">{{checklistDetails?.frozenAt | date: 'dd MMM, yyyy'}}</span>
+                    </p>
                     }
 
                 </div>
@@ -142,7 +145,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
-                        class="bi bi-x"></i> Close</button>
+                        class="bi bi-x position-relative" style="top: 1px;"></i> Cancel</button>
                 <button type="button" class="btn btn-primary" (click)="freezeChecklist()"><i class="bi bi-check-lg"></i>
                     Complete</button>
             </div>
