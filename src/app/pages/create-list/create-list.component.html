@@ -1,32 +1,40 @@
-<div class="container">
+<div class="container py-0 py-md-1">
     <div class="row mb-3">
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
-            <app-back-button></app-back-button>
-            <h2 class="fw-bold mb-2">Create Checklist</h2>
-            <p class="text-muted lead mb-0">Create your checklist here.</p>
+            <app-back-button class="d-inline-block mb-2"></app-back-button>
+            <h3 class="fw-bold mb-1 display-6 tracking-tight">Create Checklist</h3>
+            <p class="text-muted mb-0">Create your checklist here.</p>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
             @if(stepOne){
-            <div class="card border-2 rounded-4 shadow mb-4">
-                <div class="card-header">
-                    Create List
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="icon-box bg-primary-subtle text-primary">
+                            <i class="bi bi-list-nested"></i>
+                        </div>
+                        <h5 class="card-title mb-0 fw-semibold">Create List</h5>
+                    </div>
                 </div>
 
                 <div class="card-body">
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="checklistOnlyForMe" (change)="getIsPrivateStatus($event)">
+                        <input class="form-check-input" type="checkbox" value="" id="checklistOnlyForMe"
+                            (change)="getIsPrivateStatus($event)">
                         <label class="form-check-label" for="checklistOnlyForMe">
                             Only for me
                         </label>
                     </div>
                     <div class="input-group">
-                        <input type="text" class="form-control" appCapitalizeFirst placeholder="Enter list name"
-                            [(ngModel)]="listName">
-
-                        <button class="btn btn-primary" (click)="enableStepTwo()" [disabled]="isSubmitting()">
-                            <i class="bi bi-arrow-right-circle"></i> Next
+                        <input type="text" class="form-control rounded-pill-start py-2 px-3" appCapitalizeFirst
+                            placeholder="Enter list name" [(ngModel)]="listName">
+                        <button
+                            class="btn btn-primary px-4 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
+                            (click)="enableStepTwo()" [disabled]="isSubmitting()">
+                            <span>Next</span> <i class="bi bi-arrow-right"></i>
                         </button>
                     </div>
                 </div>
@@ -35,39 +43,46 @@
             } @else if (stepTwo) {
 
             <!-- Add Item -->
-            <div class="card border-2 rounded-4 shadow mb-4">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0 fw-semibold">{{listName}}</p>
-                        <!-- <p class="mb-0">{{listItems.length}}</p> -->
-                        <span class="badge text-bg-primary">{{listItems.length}}</span>
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header py-2">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center gap-2 text-truncate">
+                            <div class="icon-box bg-primary-subtle text-primary">
+                                <i class="bi bi-list-check"></i>
+                            </div>
+                            <h5 class="card-title mb-0 text-truncate fw-semibold" title="{{listName}}">{{listName}}</h5>
+                        </div>
+                        <span class="badge rounded-pill fw-normal fs-6 px-2 py-1 bg-primary-subtle text-primary">
+                            Items: {{listItems.length || 0}}
+                        </span>
                     </div>
                 </div>
 
                 <div class="card-body">
-
                     <div class="input-group">
-                        <input type="text" class="form-control" #itemInputBox appCapitalizeFirst
-                            placeholder="Enter Item" [(ngModel)]="newItemName" name="newItem">
-
-                        <button class="btn btn-primary" (click)="addListItem()" [disabled]="isSubmitting()">
+                        <input type="text" class="form-control rounded-pill-start py-2 px-3" #itemInputBox
+                            appCapitalizeFirst placeholder="Enter Item" [(ngModel)]="newItemName" name="newItem">
+                        <button
+                            class="btn btn-primary px-3 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
+                            (click)="addListItem()" [disabled]="isSubmitting()">
                             <i class="bi bi-plus-circle"></i> Add
                         </button>
                     </div>
-
                 </div>
             </div>
 
             @if (listItems.length) {
-            <div class="card rounded-4 overflow-hidden">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
                 <ul class="list-group list-group-flush">
                     @for (item of listItems; track $index) {
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="mb-0">{{item.text}}</p>
-                            <button type="button" class="btn btn-danger btn-sm" (click)="deleteItem(item?._id)"><i
-                                    class="bi bi-trash3"></i></button>
-                        </div>
+                    <li
+                        class="list-group-item d-flex justify-content-between align-items-center gap-3">
+                        <p class="mb-0 fw-medium text-break">{{item.text}}</p>
+                        <button type="button"
+                            class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
+                            (click)="deleteItem(item?._id)">
+                            <i class="bi bi-trash3"></i>
+                        </button>
                     </li>
                     }
                 </ul>
@@ -75,15 +90,18 @@
             }
 
             @if (!listItems.length) {
-            <div class="card border-2 rounded-4 shadow mb-3">
-                <div class="card-body text-center p-3">
-                    <p class="mb-0">No item added. Please add item</p>
+            <div class="card border-0 shadow-sm rounded-4 mb-3">
+                <div class="card-body text-center p-4 text-muted">
+                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                    <p class="mb-0">No items added yet. Please add an item.</p>
                 </div>
             </div>
             } @else {
             <div class="text-center mt-4">
-                <a [routerLink]="autoRedirectUrl" class="btn btn-primary text-decoration-none"><i class="bi bi-check-lg"></i>
-                    Okay</a>
+                <a [routerLink]="autoRedirectUrl"
+                    class="btn btn-primary rounded-pill px-5 py-2 shadow-sm text-decoration-none d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-check-lg fs-5"></i> Okay
+                </a>
             </div>
             }
             }

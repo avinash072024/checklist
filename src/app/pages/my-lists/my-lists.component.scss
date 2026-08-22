@@ -1,24 +1,24 @@
-.list-card {
-    transition: .3s ease;
-    border: 2px solid transparent;
+// .list-card {
+//     transition: .3s ease;
+//     border: 2px solid transparent;
 
-    &:hover {
-        transform: translateY(-6px);
-    }
-}
+//     &:hover {
+//         transform: translateY(-6px);
+//     }
+// }
 
-.public-card {
-    border-top: 5px solid #198754;
-}
+// .public-card {
+//     border-top: 5px solid #198754;
+// }
 
-.private-card {
-    background: linear-gradient(135deg, #fffdf5 0%, #fff7d6 100%);
+// .private-card {
+//     background: linear-gradient(135deg, #fffdf5 0%, #fff7d6 100%);
 
-    .card-header {
-        background: rgba(255, 193, 7, .08);
-    }
+//     .card-header {
+//         background: rgba(255, 193, 7, .08);
+//     }
 
-    .card-footer {
-        background: rgba(255, 193, 7, .05);
-    }
-}
+//     .card-footer {
+//         background: rgba(255, 193, 7, .05);
+//     }
+// }

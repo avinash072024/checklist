@@ -1,79 +1,115 @@
-<div class="container">
-    <div class="row mb-4">
+<div class="container py-0 py-md-1">
+    <!-- Header Section -->
+    <div class="row align-items-center mb-4 g-3">
         <div class="col-lg-8">
-            <app-back-button></app-back-button>
-            <h2 class="fw-bold mb-2">Other Checklists ({{listItemsCount}})</h2>
-            <p class="text-muted lead">Here's a quick overview of others checklists.</p>
+            <app-back-button class="d-inline-block mb-2"></app-back-button>
+            <h3 class="fw-bold mb-1 display-6 tracking-tight">Other Checklists ({{listItemsCount || 0}})</h3>
+            <p class="text-muted mb-0">Here's a quick overview of others checklists.</p>
         </div>
         <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
-            <a routerLink="/create-list" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
-                <i class="bi bi-plus-circle me-2"></i>Create New Checklist
+            <a routerLink="/create-list"
+                class="btn btn-primary px-4 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2 create-btn">
+                <i class="bi bi-plus-circle fs-5"></i>
+                <span>Create New Checklist</span>
             </a>
         </div>
     </div>
 
-    <div class="row">
+    <!-- Cards Grid -->
+    <div class="row g-4">
         @for (item of listItems; track $index) {
-        <div class="col-md-6 col-lg-6 col-xl-4 mb-4">
-            <div class="card rounded-4 h-100 shadow border-0 border-4 border-top"
-                [ngClass]="item?.isFreeze ? 'border-danger' : 'border-primary'">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <p class="d-flex align-items-center gap-2 text-truncate mb-0 fw-semibold">
-                        <i class="bi bi-globe2 fs-5 position-relative"
-                            [ngClass]="item?.isFreeze ? 'text-danger' : 'text-primary'" style="top: 2px"></i>
-                        {{item?.title}}
-                    </p>
-                    <p class="mb-0 text-end">{{item?.createdAt | date: 'dd MMM, yyyy'}}</p>
+        <div class="col-md-6 col-xl-4">
+            <div class="card modern-card h-100 border-0 shadow-sm" [ngClass]="item?.isFreeze ? 'frozen-card' : ''">
+
+                <!-- Card Header -->
+                <div
+                    class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2 text-truncate">
+                        <div class="icon-box"
+                            [ngClass]="item?.isFreeze ? 'bg-danger-subtle text-danger' : 'bg-primary-subtle text-primary'">
+                            <i class="bi bi-globe2"></i>
+                        </div>
+                        <h5 class="card-title mb-0 text-truncate fw-semibold" title="{{item?.title}}">{{item?.title}}
+                        </h5>
+                    </div>
+                    <span class="badge rounded-pill fw-normal px-2.5 py-1.5"
+                        [ngClass]="item?.isFreeze ? 'bg-danger-subtle text-danger' : 'bg-success-subtle text-success'">
+                        {{item?.isFreeze ? 'Completed' : 'Active'}}
+                    </span>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-6 col-sm-5">Created By</div>
-                        <div class="col-6 col-sm-7 text-muted"> {{listService.getNameOfListCreated(item?.createdBy)}}
+
+                <!-- Card Body -->
+                <div class="card-body px-4 py-3">
+                    <!-- Progress Bar Feature -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small text-muted mb-1">
+                            <span>Progress</span>
+                            <span class="fw-medium fs-6">{{item?.completedItems || 0}}/{{item?.totalItems || 0}}</span>
+                        </div>
+                        <div class="progress rounded-pill" style="height: 4px;">
+                            <div class="progress-bar rounded-pill"
+                                [ngClass]="item?.isFreeze ? 'bg-danger' : 'bg-primary'"
+                                [style.width.%]="item?.totalItems ? (item?.completedItems / item?.totalItems) * 100 : 0">
+                            </div>
                         </div>
                     </div>
 
-                    <!-- <div class="row mb-2">
-                        <div class="col-6 col-sm-5">Created Date</div>
-                        <div class="col-6 col-sm-7 text-muted"> {{item?.createdAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
-                    </div> -->
-
-                    <div class="row mb-2">
-                        <div class="col-6 col-sm-5">Total Items</div>
-                        <div class="col-6 col-sm-7 text-muted"> {{item?.totalItems || 0}}</div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-6 col-sm-5">Complete Items</div>
-                        <div class="col-6 col-sm-7 text-muted"> {{item?.completedItems || 0}}</div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-6 col-sm-5">Pending Items</div>
-                        <div class="col-6 col-sm-7 text-muted"> {{item?.pendingItems || 0}}</div>
-                    </div>
-
-                    <div class="row mb-2">
-                        <div class="col-6 col-sm-5">Status</div>
-                        <div class="col-6 col-sm-7 fw-semibold"
-                            [ngClass]="item?.isFreeze ? 'text-danger' : 'text-primary'">
-                            {{item?.isFreeze ? 'Completed' : 'Active'}}</div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6 col-sm-5">Completed&nbsp;Date</div>
-                        <div class="col-6 col-sm-7 text-muted"> {{(item?.frozenAt | date: 'dd MMM, yyyy') || '-'}}</div>
+                    <!-- Details Meta Grid -->
+                    <div class="meta-list d-flex flex-column gap-2 small">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-person me-1"></i> Created By</span>
+                            <span
+                                class="fw-medium text-truncate max-w-150">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-clock me-1"></i> Created Date</span>
+                            <span class="fw-medium fs-6">{{item?.createdAt | date: 'dd MMM, yyyy'}}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-list-check me-1"></i> Total Items</span>
+                            <span class="fw-medium fs-6">{{item?.totalItems || 0}}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-check2-circle me-1"></i> Complete Items</span>
+                            <span class="fw-medium fs-6 text-success">{{item?.completedItems || 0}}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-hourglass-split me-1"></i> Pending Items</span>
+                            <span class="fw-medium fs-6 text-danger">{{item?.pendingItems || 0}}</span>
+                        </div>
+                        @if (item?.isFreeze && item?.frozenAt) {
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-calendar-check me-1"></i> Completed Date</span>
+                            <span class="fw-medium fs-6 text-danger">{{item?.frozenAt | date: 'dd MMM, yyyy'}}</span>
+                        </div>
+                        }
                     </div>
                 </div>
-                <div class="card-footer d-flex justify-content-end align-items-center">
-                    <button type="button" class="btn btn-outline-primary btn-sm rounded-3"
-                        (click)="viewChecklist(item?._id)"><i class="bi bi-eye"
-                            style="position: relative; top: 1.4px"></i> View</button>
+
+                <!-- Card Footer Actions -->
+                <div
+                    class="card-footer bg-transparent border-0 px-4 pb-4 pt-0 d-flex justify-content-between align-items-center">
+                    @if(listService.getNameOfListCreated(item?.createdBy) === 'You') {
+                    <button type="button"
+                        class="btn btn-outline-danger btn-sm rounded-pill px-3 d-flex align-items-center gap-1 action-del-btn"
+                        (click)="openModal(item)">
+                        <i class="bi bi-trash3"></i> <span>Delete</span>
+                    </button>
+                    } @else {
+                    <div></div>
+                    }
+
+                    <button type="button"
+                        class="btn btn-primary btn-sm rounded-pill px-4 d-flex align-items-center gap-1 action-view-btn shadow-sm"
+                        (click)="viewChecklist(item?._id)">
+                        <span>View</span> <i class="bi bi-arrow-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
         }
 
-        @if (listItems.length <= 0) { <div class="col-12 mb-4">
+        @if (listItems.length <= 0) { <div class="col-12 text-center py-5">
             <app-list-not-found-card></app-list-not-found-card>
     </div>
     }
@@ -84,20 +120,23 @@
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content rounded-4">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Checklist</h1>
+                <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Delete Checklist</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     (click)="closeModal()"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to delete <strong>{{deleteDetails?.title}}</strong> checklist?
+            <div class="modal-body py-4">
+                Are you sure you want to delete <strong class="text-body">{{deleteDetails?.title}}</strong> checklist?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
-                        class="bi bi-x position-relative" style="top: 1px;"></i> Cancel</button>
-                <button type="button" class="btn btn-danger" (click)="deleteChecklist()"><i class="bi bi-trash3"></i>
-                    Delete</button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal"
+                    (click)="closeModal()">
+                    <i class="bi bi-x position-relative" style="top: 1px;"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-danger rounded-pill px-4 shadow-sm" (click)="deleteChecklist()">
+                    <i class="bi bi-trash3"></i> Delete
+                </button>
             </div>
         </div>
     </div>

@@ -1,115 +1,147 @@
-<div class="container">
-    <div class="row mb-2">
+<div class="container py-0 py-md-1">
+    <div class="row mb-3">
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
-            <app-back-button></app-back-button>
-            <h2 class="fw-bold mb-0">View Checklist {{checklistDetails?.isPrivate ? '(Private)' : ''}}</h2>
+            <app-back-button class="d-inline-block mb-2"></app-back-button>
+            <h3 class="fw-bold mb-1 display-6 tracking-tight">
+                View Checklist {{checklistDetails?.isPrivate ? '(Private)' : ''}}
+            </h3>
             @if (!checklistDetails?.isFreeze) {
-            <p class="text-muted lead mt-2 mb-0">You can add items here until the list is complete.</p>
-            }@else {
-            <p class="text-muted lead mt-2 mb-0">The checklist is completed, now you can't modify the list.</p>
+            <p class="text-muted mb-0">You can add items here until the list is complete.</p>
+            } @else {
+            <p class="text-muted mb-0">The checklist is completed, now you can't modify the list.</p>
             }
         </div>
     </div>
-    <div class="row">
+
+    <div class="row g-4">
         @if(checklistDetails) {
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
-            <div class="card border-2 rounded-4 shadow mt-2 mb-4">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="d-flex align-items-center gap-2 text-truncate mb-0 fw-semibold">
-                            @if(checklistDetails?.isPrivate) {
-                            <i class="bi bi-lock-fill text-primary fs-5"></i>
-                            } @else {
-                            <i class="bi bi-globe2 text-primary fs-5 position-relative" style="top:2px"></i>
-                            }
-                            {{checklistDetails?.title}}
-                        </p>
-
-                        <!-- <p class="mb-0 fw-semibold">{{checklistDetails?.title}}</p> -->
-                        <p class="mb-0">Total Items: <span
-                                class="badge text-bg-primary">{{checklistDetails?.listItems?.length}}</span></p>
+            <!-- Main Details Card -->
+            <div class="card modern-card-private border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header py-2">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center gap-2 text-truncate">
+                            <div class="icon-box"
+                                [ngClass]="checklistDetails?.isFreeze ? 'bg-danger-subtle text-danger' : 'bg-primary-subtle text-primary'">
+                                @if(checklistDetails?.isPrivate) {
+                                <i class="bi bi-lock-fill"></i>
+                                } @else {
+                                <i class="bi bi-globe2"></i>
+                                }
+                            </div>
+                            <h5 class="card-title mb-0 text-truncate fw-semibold" title="{{checklistDetails?.title}}">
+                                {{checklistDetails?.title}}
+                            </h5>
+                        </div>
+                        <span class="badge rounded-pill fw-normal px-2.5 py-1.5 bg-primary-subtle text-primary">
+                            Total: {{checklistDetails?.listItems?.length || 0}}
+                        </span>
                     </div>
                 </div>
 
-                <div class="card-body">
-                    <p class="mb-0">Created By : <span
-                            class="fw-semibold">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
-                    </p>
-                    @if (!checklistDetails?.isFreeze) {
-                    <div class="input-group mt-2">
-                        <input type="text" class="form-control" #itemInputBox appCapitalizeFirst
-                            placeholder="Enter Item" [(ngModel)]="newItemName" name="newItem">
+                <div class="card-body px-4 py-3">
+                    <div class="meta-list d-flex flex-column gap-2 small mb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-person me-1"></i> Created By</span>
+                            <span
+                                class="fw-medium fs-6 text-truncate max-w-150">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
+                        </div>
 
-                        <button class="btn btn-primary" (click)="addListItem()">
+                        @if (checklistDetails?.isFreeze) {
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-info-circle me-1"></i> Status</span>
+                            <span class="fw-medium fs-6 text-danger">Completed</span>
+                        </div>
+                        @if (checklistDetails?.frozenAt) {
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-calendar-check me-1"></i> Completed
+                                Date</span>
+                            <span class="fw-medium fs-6 text-danger">{{checklistDetails?.frozenAt | date: 'dd MMM,
+                                yyyy'}}</span>
+                        </div>
+                        }
+                        }
+                    </div>
+
+                    @if (!checklistDetails?.isFreeze) {
+                    <div class="input-group mt-3">
+                        <input type="text" class="form-control rounded-pill-start py-2 px-3" #itemInputBox
+                            appCapitalizeFirst placeholder="Enter Item" [(ngModel)]="newItemName" name="newItem">
+                        <button
+                            class="btn btn-primary px-4 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
+                            (click)="addListItem()">
                             <i class="bi bi-plus-circle"></i> Add
                         </button>
                     </div>
-                    } @else {
-                    <p class="mb-0">Status : <span class="fw-semibold"
-                            [ngClass]="checklistDetails?.isFreeze ? 'text-danger' : 'text-success'">{{checklistDetails?.isFreeze
-                            ? 'Completed' : 'Active'}}</span></p>
-                    <p class="mb-0">Completed Date : <span
-                            class="fw-semibold">{{checklistDetails?.frozenAt | date: 'dd MMM, yyyy'}}</span>
-                    </p>
                     }
-
                 </div>
             </div>
 
+            <!-- Checklist Items -->
             @for (item of checklistDetails?.listItems; track $index) {
-            <div class="card border-2 rounded-4 shadow mb-3 border-0 border-5 border-start border-end"
+            <div class="card modern-card-private border-0 shadow-sm rounded-4 mb-3 border-start border-end border-4"
                 [ngClass]="item?.completed ? 'border-primary' : 'border-danger'">
                 @if (!checklistDetails?.isPrivate) {
-                <div class="card-header">
-                    <p class="text-muted mb-0">Created By : <span
-                            class="fw-semibold">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
-                    </p>
+                <div class="card-header small text-muted fs-6">
+                    <i class="bi bi-person me-1"></i> Created By: <span
+                        class="fw-500 text-body">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
                 </div>
                 }
-                <div class="card-body py-2 d-flex justify-content-between align-items-center">
-                    <div class="form-check w-75">
-                        <input class="form-check-input" type="checkbox" [value]="item?._id" [id]="item?._id"
+
+                <div class="card-body py-2 d-flex justify-content-between align-items-center gap-3">
+                    <div class="form-check w-75 mb-0">
+                        <input class="form-check-input mt-1" type="checkbox" [value]="item?._id" [id]="item?._id"
                             [checked]="item?.completed" [disabled]="checklistDetails?.isFreeze"
                             (change)="completeListItem(item?._id, $event)">
-                        <label class="form-check-label" [for]="item?._id">
+                        <label class="form-check-label fw-medium text-break" [for]="item?._id">
                             {{item.text}}
                         </label>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteItem(item?._id)"
-                        [disabled]="checklistDetails?.isFreeze"><i class="bi bi-trash3"></i></button>
+                    <button type="button"
+                        class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
+                        (click)="deleteItem(item?._id)" [disabled]="checklistDetails?.isFreeze">
+                        <i class="bi bi-trash3"></i>
+                    </button>
                 </div>
+
                 @if (!checklistDetails?.isPrivate) {
-                <div class="card-footer">
-                    <p class="text-muted mb-0">Completed By : <span
-                            class="fw-semibold">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
-                    </p>
+                <div class="card-footer small text-muted fs-6">
+                    <i class="bi bi-check2-circle me-1"></i> Completed By: <span
+                        class="fw-500 text-body">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
                 </div>
                 }
             </div>
             }
 
+            <!-- Items Summary Card -->
             @if (checklistDetails?.listItems?.length > 0) {
-            <div class="card border-2 rounded-4 shadow border-0 border-5 border-top border-primary mt-4">
-                <div class="card-header">Items Summary</div>
-                <div class="card-body">
+            <div class="card modern-card-private border-0 shadow-sm rounded-4 mt-4 border-top border-4 border-primary">
+                <div class="card-header fw-bold">Items Summary</div>
+                <div class="card-body px-4 py-3">
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">Total: <span class="badge text-bg-primary">{{checklistDetails?.totalItems
-                                || 0}}</span></p>
-                        <p class="mb-0">Completed: <span
-                                class="badge text-bg-success">{{checklistDetails?.completedItems ||
-                                0}}</span></p>
-                        <p class="mb-0">Pending: <span class="badge text-bg-danger">{{checklistDetails?.pendingItems ||
-                                0}}</span></p>
+                        <span class="small text-muted fs-6">Total: <span
+                                class="badge rounded-pill text-bg-primary px-2 py-1">{{checklistDetails?.totalItems ||
+                                0}}</span></span>
+                        <span class="small text-muted fs-6">Completed: <span
+                                class="badge rounded-pill text-bg-success px-2 py-1">{{checklistDetails?.completedItems
+                                || 0}}</span></span>
+                        <span class="small text-muted fs-6">Pending: <span
+                                class="badge rounded-pill text-bg-danger px-2.py-1">{{checklistDetails?.pendingItems
+                                || 0}}</span></span>
                     </div>
                 </div>
             </div>
             }
 
+            <!-- Complete List Action Button -->
             @if (!checklistDetails?.isFreeze && checklistDetails?.listItems?.length > 0) {
             @if(listService.getNameOfListCreated(checklistDetails?.createdBy) === 'You') {
-            <div class="text-center mt-5">
-                <button type="button" class="btn btn-primary px-3" (click)="openModal(checklistDetails)"><i
-                        class="bi bi-check-lg"></i> Complete List</button>
+            <div class="text-center mt-4">
+                <button type="button"
+                    class="btn btn-primary rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2"
+                    (click)="openModal(checklistDetails)">
+                    <i class="bi bi-check-lg fs-5"></i> Complete List
+                </button>
             </div>
             }
             }
@@ -121,33 +153,37 @@
             }
         </div>
         } @else {
-        <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
+        <div class="col-md-7 col-lg-6 col-xl-5 mx-auto text-center py-5">
             <app-not-found-card></app-not-found-card>
         </div>
         }
     </div>
 </div>
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content rounded-4">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Complete Checklist</h1>
+                <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Complete Checklist</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     (click)="closeModal()"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to complete <strong>{{deleteDetails?.title}}</strong> checklist?
+            <div class="modal-body py-4">
+                <!-- Are you sure you want to complete <strong class="text-body">{{deleteDetails?.title}}</strong> checklist? -->
+                <!-- <div class="small text-muted mt-1">Once completed, you will no longer be able to modify the list. The list will be automatically deleted 30 days after its completion date.</div> -->
+                <p>Once completed, you will no longer be able to modify the list. The list will be automatically deleted 30 days after its completion date.</p>
+                <p class="mb-0">Are you sure you want to complete <strong class="text-body">{{deleteDetails?.title}}</strong> checklist?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()"><i
-                        class="bi bi-x position-relative" style="top: 1px;"></i> Cancel</button>
-                <button type="button" class="btn btn-primary" (click)="freezeChecklist()"><i class="bi bi-check-lg"></i>
-                    Complete</button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal"
+                    (click)="closeModal()">
+                    <i class="bi bi-x position-relative" style="top: 1px;"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="freezeChecklist()">
+                    <i class="bi bi-check-lg"></i> Complete
+                </button>
             </div>
         </div>
     </div>
