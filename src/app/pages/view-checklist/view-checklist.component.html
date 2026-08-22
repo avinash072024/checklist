@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="card-body px-4 py-3">
+                <div class="card-body">
                     <div class="meta-list d-flex flex-column gap-2 small mb-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted fs-6"><i class="bi bi-person me-1"></i> Created By</span>
@@ -56,8 +56,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted fs-6"><i class="bi bi-calendar-check me-1"></i> Completed
                                 Date</span>
-                            <span class="fw-medium fs-6 text-danger">{{checklistDetails?.frozenAt | date: 'dd MMM,
-                                yyyy'}}</span>
+                            <span class="fw-medium fs-6 text-danger">{{checklistDetails?.frozenAt | date: 'dd MMM, yyyy'}}</span>
                         </div>
                         }
                         }
@@ -68,7 +67,7 @@
                         <input type="text" class="form-control rounded-pill-start py-2 px-3" #itemInputBox
                             appCapitalizeFirst placeholder="Enter Item" [(ngModel)]="newItemName" name="newItem">
                         <button
-                            class="btn btn-primary px-4 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
+                            class="btn btn-primary px-3 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
                             (click)="addListItem()">
                             <i class="bi bi-plus-circle"></i> Add
                         </button>
@@ -82,9 +81,9 @@
             <div class="card modern-card-private border-0 shadow-sm rounded-4 mb-3 border-start border-end border-4"
                 [ngClass]="item?.completed ? 'border-primary' : 'border-danger'">
                 @if (!checklistDetails?.isPrivate) {
-                <div class="card-header small text-muted fs-6">
-                    <i class="bi bi-person me-1"></i> Created By: <span
-                        class="fw-500 text-body">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
+                <div class="card-header small fs-6">
+                    <i class="bi bi-person me-1"></i> Created By : <span
+                        class="fw-medium text-body">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
                 </div>
                 }
 
@@ -105,9 +104,9 @@
                 </div>
 
                 @if (!checklistDetails?.isPrivate) {
-                <div class="card-footer small text-muted fs-6">
-                    <i class="bi bi-check2-circle me-1"></i> Completed By: <span
-                        class="fw-500 text-body">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
+                <div class="card-footer small fs-6">
+                    <i class="bi bi-check2-circle me-1"></i> Completed By : <span
+                        class="fw-medium text-body">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
                 </div>
                 }
             </div>
@@ -117,7 +116,7 @@
             @if (checklistDetails?.listItems?.length > 0) {
             <div class="card modern-card-private border-0 shadow-sm rounded-4 mt-4 border-top border-4 border-primary">
                 <div class="card-header fw-bold">Items Summary</div>
-                <div class="card-body px-4 py-3">
+                <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="small text-muted fs-6">Total: <span
                                 class="badge rounded-pill text-bg-primary px-2 py-1">{{checklistDetails?.totalItems ||
@@ -173,8 +172,10 @@
             <div class="modal-body py-4">
                 <!-- Are you sure you want to complete <strong class="text-body">{{deleteDetails?.title}}</strong> checklist? -->
                 <!-- <div class="small text-muted mt-1">Once completed, you will no longer be able to modify the list. The list will be automatically deleted 30 days after its completion date.</div> -->
-                <p>Once completed, you will no longer be able to modify the list. The list will be automatically deleted 30 days after its completion date.</p>
-                <p class="mb-0">Are you sure you want to complete <strong class="text-body">{{deleteDetails?.title}}</strong> checklist?</p>
+                <p>Once completed, you will no longer be able to modify the list. The list will be automatically deleted
+                    30 days after its completion date.</p>
+                <p class="mb-0">Are you sure you want to complete <strong
+                        class="text-body">{{deleteDetails?.title}}</strong> checklist?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal"

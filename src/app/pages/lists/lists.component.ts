@@ -2,7 +2,6 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ListService } from '../../services/list/list.service';
 import { SocketService } from '../../services/socket/socket.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe, NgClass } from '@angular/common';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { jwtDecode } from 'jwt-decode';
@@ -12,11 +11,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
 import { Subscription } from 'rxjs';
 import { ListNotFoundCardComponent } from "../../components/list-not-found-card/list-not-found-card.component";
+import { ChecklistCardComponent } from "../../components/checklist-card/checklist-card.component";
 declare var $: any;
 
 @Component({
   selector: 'app-lists',
-  imports: [DatePipe, NgClass, RouterLink, BackButtonComponent, ListNotFoundCardComponent],
+  imports: [RouterLink, BackButtonComponent, ListNotFoundCardComponent, ChecklistCardComponent],
   templateUrl: './lists.component.html',
   styleUrl: './lists.component.scss'
 })

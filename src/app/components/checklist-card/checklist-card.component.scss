@@ -1,0 +1,25 @@
+.modern-card {
+    background-color: var(--bs-card-bg);
+    border-radius: 1.25rem !important;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid var(--bs-border-color-translucent) !important;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        // transform: translateY(-6px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1) !important;
+
+        // .action-view-btn {
+        //     transform: translateX(2px);
+        // }
+    }
+
+    &.frozen-card {
+        border-top: 4px solid var(--bs-danger) !important;
+    }
+
+    &.warning-card {
+        border-top: 4px solid var(--bs-warning) !important;
+    }
+}
