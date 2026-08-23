@@ -1,57 +1,196 @@
-<section class="user-list-section mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <h4 class="fw-bold mb-1">Users</h4>
-            <p class="text-muted mb-0">Overview of users, joining dates, and their checklist counts.</p>
-        </div>
-    </div>
+<section class="users-section d-none" id="users-section">
 
-    @if(isLoading()) {
-    <div class="text-center py-4">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+  <!-- Section Header -->
+  <div class="users-header">
+    <div class="users-header__left">
+      <div class="section-badge mb-3">
+        <i class="bi bi-people-fill"></i>
+        <span>Community</span>
+      </div>
+      <h2 class="section-title">All Users</h2>
+      <p class="section-subtitle">Overview of users, joining dates, and their checklist counts.</p>
     </div>
-    } @else {
-    <div class="row mt-3">
-        <div class="col-md-12">
-            <div class="card rounded-4 shadow h-100">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Sr.&nbsp;No.</th>
-                                    <th style="min-width: 10rem;">Full&nbsp;Name</th>
-                                    <th class="text-center">Joined&nbsp;Date</th>
-                                    <th class="text-center">List&nbsp;Count</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let user of users()">
-                                    <td class="text-center">{{ users().indexOf(user) + 1 }}.</td>
-                                    <td>
-                                        <div style="min-width: 10rem;"
-                                            class="fw-medium d-flex align-items-center">
-                                            <img [src]="avatarService.getAvatar(user?.fullname)" class="me-2" />
-                                            <span class="mb-0">{{ user?.fullname ||
-                                                'Anonymous' }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">{{ user?.joinedDate ? (user.joinedDate | date:'mediumDate')
-                                        : 'N/A' }}</td>
-                                    <td class="text-center">{{ user?.totalChecklist ?? 0 }}</td>
-                                </tr>
-                                <tr *ngIf="!isLoading() && users().length === 0">
-                                    <td class="text-center" colspan="4">No user found</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="users-header__count" *ngIf="!isLoading() && users().length > 0">
+      <span class="total-count-badge">{{ users().length }} Members</span>
+    </div>
+  </div>
+
+  <!-- Loading Skeleton -->
+  @if(isLoading()) {
+  <div class="skeleton-wrapper" aria-label="Loading users...">
+    <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
+      <div class="skeleton-avatar"></div>
+      <div class="skeleton-lines">
+        <div class="skeleton-line skeleton-line--long"></div>
+        <div class="skeleton-line skeleton-line--short"></div>
+      </div>
+      <div class="skeleton-chip"></div>
+      <div class="skeleton-chip skeleton-chip--sm"></div>
+    </div>
+  </div>
+  } @else {
+
+  <!-- Empty State -->
+  @if(users().length === 0) {
+  <div class="empty-state" id="users-empty-state">
+    <div class="empty-state__icon">
+      <i class="bi bi-person-x"></i>
+    </div>
+    <h5 class="empty-state__title">No Users Found</h5>
+    <p class="empty-state__text">There are no users to display right now.</p>
+  </div>
+  } @else {
+
+  <!-- Users Table Card -->
+  <div class="users-table-card" id="users-table-card">
+    <div class="table-responsive">
+      <table class="users-table" aria-label="User list table">
+        <thead>
+          <tr>
+            <th class="col-rank">#</th>
+            <th class="col-name">User</th>
+            <th class="col-count">Lists</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="user-row" *ngFor="let user of users(); let i = index" [attr.id]="'user-row-' + (i + 1)">
+            <!-- Rank -->
+            <td class="col-rank">
+              <span class="rank-badge">
+                <span>{{ i + 1 }}</span>
+              </span>
+            </td>
+
+            <!-- Name + Avatar -->
+            <td class="col-name">
+              <div class="user-identity">
+                <div class="user-avatar-wrap">
+                  <img [src]="avatarService.getAvatar(user?.fullname)" [alt]="user?.fullname || 'User avatar'"
+                    class="user-avatar" />
                 </div>
-            </div>
-        </div>
+                <div class="user-meta">
+                  <span class="user-name">{{ user?.fullname || 'Anonymous' }}</span>
+                  <div class="date-cell">
+                    <i class="bi bi-calendar3 date-icon"></i>
+                    <span class="text-muted">{{ user?.joinedDate ? (user.joinedDate | date:'MMM d, y') : 'N/A' }}</span>
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- List Count -->
+            <td class="col-count">
+              <span class="list-count-pill">
+                <i class="bi bi-check2-square"></i>
+                {{ user?.totalChecklist ?? 0 }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    }
+  </div>
+
+  }
+  }
 
 </section>
+
+
+
+<div class="row">
+  <!-- Section Header -->
+  <div class="users-header">
+    <div class="users-header__left">
+      <div class="section-badge mb-3">
+        <i class="bi bi-people-fill"></i>
+        <span>Community</span>
+      </div>
+      <h2 class="section-title">All Users</h2>
+      <p class="section-subtitle">Overview of users, joining dates, and their checklist counts.</p>
+    </div>
+    <div class="users-header__count" *ngIf="!isLoading() && users().length > 0">
+      <span class="total-count-badge">{{ users().length }} Members</span>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="card" style="border-radius: 20px;">
+      <div class="card-body">
+        <!-- Loading Skeleton -->
+        @if(isLoading()) {
+        <div class="skeleton-wrapper" aria-label="Loading users...">
+          <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
+            <div class="skeleton-avatar"></div>
+            <div class="skeleton-lines">
+              <div class="skeleton-line skeleton-line--long"></div>
+              <div class="skeleton-line skeleton-line--short"></div>
+            </div>
+            <div class="skeleton-chip"></div>
+            <div class="skeleton-chip skeleton-chip--sm"></div>
+          </div>
+        </div>
+        } @else {
+
+        <!-- Empty State -->
+        @if(users().length === 0) {
+        <div class="empty-state" id="users-empty-state">
+          <div class="empty-state__icon">
+            <i class="bi bi-person-x"></i>
+          </div>
+          <h5 class="empty-state__title">No Users Found</h5>
+          <p class="empty-state__text">There are no users to display right now.</p>
+        </div>
+        } @else {
+        <div class="table-responsive">
+          <table class="table table-borderless table-hover table-striped mb-0">
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th>User</th>
+                <th class="text-center">Lists</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of users(); track $index; let i = $index) {
+              <tr [attr.id]="'user-row-' + (i + 1)">
+                <td class="text-center col-rank">
+                  <span class="rank-badge">
+                    <span>{{ i + 1 }}</span>
+                  </span>
+                </td>
+
+                <td class="col-name">
+                  <div class="user-identity">
+                    <div class="user-avatar-wrap">
+                      <img [src]="avatarService.getAvatar(user?.fullname)" [alt]="user?.fullname || 'User avatar'"
+                        class="user-avatar" />
+                    </div>
+                    <div class="user-meta">
+                      <span class="user-name">{{ user?.fullname || 'Anonymous' }}</span>
+                      <div class="date-cell">
+                        <i class="bi bi-calendar3 date-icon"></i>
+                        <span class="text-muted">{{ user?.joinedDate ? (user.joinedDate | date:'MMM d, y') : 'N/A'
+                          }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- List Count -->
+                <td class="text-center col-count">
+                  <span class="list-count-pill">
+                    <i class="bi bi-check2-square"></i>
+                    {{ user?.totalChecklist ?? 0 }}
+                  </span>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        }
+        }
+      </div>
+    </div>
+  </div>
+</div>

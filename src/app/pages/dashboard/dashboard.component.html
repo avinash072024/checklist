@@ -1,89 +1,113 @@
-<div class="container">
-    <div class="row my-4">
-        <div class="col-lg-8">
-            <h2 class="fw-bold mb-2">Welcome, <span class="text-primary">{{userDetails?.name}}</span></h2>
-            <p class="text-muted lead">Here's a quick overview of your checklists.</p>
-        </div>
-        <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
-            <a routerLink="/create-list" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
-                <i class="bi bi-plus-circle me-2"></i>Create New Checklist
-            </a>
-        </div>
+<div class="container pt-3 pt-md-4">
+
+  <!-- Greeting Header -->
+  <div class="dashboard-header">
+    <div class="greeting-section">
+      <div class="greeting-badge">
+        <i class="bi bi-stars"></i>
+        <span>Dashboard</span>
+      </div>
+      <h1 class="greeting-title">
+        Welcome,
+        <span class="highlight-name">{{ userDetails?.name }}</span>
+        <span class="wave-emoji">👋</span>
+      </h1>
+      <p class="greeting-subtitle">Here's a quick overview of your checklists and activity.</p>
     </div>
 
-    <div class="row g-4">
-        <!-- Total Lists -->
-        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists">
-            <div class="dashboard-card h-100 bg-primary">
-                <div class="card-icon">
-                    <i class="bi bi-card-checklist"></i>
-                </div>
-                <div>
-                    <small>Total Lists</small>
-                    <h2>
-                        {{ dashboard().totalLists }}
-                    </h2>
-                    <span>
-                        All available lists
-                    </span>
-                </div>
-            </div>
-        </div>
+    <div class="header-actions">
+      <a routerLink="/create-list" class="create-btn-modern" id="create-checklist-btn">
+        <span class="btn-icon">
+          <i class="bi bi-plus-lg"></i>
+        </span>
+        <span>Create New Checklist</span>
+        <i class="bi bi-arrow-right btn-arrow"></i>
+      </a>
+    </div>
+  </div>
 
-        <!-- My Lists -->
-        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/my-lists">
-            <div class="dashboard-card h-100 bg-success">
-                <div class="card-icon">
-                    <i class="bi bi-person-check-fill"></i>
-                </div>
-                <div>
-                    <small>My Public Lists</small>
-                    <h2>
-                        {{ dashboard().myLists }}
-                    </h2>
-                    <span>
-                        Created by you
-                    </span>
-                </div>
-            </div>
-        </div>
+  <!-- Stats Cards Grid -->
+  <div class="stats-grid">
 
-        <!-- Other Lists -->
-        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/other-lists">
-            <div class="dashboard-card h-100 bg-secondary">
-                <div class="card-icon">
-                    <i class="bi bi-people-fill"></i>
-                </div>
-                <div>
-                    <small>Created By Others</small>
-                    <h2>
-                        {{ dashboard().otherLists }}
-                    </h2>
-                    <span>
-                        Shared lists
-                    </span>
-                </div>
-            </div>
+    <!-- Total Lists -->
+    <div class="stat-card stat-card--blue" routerLink="/lists" tabindex="0" role="button" id="stat-total-lists">
+      <div class="stat-card__glow"></div>
+      <div class="stat-card__content">
+        <div class="stat-card__icon-wrap">
+          <i class="bi bi-card-checklist"></i>
         </div>
-
-        <!-- My Lists -->
-        <div class="col-md-6 col-lg-4 col-xl-3" routerLink="/lists/private-lists">
-            <div class="dashboard-card h-100 bg-danger">
-                <div class="card-icon">
-                    <i class="bi bi-lock-fill"></i>
-                </div>
-                <div>
-                    <small>My Private List</small>
-                    <h2>
-                        {{ dashboard().privateList }}
-                    </h2>
-                    <span>
-                        Only for me
-                    </span>
-                </div>
-            </div>
+        <div class="stat-card__body">
+          <span class="stat-card__label">Total Lists</span>
+          <div class="stat-card__number">{{ dashboard().totalLists }}</div>
+          <span class="stat-card__sub">All available lists</span>
         </div>
+      </div>
+      <div class="stat-card__footer">
+        <span>View All <i class="bi bi-arrow-right-short"></i></span>
+      </div>
+      <div class="stat-card__bg-shape"></div>
     </div>
 
-    <app-user-list></app-user-list>
+    <!-- My Public Lists -->
+    <div class="stat-card stat-card--green" routerLink="/lists/my-lists" tabindex="0" role="button" id="stat-my-lists">
+      <div class="stat-card__glow"></div>
+      <div class="stat-card__content">
+        <div class="stat-card__icon-wrap">
+          <i class="bi bi-person-check-fill"></i>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__label">My Public Lists</span>
+          <div class="stat-card__number">{{ dashboard().myLists }}</div>
+          <span class="stat-card__sub">Created by you</span>
+        </div>
+      </div>
+      <div class="stat-card__footer">
+        <span>View Mine <i class="bi bi-arrow-right-short"></i></span>
+      </div>
+      <div class="stat-card__bg-shape"></div>
+    </div>
+
+    <!-- Other Lists -->
+    <div class="stat-card stat-card--purple" routerLink="/lists/other-lists" tabindex="0" role="button" id="stat-other-lists">
+      <div class="stat-card__glow"></div>
+      <div class="stat-card__content">
+        <div class="stat-card__icon-wrap">
+          <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__label">Created By Others</span>
+          <div class="stat-card__number">{{ dashboard().otherLists }}</div>
+          <span class="stat-card__sub">Shared with you</span>
+        </div>
+      </div>
+      <div class="stat-card__footer">
+        <span>Explore <i class="bi bi-arrow-right-short"></i></span>
+      </div>
+      <div class="stat-card__bg-shape"></div>
+    </div>
+
+    <!-- My Private Lists -->
+    <div class="stat-card stat-card--red" routerLink="/lists/private-lists" tabindex="0" role="button" id="stat-private-lists">
+      <div class="stat-card__glow"></div>
+      <div class="stat-card__content">
+        <div class="stat-card__icon-wrap">
+          <i class="bi bi-lock-fill"></i>
+        </div>
+        <div class="stat-card__body">
+          <span class="stat-card__label">My Private Lists</span>
+          <div class="stat-card__number">{{ dashboard().privateList }}</div>
+          <span class="stat-card__sub">Only for you</span>
+        </div>
+      </div>
+      <div class="stat-card__footer">
+        <span>View Private <i class="bi bi-arrow-right-short"></i></span>
+      </div>
+      <div class="stat-card__bg-shape"></div>
+    </div>
+
+  </div>
+
+  <!-- User List Section -->
+  <app-user-list></app-user-list>
+
 </div>

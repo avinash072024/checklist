@@ -17,7 +17,7 @@
         @if(checklistDetails) {
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
             <!-- Main Details Card -->
-            <div class="card modern-card-private border-0 shadow-sm rounded-4 mb-4">
+            <div class="card modern-card border-0 shadow-sm rounded-4 border-top border-4 border-primary mb-4">
                 <div class="card-header py-2">
                     <div class="d-flex justify-content-between align-items-center gap-2">
                         <div class="d-flex align-items-center gap-2 text-truncate">
@@ -115,7 +115,7 @@
 
             <!-- Items Summary Card -->
             @if (checklistDetails?.listItems?.length > 0) {
-            <div class="card modern-card-private border-0 shadow-sm rounded-4 mt-4 border-top border-4 border-primary">
+            <div class="card modern-card border-0 shadow-sm rounded-4 mt-4 border-top border-4 border-primary">
                 <div class="card-header fw-bold">Items Summary</div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -140,7 +140,7 @@
                 <button type="button"
                     class="btn btn-primary rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2"
                     (click)="openModal(checklistDetails)">
-                    <i class="bi bi-check-lg fs-5"></i> Complete List
+                    <i class="bi bi-check-lg fs-5 position-relative" style="top: 1px;"></i> Complete List
                 </button>
             </div>
             }
@@ -184,7 +184,7 @@
                     <i class="bi bi-x position-relative" style="top: 1px;"></i> Cancel
                 </button>
                 <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="freezeChecklist()">
-                    <i class="bi bi-check-lg"></i> Complete
+                    <i class="bi bi-check-lg position-relative" style="top: 1px;"></i> Complete
                 </button>
             </div>
         </div>
