@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { ThemeService } from '../../services/theme/theme.service';
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './theme-switcher.component.scss'
 })
 export class ThemeSwitcherComponent implements OnInit {
+  @Input() dynamicClass: string = '';
   currentTheme!: string;
   themeService = inject(ThemeService);
   sessionService = inject(SessionService);

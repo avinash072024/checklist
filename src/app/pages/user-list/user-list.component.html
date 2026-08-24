@@ -154,7 +154,7 @@
               @for (user of users(); track $index; let i = $index) {
               <tr [attr.id]="'user-row-' + (i + 1)">
                 <td class="text-center col-rank">
-                  <span class="rank-badge">
+                  <span class="rank-badge mt-1">
                     <span>{{ i + 1 }}</span>
                   </span>
                 </td>
@@ -178,7 +178,7 @@
 
                 <!-- List Count -->
                 <td class="text-center col-count">
-                  <span class="list-count-pill">
+                  <span class="list-count-pill mt-2">
                     <i class="bi bi-check2-square"></i>
                     {{ user?.totalChecklist ?? 0 }}
                   </span>
