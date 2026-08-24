@@ -14,7 +14,7 @@
     </div>
 
     <div class="row g-4">
-        @if(checklistDetails) {
+        @if(checklistDetails?.listItems?.length) {
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
             <!-- Main Details Card -->
             <div class="card border-0 shadow-sm rounded-4 border-top border-4 border-primary mb-4">
@@ -33,7 +33,7 @@
                                 {{checklistDetails?.title}}
                             </h5>
                         </div>
-                        <span class="badge rounded-pill fs-6 fw-normal px-2 py-1 bg-primary-subtle text-primary">
+                        <span class="badge rounded-pill fs-7 fw-normal px-2 py-1 bg-primary-subtle text-primary">
                             Total: {{checklistDetails?.listItems?.length || 0}}
                         </span>
                     </div>
