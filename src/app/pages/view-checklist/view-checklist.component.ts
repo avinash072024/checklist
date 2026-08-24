@@ -92,6 +92,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         }
       },
       error: (err) => {
+        this.checklistDetails = [];
         this.spinner.hide();
         // this.toastr.error(err?.error?.message || err?.message);
         // this.toastr.error(err?.message);
