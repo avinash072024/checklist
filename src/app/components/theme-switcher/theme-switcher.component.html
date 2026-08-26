@@ -1,8 +1,8 @@
-<button type="button" [class]="`btn btn-primary ${dynamicClass}`" [title]="currentTheme === 'dark' ? 'Light' : 'Dark'" (click)="toggleTheme();">
+<button type="button" [class]="`btn btn-primary ${dynamicClass}`" [title]="currentTheme === 'dark' ? 'Switch to light' : 'Switch to dark'" (click)="toggleTheme();">
     @if(currentTheme === 'light'){
         <i class="bi bi-moon-stars-fill"></i>
     } @else {
-        <i class="bi bi-sun-fill"></i>
+        <i class="bi bi-sun-fill text-warning"></i>
     }
 </button>
 
