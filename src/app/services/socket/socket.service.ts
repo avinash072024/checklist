@@ -39,7 +39,8 @@ export class SocketService {
         'checklist:item-added',
         'checklist:item-deleted',
         'checklist:item-toggled',
-        'checklist:frozen'
+        'checklist:frozen',
+        'checklist:reordered'
       ];
 
       const handlers = events.map(event => {

@@ -12,10 +12,11 @@ import { Subscription } from 'rxjs';
 import { NotFoundCardComponent } from '../../components/not-found-card/not-found-card.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
+import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-view-checklist',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, BackButtonComponent, NotFoundCardComponent],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, BackButtonComponent, NotFoundCardComponent, DragDropModule],
   templateUrl: './view-checklist.component.html',
   styleUrl: './view-checklist.component.scss'
 })
@@ -54,7 +55,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   addListItem(): void {
     const itemText = this.newItemName.trim();
     // if (!itemText) return;
-    if(!itemText) {
+    if (!itemText) {
       this.toastr.error('Please enter item name');
       return;
     }
@@ -78,10 +79,10 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   }
 
   getChecklistById(checklistId: string, showSpinner: boolean): void {
-    if(showSpinner) {
+    if (showSpinner) {
       this.spinner.show();
     }
-    
+
     this.listService.getChecklistById(checklistId).subscribe({
       next: (res: any) => {
         if (res?.success) {
@@ -158,6 +159,32 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   closeModal(): void {
     this.deleteDetails = null;
     $('#staticBackdrop').modal('hide');
+  }
+
+  // Add this drop handler method
+  drop(event: CdkDragDrop<any[]>): void {
+    if (this.checklistDetails?.isFreeze) return;
+
+    // Locally reorder the array instantly for smooth UI feedback
+    moveItemInArray(this.checklistDetails.listItems, event.previousIndex, event.currentIndex);
+
+    // Extract the new order of IDs to send to your backend API
+    const orderedIds = this.checklistDetails.listItems.map((item: any) => item._id);
+
+    this.listService.reorderChecklistItems(this.checkListId, orderedIds).subscribe({
+      next: (res: any) => {
+        if (!res?.success) {
+          this.toastr.error(res?.message);
+          // Revert locally if failed
+          moveItemInArray(this.checklistDetails.listItems, event.currentIndex, event.previousIndex);
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error(err?.message);
+        // Revert locally if failed
+        moveItemInArray(this.checklistDetails.listItems, event.currentIndex, event.previousIndex);
+      }
+    });
   }
 
   ngOnDestroy(): void {

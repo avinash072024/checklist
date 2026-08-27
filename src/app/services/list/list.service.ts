@@ -59,6 +59,14 @@ export class ListService {
     );
   }
 
+  reorderChecklistItems(checklistId: string, orderedIds: string[]): Observable<any> {
+    return this.http.patch<any>(
+      `${environment.apiUrl}/checklists/${checklistId}/reorder`,
+      { orderedIds },
+      this.sessionService.getAuthHeaders()
+    );
+  }
+
   toggleItemComplete(checklistId: string, itemId: string, completed: boolean): Observable<any> {
     return this.http.patch<any>(
       `${environment.apiUrl}/checklists/${checklistId}/items/${itemId}/complete`,
