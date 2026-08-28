@@ -29,7 +29,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   listName = '';
   newItemName = '';
   deleteDetails: any;
-  heading!: string;
+  heading: string = 'View Checklist';
   subHeading!: string;
 
   listService = inject(ListService);
@@ -53,8 +53,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         this.getChecklistById(this.checkListId, false);
       }
     });
-    this.heading = !this.checklistDetails?.isPrivate ? `View Checklist (Private)` : `View Checklist`;
-    this.subHeading = this.checklistDetails?.freeze ? "`The checklist is completed, now you can't modify the list.`" : 'You can add items here until the list is complete.';
   }
 
   addListItem(): void {
