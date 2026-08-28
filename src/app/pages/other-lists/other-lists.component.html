@@ -1,6 +1,6 @@
 <div class="container py-0 py-md-1">
     <!-- Header Section -->
-    <div class="row align-items-center mb-4 g-3">
+    <!-- <div class="row align-items-center mb-4 g-3">
         <div class="col-lg-8">
             <app-back-button class="d-inline-block mb-2"></app-back-button>
             <h3 class="fw-bold mb-1 display-6 tracking-tight">Other Checklists ({{listItemsCount || 0}})</h3>
@@ -9,30 +9,29 @@
         <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
             <app-create-checklist-button></app-create-checklist-button>
         </div>
-    </div>
+    </div> -->
+
+    <app-common-top-section [heading]="'Other Checklists'" [subheading]="`Here's a quick overview of others checklists`"
+        [checklistCount]="listItemsCount">
+    </app-common-top-section>
 
     <!-- Cards Grid -->
     <div class="row g-4">
         @for (item of listItems; track $index) {
         <div class="col-md-6 col-xl-4">
-            <app-checklist-card
-                [item]="item"
-                variant="primary"
-                icon="bi-globe2"
+            <app-checklist-card [item]="item" variant="primary" icon="bi-globe2"
                 [createdByLabel]="listService.getNameOfListCreated(item?.createdBy)"
                 [showDelete]="listService.getNameOfListCreated(item?.createdBy) === 'You'"
-                (deleteClicked)="openModal(item)"
-                (viewClicked)="viewChecklist(item?._id)">
+                (deleteClicked)="openModal(item)" (viewClicked)="viewChecklist(item?._id)">
             </app-checklist-card>
         </div>
         }
 
-        @if (listItems.length <= 0) {
-        <div class="col-12 text-center py-5">
+        @if (listItems.length <= 0) { <div class="col-12 text-center py-5">
             <app-list-not-found-card></app-list-not-found-card>
-        </div>
-        }
     </div>
+    }
+</div>
 </div>
 
 <!-- Modal -->
@@ -46,7 +45,8 @@
                     (click)="closeModal()"></button>
             </div>
             <div class="modal-body py-4">
-                Are you sure you want to delete the <strong class="text-body">{{deleteDetails?.title}}</strong> checklist? This action cannot be undone.
+                Are you sure you want to delete the <strong class="text-body">{{deleteDetails?.title}}</strong>
+                checklist? This action cannot be undone.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal"

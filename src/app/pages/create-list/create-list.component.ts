@@ -7,13 +7,13 @@ import { ToastrService } from 'ngx-toastr';
 import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { Router, RouterLink } from '@angular/router';
-import { BackButtonComponent } from "../../components/back-button/back-button.component";
 import { SocketService } from '../../services/socket/socket.service';
 import { Subscription } from 'rxjs';
+import { CommonTopSectionComponent } from "../../components/common-top-section/common-top-section.component";
 
 @Component({
   selector: 'app-create-list',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, RouterLink, BackButtonComponent],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, RouterLink, CommonTopSectionComponent],
   templateUrl: './create-list.component.html',
   styleUrl: './create-list.component.scss'
 })

@@ -13,10 +13,11 @@ import { NotFoundCardComponent } from '../../components/not-found-card/not-found
 import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { CommonTopSectionComponent } from "../../components/common-top-section/common-top-section.component";
 
 @Component({
   selector: 'app-view-checklist',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, BackButtonComponent, NotFoundCardComponent, DragDropModule],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, BackButtonComponent, NotFoundCardComponent, DragDropModule, CommonTopSectionComponent],
   templateUrl: './view-checklist.component.html',
   styleUrl: './view-checklist.component.scss'
 })
@@ -28,6 +29,8 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   listName = '';
   newItemName = '';
   deleteDetails: any;
+  heading!: string;
+  subHeading!: string;
 
   listService = inject(ListService);
   socketService = inject(SocketService);
@@ -50,6 +53,8 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         this.getChecklistById(this.checkListId, false);
       }
     });
+    this.heading = !this.checklistDetails?.isPrivate ? `View Checklist (Private)` : `View Checklist`;
+    this.subHeading = this.checklistDetails?.freeze ? "`The checklist is completed, now you can't modify the list.`" : 'You can add items here until the list is complete.';
   }
 
   addListItem(): void {
@@ -87,6 +92,8 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res?.success) {
           this.checklistDetails = res?.data || [];
+          this.heading = this.checklistDetails?.isPrivate ? `View Checklist (Private)` : `View Checklist`;
+          this.subHeading = this.checklistDetails?.freeze ? "`The checklist is completed, now you can't modify the list.`" : 'You can add items here until the list is complete.';
           this.spinner.hide();
         } else {
           this.spinner.hide();
@@ -95,8 +102,6 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.checklistDetails = [];
         this.spinner.hide();
-        // this.toastr.error(err?.error?.message || err?.message);
-        // this.toastr.error(err?.message);
         this.toastr.error(err?.error?.message || 'Something went wrong.');
       }
     });

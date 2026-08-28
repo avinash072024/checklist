@@ -1,6 +1,6 @@
 <div class="container py-0 py-md-1">
     <!-- Header Section -->
-    <div class="row align-items-center mb-4 g-3">
+    <!-- <div class="row align-items-center mb-4 g-3">
         <div class="col-lg-8">
             <app-back-button class="d-inline-block mb-2"></app-back-button>
             <h3 class="fw-bold mb-1 display-6 tracking-tight">All Checklists ({{listItemsCount || 0}})</h3>
@@ -9,7 +9,9 @@
         <div class="col-lg-4 d-flex align-items-center justify-content-lg-end">
             <app-create-checklist-button></app-create-checklist-button>
         </div>
-    </div>
+    </div> -->
+
+    <app-common-top-section [heading]="'All Checklists'" [subheading]="`Here's a quick overview of all active and completed checklists`" [checklistCount]="listItemsCount"></app-common-top-section>
 
     <!-- Cards Grid -->
     <div class="row g-4">

@@ -1,0 +1,13 @@
+<div class="row align-items-center mb-4 g-3">
+    <div [ngClass]="!showCreateButton ? 'col-md-7 col-lg-6 col-xl-5 mx-auto' : 'col-md-7 col-lg-8'">
+        <app-back-button class="d-inline-block mb-2"></app-back-button>
+        <h3 class="fw-bold mb-1 display-6 tracking-tight">{{heading}}
+            {{checklistCount ? '(' + checklistCount + ')':''}}</h3>
+        <p class="text-muted mb-0">{{ subheading }}</p>
+    </div>
+    @if(showCreateButton) {
+    <div class="col-md-5 col-lg-4 d-flex align-items-center justify-content-lg-end">
+        <app-create-checklist-button></app-create-checklist-button>
+    </div>
+    }
+</div>
