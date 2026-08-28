@@ -1,0 +1,124 @@
+:host {
+  display: inline-block;
+  width: auto;
+
+  @media (max-width: 576px) {
+    width: 100%;
+  }
+}
+
+.create-checklist-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0.75rem 1.6rem;
+  background: linear-gradient(135deg, #4f6ef7 0%, #7c3aed 100%);
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-radius: 50px;
+  box-shadow: 0 6px 20px rgba(79, 110, 247, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  white-space: nowrap;
+  // width: 100%;
+
+  // Shining glow line effect
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    transition: 0.75s;
+    opacity: 0;
+  }
+
+  .btn-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+
+    i {
+      font-size: 1rem;
+      color: #ffffff;
+    }
+  }
+
+  .btn-label {
+    letter-spacing: 0.3px;
+  }
+
+  .btn-arrow-icon {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+
+    i {
+      font-size: 1.1rem;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(79, 110, 247, 0.45), 0 0 12px rgba(124, 58, 237, 0.2);
+    background: linear-gradient(135deg, #5c7cfa 0%, #8b5cf6 100%);
+    border-color: rgba(255, 255, 255, 0.25);
+
+    &::after {
+      left: 125%;
+      opacity: 1;
+    }
+
+    .btn-icon-box {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    .btn-arrow-icon {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(79, 110, 247, 0.3);
+  }
+
+  // Dark theme adaptations
+  @media (max-width: 576px) {
+    // width: 100%;
+    justify-content: center;
+  }
+}
+
+:host-context([data-bs-theme="dark"]) {
+  .create-checklist-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+    border-color: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #818cf8 100%);
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4), 0 0 15px rgba(59, 130, 246, 0.2);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

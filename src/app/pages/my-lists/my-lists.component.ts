@@ -6,17 +6,18 @@ import { SessionService } from '../../services/session/session.service';
 import { Constants } from '../../models/constants';
 import { jwtDecode } from 'jwt-decode';
 import { User } from '../../models/user.model';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BackButtonComponent } from "../../components/back-button/back-button.component";
 import { Subscription } from 'rxjs';
 import { ListNotFoundCardComponent } from "../../components/list-not-found-card/list-not-found-card.component";
 import { ChecklistCardComponent } from "../../components/checklist-card/checklist-card.component";
+import { CreateChecklistButtonComponent } from "../../components/create-checklist-button/create-checklist-button.component";
 declare var $: any;
 
 @Component({
   selector: 'app-my-lists',
-  imports: [RouterLink, BackButtonComponent, ListNotFoundCardComponent, ChecklistCardComponent],
+  imports: [BackButtonComponent, ListNotFoundCardComponent, ChecklistCardComponent, CreateChecklistButtonComponent],
   templateUrl: './my-lists.component.html',
   styleUrl: './my-lists.component.scss'
 })

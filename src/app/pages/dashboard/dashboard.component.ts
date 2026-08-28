@@ -10,10 +10,11 @@ import { jwtDecode } from 'jwt-decode';
 import { RouterLink } from "@angular/router";
 import { Subscription } from 'rxjs';
 import { UserListComponent } from '../user-list/user-list.component';
+import { CreateChecklistButtonComponent } from '../../components/create-checklist-button/create-checklist-button.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, UserListComponent],
+  imports: [RouterLink, UserListComponent, CreateChecklistButtonComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
