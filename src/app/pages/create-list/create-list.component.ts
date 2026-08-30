@@ -10,10 +10,11 @@ import { Router, RouterLink } from '@angular/router';
 import { SocketService } from '../../services/socket/socket.service';
 import { Subscription } from 'rxjs';
 import { CommonTopSectionComponent } from "../../components/common-top-section/common-top-section.component";
+import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-create-list',
-  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, RouterLink, CommonTopSectionComponent],
+  imports: [FormsModule, CommonModule, CapitalizeFirstDirective, RouterLink, CommonTopSectionComponent, DragDropModule],
   templateUrl: './create-list.component.html',
   styleUrl: './create-list.component.scss'
 })
@@ -185,6 +186,32 @@ export class CreateListComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.toastr.error(err?.message);
+      }
+    });
+  }
+
+  // Add this drop handler method
+  drop(event: CdkDragDrop<any[]>): void {
+    if (this.listDetails?.isFreeze) return;
+
+    // Locally reorder the array instantly for smooth UI feedback
+    moveItemInArray(this.listDetails.listItems, event.previousIndex, event.currentIndex);
+
+    // Extract the new order of IDs to send to your backend API
+    const orderedIds = this.listDetails.listItems.map((item: any) => item._id);
+
+    this.listService.reorderChecklistItems(this.listDetails.id, orderedIds).subscribe({
+      next: (res: any) => {
+        if (!res?.success) {
+          this.toastr.error(res?.message);
+          // Revert locally if failed
+          moveItemInArray(this.listDetails.listItems, event.currentIndex, event.previousIndex);
+        }
+      },
+      error: (err: any) => {
+        this.toastr.error(err?.message);
+        // Revert locally if failed
+        moveItemInArray(this.listDetails.listItems, event.currentIndex, event.previousIndex);
       }
     });
   }

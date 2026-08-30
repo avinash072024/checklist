@@ -7,7 +7,8 @@
         </div>
     </div> -->
 
-    <app-common-top-section [heading]="'Create Checklist'" subheading="Create your checklist here" [showCreateButton]="false"></app-common-top-section>
+    <app-common-top-section [heading]="'Create Checklist'" subheading="Create your checklist here"
+        [showCreateButton]="false"></app-common-top-section>
 
     <div class="row">
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
@@ -75,16 +76,24 @@
 
             @if (listItems.length) {
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
-                <ul class="list-group list-group-flush">
+                <ul cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="listDetails?.isFreeze"
+                    class="list-group list-group-flush">
                     @for (item of listItems; track $index) {
-                    <li
-                        class="list-group-item d-flex justify-content-between align-items-center gap-3">
+                    <li cdkDrag class="list-group-item d-flex justify-content-between align-items-center gap-3">
                         <p class="mb-0 fw-medium text-break">{{item.text}}</p>
-                        <button type="button"
-                            class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
-                            (click)="deleteItem(item?._id)">
-                            <i class="bi bi-trash3"></i>
-                        </button>
+                        <div class="d-flex gap-2">
+                            <button type="button"
+                                class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
+                                (click)="deleteItem(item?._id)">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                            @if (!listDetails?.isFreeze) {
+                            <span cdkDragHandle class="cursor-grab text-muted px-1 d-flex align-items-center"
+                                title="Drag to reorder">
+                                <i class="bi bi-grip-vertical mt-2 fs-5"></i>
+                            </span>
+                            }
+                        </div>
                     </li>
                     }
                 </ul>
