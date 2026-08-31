@@ -1,8 +1,11 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { UserDropdownComponent } from "../user-dropdown/user-dropdown.component";
 import { Constants } from '../../models/constants';
+import { SessionService } from '../../services/session/session.service';
+import { ToastrService } from 'ngx-toastr';
+declare var $: any;
 
 interface NavLinks {
   id: number;
@@ -21,6 +24,9 @@ export class NavbarComponent {
   isLoggedIn = false; // Bind to Auth Service later
   appName: string = Constants.appName;
 
+  sessionService = inject(SessionService);
+  toastr = inject(ToastrService);
+
   navLinks: NavLinks[] = [
     { id: 1, label: 'Dashboard', path: '/dashboard' },
     { id: 2, label: 'Lists', path: '/lists' },
@@ -35,8 +41,10 @@ export class NavbarComponent {
     this.isScrolled = window.scrollY > 50;
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+  logout(): void {
+    this.sessionService.logout();
+    $('#LogoutStaticBackdrop').modal('hide');
+    this.toastr.success('Logout successfully');
+    this.router.navigateByUrl('/login');
   }
 }
