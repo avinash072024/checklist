@@ -1,16 +1,16 @@
-<div class="header-actions d-flex align-items-center gap-0">
+<div class="header-actions d-flex align-items-center gap-2">
 
     <!-- Theme Switcher -->
-    <div class="theme-switcher-wrapper position-relative">
+    <div class="theme-switcher-wrapper position-relative" [class]="dynamicClass">
         <app-theme-switcher></app-theme-switcher>
     </div>
 
     <!-- User Dropdown -->
-    <div class="dropdown user-dropdown" [class]="dynamicClass">
+    <div class="dropdown user-dropdown me-2 me-md-2 me-lg-0" [class]="dynamicClass">
 
         <!-- User Button -->
         <button type="button" class="user-menu-btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown"
-            data-bs-auto-close="outside" aria-expanded="false" aria-label="Open user menu">
+            aria-expanded="false" aria-label="Open user menu">
 
             <!-- Avatar -->
             <span class="user-avatar">
@@ -33,7 +33,7 @@
         </button>
 
         <!-- Dropdown Menu -->
-        <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu">
+        <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu rounded-5 shadow-lg">
 
             <!-- User Header -->
             <li class="user-dropdown-header">
