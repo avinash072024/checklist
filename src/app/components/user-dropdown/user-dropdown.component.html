@@ -1,35 +1,142 @@
-<div class="d-flex align-items-center">
-    <div [class]="`${dynamicClass} position-relative top-2px`">
+<div class="header-actions d-flex align-items-center gap-0">
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher-wrapper position-relative">
         <app-theme-switcher></app-theme-switcher>
     </div>
 
-    <div [class]="`dropdown ${dynamicClass}`">
-        <!-- <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-fill"></i> {{userDetails?.name?.split(' ')[0]}}
-    </a> -->
-        <a class="d-block d-md-block d-lg-none btn btn-primary pb-0 dropdown-toggle" href="#" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-fill fs-4"></i>
-        </a>
-        <a class="d-none d-md-none d-lg-flex btn btn-primary pb-0 dropdown-toggle" href="#" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-fill fs-4"></i> <span style="padding: 4px 0 0 5px;">{{ displayName }}</span>
-        </a>
+    <!-- User Dropdown -->
+    <div class="dropdown user-dropdown" [class]="dynamicClass">
 
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item"><i class="bi bi-person-fill me-2"></i> {{ displayName }}</a></li>
+        <!-- User Button -->
+        <button type="button" class="user-menu-btn dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown"
+            data-bs-auto-close="outside" aria-expanded="false" aria-label="Open user menu">
+
+            <!-- Avatar -->
+            <span class="user-avatar">
+                <i class="bi bi-person-fill"></i>
+            </span>
+
+            <!-- Desktop User Name -->
+            <span class="user-info d-none d-lg-flex flex-column">
+                <span class="user-name">
+                    {{ displayName }}
+                </span>
+
+                <span class="user-label">
+                    Manage your Account
+                </span>
+            </span>
+
+            <!-- Dropdown Icon -->
+            <i class="bi bi-chevron-down dropdown-icon d-none d-lg-block"></i>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu">
+
+            <!-- User Header -->
+            <li class="user-dropdown-header">
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="user-avatar user-avatar-lg">
+                        <!-- <i class="bi bi-person-fill"></i> -->
+                        <!-- <img [src]="avatarService.getAvatar(displayName)" [alt]="displayName || 'User avatar'"
+                            class="user-avatar" /> -->
+                        <img [src]="`https://ui-avatars.com/api/?name=${displayName}&background=4361EE&color=ffffff&rounded=true&size=40`" alt="">
+                    </div>
+
+                    <div class="user-details">
+                        <div class="user-details-label">
+                            Logged in as
+                        </div>
+                        <div class="user-details-name">
+                            {{ displayName }}
+                        </div>
+
+                        <!-- <div class="user-details-label">
+                            Manage your account
+                        </div> -->
+                    </div>
+
+                </div>
+            </li>
+
             <li>
                 <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" routerLink="/my-profile"><i class="bi bi-person-circle me-2"></i> My
-                    Profile</a></li>
-            <li><a class="dropdown-item" routerLink="/change-password"><i class="bi bi-key-fill me-2"></i> Change
-                    Password</a></li>
+
+            <!-- Profile -->
+            <li>
+                <a class="dropdown-item user-dropdown-item" routerLink="/my-profile">
+
+                    <span class="menu-icon">
+                        <i class="bi bi-person-circle position-relative top-2px"></i>
+                    </span>
+
+                    <span class="menu-content">
+                        <span class="menu-title">
+                            My Profile
+                        </span>
+
+                        <span class="menu-description">
+                            View and update your profile
+                        </span>
+                    </span>
+
+                    <i class="bi bi-chevron-right menu-arrow"></i>
+                </a>
+            </li>
+
+            <!-- Change Password -->
+            <li>
+                <a class="dropdown-item user-dropdown-item" routerLink="/change-password">
+
+                    <span class="menu-icon">
+                        <i class="bi bi-key-fill position-relative top-2px"></i>
+                    </span>
+
+                    <span class="menu-content">
+                        <span class="menu-title">
+                            Change Password
+                        </span>
+
+                        <span class="menu-description">
+                            Update your account password
+                        </span>
+                    </span>
+
+                    <i class="bi bi-chevron-right menu-arrow"></i>
+                </a>
+            </li>
+
             <li>
                 <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item text-danger cursor-pointer" (click)="logout()"><i
-                        class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+
+            <!-- Logout -->
+            <li>
+                <button type="button" class="dropdown-item user-dropdown-item logout-item" (click)="logout()">
+
+                    <span class="menu-icon">
+                        <i class="bi bi-box-arrow-right position-relative top-2px"></i>
+                    </span>
+
+                    <span class="menu-content">
+                        <span class="menu-title">
+                            Logout
+                        </span>
+
+                        <span class="menu-description">
+                            Sign out of your account
+                        </span>
+                    </span>
+
+                    <i class="bi bi-chevron-right menu-arrow"></i>
+                </button>
+            </li>
+
         </ul>
     </div>
+
 </div>

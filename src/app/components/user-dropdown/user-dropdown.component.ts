@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user.model';
 import { Constants } from '../../models/constants';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
+import { AvatarService } from '../../services/avatar/avatar.service';
 
 @Component({
   selector: 'app-user-dropdown',
@@ -17,6 +18,7 @@ export class UserDropdownComponent implements OnInit, OnDestroy {
 
   @Input() dynamicClass: string = '';
   sessionService = inject(SessionService);
+  avatarService = inject(AvatarService);
   router = inject(Router);
   toastr = inject(ToastrService);
   userDetails: User | null = null;
