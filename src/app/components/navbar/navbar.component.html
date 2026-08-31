@@ -46,18 +46,19 @@
 <!-- Modal -->
 <div class="modal fade" id="LogoutStaticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="LogoutStaticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content rounded-4">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="LogoutStaticBackdropLabel">Logout</h1>
+        <h1 class="modal-title fs-5 fw-bold" id="LogoutStaticBackdropLabel">Confirm Logout</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p class="mb-0">Are you sure you want to logout?</p>
+        <!-- <p class="mb-0">Are you sure you want to <strong>logout</strong>?</p> -->
+         <p class="mb-0">Click <strong>"Logout"</strong> below if you are ready to end your current session. You will need to login again to access your account.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x position-relative top-1px"></i> Cancel</button>
-        <button type="button" class="btn btn-danger" (click)="logout()"><i class="bi bi-box-arrow-right position-relative top-1px"></i>
+        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal"><i class="bi bi-x position-relative top-1px"></i> Cancel</button>
+        <button type="button" class="btn btn-danger rounded-pill px-4 shadow-sm" (click)="logout()"><i class="bi bi-box-arrow-right position-relative top-1px"></i>
           Logout</button>
       </div>
     </div>
