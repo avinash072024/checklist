@@ -12,8 +12,13 @@
       <div class="d-block d-md-block d-lg-none">
         <button type="button" class="btn btn-primary btn-sm pb-0" data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <i class="bi bi-grid-fill fs-4"></i>
+          aria-label="Toggle navigation" (click)="collapseNavbar()">
+          <!-- @if(navbarCollapsed) {
+            <i class="bi bi-x-lg fs-4"></i>  
+          } @else {
+            <i class="bi bi-grid-fill fs-4"></i>
+          } -->
+          <i class="bi fs-4" [ngClass]="navbarCollapsed ? 'bi-x-lg' : 'bi-grid-fill'"></i>
         </button>
       </div>
     </div>
@@ -23,7 +28,7 @@
         <li class="nav-item my-1 my-lg-0 mx-lg-1">
           <a class="nav-link px-3 py-2 rounded-pill" [routerLink]="item?.path" routerLinkActive="active"
             [routerLinkActiveOptions]="{exact: item?.path === '/dashboard'}" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent">
+            data-bs-target="#navbarSupportedContent" (click)="collapseNavbar()">
             {{item?.label}}
           </a>
         </li>

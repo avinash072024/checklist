@@ -53,8 +53,8 @@
             <tbody>
               @for (user of users(); track $index; let i = $index) {
               <tr [attr.id]="'user-row-' + (i + 1)">
-                <td class="text-center col-rank">
-                  <span class="rank-badge mt-1">
+                <td class="text-center align-middle col-rank">
+                  <span class="rank-badge">
                     <span>{{ i + 1 }}</span>
                   </span>
                 </td>
@@ -69,7 +69,7 @@
                       <span class="user-name">{{ user?.fullname || 'Anonymous' }}</span>
                       <div class="date-cell">
                         <i class="bi bi-calendar3 date-icon"></i>
-                        <span class="text-muted">Joined at {{ user?.joinedDate ? (user.joinedDate | date:'MMM d, y') : 'N/A'
+                        <span class="text-muted"> {{ user?.joinedDate ? (user.joinedDate | date:'MMM d, y') : 'N/A'
                           }}</span>
                       </div>
                     </div>
@@ -77,8 +77,8 @@
                 </td>
 
                 <!-- List Count -->
-                <td class="text-center col-count">
-                  <span class="list-count-pill mt-2">
+                <td class="text-center align-middle col-count">
+                  <span class="list-count-pill">
                     <i class="bi bi-check2-square"></i>
                     {{ user?.totalChecklist ?? 0 }}
                   </span>

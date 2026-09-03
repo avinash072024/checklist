@@ -23,6 +23,7 @@ export class NavbarComponent {
   isScrolled = false;
   isLoggedIn = false; // Bind to Auth Service later
   appName: string = Constants.appName;
+  navbarCollapsed: boolean = false;
 
   sessionService = inject(SessionService);
   toastr = inject(ToastrService);
@@ -34,6 +35,10 @@ export class NavbarComponent {
   ]
 
   constructor(private router: Router) { }
+
+  collapseNavbar(): void {
+    this.navbarCollapsed = !this.navbarCollapsed;
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
