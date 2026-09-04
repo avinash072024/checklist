@@ -164,7 +164,7 @@
                 <button type="button"
                     class="btn btn-primary rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2"
                     (click)="openModal(checklistDetails)">
-                    <i class="bi bi-check-lg fs-5 position-relative top-1px"></i> Complete List
+                    <i class="bi bi-check-lg fs-5 position-relative top-1px"></i> Close List
                 </button>
             </div>
             }
@@ -190,16 +190,16 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content rounded-4 border-0 shadow-lg">
             <div class="modal-header">
-                <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Complete Checklist</h1>
+                <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Close Checklist</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                     (click)="closeModal()"></button>
             </div>
             <div class="modal-body py-4">
                 <!-- Are you sure you want to complete <strong class="text-body">{{deleteDetails?.title}}</strong> checklist? -->
                 <!-- <div class="small text-muted mt-1">Once completed, you will no longer be able to modify the list. The list will be automatically deleted 30 days after its completion date.</div> -->
-                <p>Once completed, you will no longer be able to modify the list. The list will be automatically deleted
-                    30 days after its completion date.</p>
-                <p class="mb-0">Are you sure you want to complete <strong
+                <p>Once closed, you will no longer be able to modify the list. The list will be automatically deleted
+                    30 days after its closure date.</p>
+                <p class="mb-0">Are you sure you want to close <strong
                         class="text-body">{{deleteDetails?.title}}</strong> checklist?</p>
             </div>
             <div class="modal-footer">
@@ -208,7 +208,7 @@
                     <i class="bi bi-x position-relative top-1px"></i> Cancel
                 </button>
                 <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="freezeChecklist()">
-                    <i class="bi bi-check-lg position-relative top-1px"></i> Complete
+                    <i class="bi bi-check-lg position-relative top-1px"></i> Close Checklist
                 </button>
             </div>
         </div>
