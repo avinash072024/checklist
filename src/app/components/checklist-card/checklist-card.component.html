@@ -64,33 +64,36 @@
     </div>
 
     <!-- Card Footer Actions -->
-    <div class="card-footer d-flex justify-content-between align-items-center">
-        @if (showDelete) {
-        <button type="button"
-            class="btn btn-outline-danger btn-sm rounded-pill px-3 d-flex align-items-center gap-1 action-del-btn"
-            (click)="deleteClicked.emit()">
-            <i class="bi bi-trash3"></i> <span>Delete</span>
-        </button>
-        }
-
-        <button type="button"
-            class="btn btn-outline-primary btn-sm rounded-pill px-4 d-flex align-items-center gap-1 action-view-btn shadow-sm"
-            
-            [disabled]="isDownloading"
-            (click)="downloadPdf()">
-            @if (isDownloading) {
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                <span>Downloading…</span>
-            } @else {
-                <span>Download PDF</span>
-                <i class="bi bi-file-earmark-pdf position-relative top-1px"></i>
+    <div class="card-footer px-4 d-flex justify-content-between align-items-center gap-2">
+        <div class="d-flex gap-2">
+            @if (showDelete) {
+            <button type="button"
+                class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center action-del-btn"
+                style="width: 32px; height: 32px;"
+                title="Delete"
+                (click)="deleteClicked.emit()">
+                <i class="bi bi-trash3"></i>
+            </button>
             }
-        </button>
+
+            <button type="button"
+                class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                style="width: 32px; height: 32px;"
+                title="Download PDF"
+                [disabled]="isDownloading"
+                (click)="downloadPdf()">
+                @if (isDownloading) {
+                    <span class="spinner-border spinner-border-sm" style="width: 1rem; height: 1rem;" role="status" aria-hidden="true"></span>
+                } @else {
+                    <i class="bi bi-download"></i>
+                }
+            </button>
+        </div>
 
         <button type="button"
-            class="btn btn-sm rounded-pill px-4 d-flex align-items-center gap-1 action-view-btn shadow-sm"
+            class="btn btn-sm rounded-pill px-4 d-flex align-items-center gap-2 action-view-btn shadow-sm"
             [ngClass]="viewBtnClass" (click)="viewClicked.emit()">
-            <span>View</span> <i class="bi bi-arrow-right position-relative top-15px"></i>
+            <span class="fw-medium">View</span> <i class="bi bi-arrow-right"></i>
         </button>
     </div>
 </div>
