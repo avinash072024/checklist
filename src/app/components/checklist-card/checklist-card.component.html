@@ -71,9 +71,21 @@
             (click)="deleteClicked.emit()">
             <i class="bi bi-trash3"></i> <span>Delete</span>
         </button>
-        } @else {
-        <div></div>
         }
+
+        <button type="button"
+            class="btn btn-outline-primary btn-sm rounded-pill px-4 d-flex align-items-center gap-1 action-view-btn shadow-sm"
+            
+            [disabled]="isDownloading"
+            (click)="downloadPdf()">
+            @if (isDownloading) {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>Downloading…</span>
+            } @else {
+                <span>Download PDF</span>
+                <i class="bi bi-file-earmark-pdf position-relative top-1px"></i>
+            }
+        </button>
 
         <button type="button"
             class="btn btn-sm rounded-pill px-4 d-flex align-items-center gap-1 action-view-btn shadow-sm"

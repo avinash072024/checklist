@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
+import { ListService } from '../../services/list/list.service';
 
 @Component({
   selector: 'app-checklist-card',
@@ -8,6 +9,11 @@ import { DatePipe, NgClass } from '@angular/common';
   styleUrl: './checklist-card.component.scss'
 })
 export class ChecklistCardComponent {
+
+  private listService = inject(ListService);
+
+  /** Prevents duplicate download requests */
+  isDownloading = false;
 
   /** The checklist item data */
   @Input() item: any;
@@ -82,5 +88,25 @@ export class ChecklistCardComponent {
     return this.item?.totalItems
       ? (this.item.completedItems / this.item.totalItems) * 100
       : 0;
+  }
+
+  downloadPdf(): void {
+    if (!this.item?._id || this.isDownloading) return;
+    this.isDownloading = true;
+
+    this.listService.downloadChecklistPdf(this.item._id).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = `${this.item?.title || 'checklist'}.pdf`;
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+        this.isDownloading = false;
+      },
+      error: () => {
+        this.isDownloading = false;
+      }
+    });
   }
 }
