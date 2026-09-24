@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { ListService } from '../../services/list/list.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-checklist-card',
@@ -54,6 +55,8 @@ export class ChecklistCardComponent {
    */
   @Output() viewClicked = new EventEmitter<void>();
 
+  toastr = inject(ToastrService);
+
   get activeCardClass(): string {
     return this.variant === 'warning' ? 'warning-card' : '';
   }
@@ -103,9 +106,11 @@ export class ChecklistCardComponent {
         anchor.click();
         window.URL.revokeObjectURL(url);
         this.isDownloading = false;
+        this.toastr.success('Checklist downloaded successfully');
       },
       error: () => {
         this.isDownloading = false;
+        this.toastr.error('Failed to download checklist');
       }
     });
   }
