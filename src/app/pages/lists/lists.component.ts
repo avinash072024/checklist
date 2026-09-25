@@ -76,45 +76,67 @@ export class ListsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // onSearch(): void {
+  //   if (!this.searchQuery.trim()) {
+  //     this.getLists(true);
+  //     return;
+  //   }
+
+  //   this.spinner.show();
+
+  //   forkJoin({
+  //     name: this.listService.searchChecklistsByName(this.searchQuery),
+  //     creator: this.listService.searchChecklistsByCreator(this.searchQuery)
+  //   }).subscribe({
+  //     next: (res: any) => {
+  //       const nameRes = res.name;
+  //       const creatorRes = res.creator;
+
+  //       let allItems: any[] = [];
+  //       if (nameRes?.success && nameRes?.data) {
+  //         allItems = [...allItems, ...nameRes.data];
+  //       }
+  //       if (creatorRes?.success && creatorRes?.data) {
+  //         allItems = [...allItems, ...creatorRes.data];
+  //       }
+
+  //       const uniqueItemsMap = new Map();
+  //       allItems.forEach(item => {
+  //         uniqueItemsMap.set(item._id || item.id, item);
+  //       });
+
+  //       this.listItems = Array.from(uniqueItemsMap.values());
+  //       this.listItemsCount = this.listItems.length;
+
+  //       this.spinner.hide();
+  //     },
+  //     error: (err) => {
+  //       this.spinner.hide();
+  //       this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
+  //     }
+  //   });
+  // }
+
   onSearch(): void {
-    if (!this.searchQuery.trim()) {
+    const query = this.searchQuery.trim().toLowerCase();
+
+    if (!query) {
       this.getLists(true);
-      return;
+    } else {
+      this.spinner.show();
+      this.listItems = this.listItems.filter(item => {
+        const checklistName = item?.title?.toLowerCase() || '';
+        const creatorName = item?.createdBy?.fullname?.toLowerCase() || '';
+
+        return (
+          checklistName.includes(query) ||
+          creatorName.includes(query)
+        );
+      });
+      this.spinner.hide();
     }
-    
-    this.spinner.show();
-    
-    forkJoin({
-      name: this.listService.searchChecklistsByName(this.searchQuery),
-      creator: this.listService.searchChecklistsByCreator(this.searchQuery)
-    }).subscribe({
-      next: (res: any) => {
-        const nameRes = res.name;
-        const creatorRes = res.creator;
-        
-        let allItems: any[] = [];
-        if (nameRes?.success && nameRes?.data) {
-          allItems = [...allItems, ...nameRes.data];
-        }
-        if (creatorRes?.success && creatorRes?.data) {
-          allItems = [...allItems, ...creatorRes.data];
-        }
 
-        const uniqueItemsMap = new Map();
-        allItems.forEach(item => {
-          uniqueItemsMap.set(item._id || item.id, item);
-        });
-        
-        this.listItems = Array.from(uniqueItemsMap.values());
-        this.listItemsCount = this.listItems.length;
-
-        this.spinner.hide();
-      },
-      error: (err) => {
-        this.spinner.hide();
-        this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
-      }
-    });
+    this.listItemsCount = this.listItems.length;
   }
 
   getNameOfListCreated(data: any): string {
