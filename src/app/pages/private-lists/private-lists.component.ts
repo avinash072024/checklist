@@ -13,11 +13,12 @@ import { ListNotFoundCardComponent } from "../../components/list-not-found-card/
 import { ChecklistCardComponent } from "../../components/checklist-card/checklist-card.component";
 import { CommonTopSectionComponent } from "../../components/common-top-section/common-top-section.component";
 import { FormsModule } from '@angular/forms';
+import { SearchBoxComponent } from '../../components/search-box/search-box.component';
 declare var $: any;
 
 @Component({
   selector: 'app-private-lists',
-  imports: [ListNotFoundCardComponent, ChecklistCardComponent, CommonTopSectionComponent, FormsModule],
+  imports: [ListNotFoundCardComponent, ChecklistCardComponent, CommonTopSectionComponent, FormsModule, SearchBoxComponent],
   templateUrl: './private-lists.component.html',
   styleUrl: './private-lists.component.scss'
 })
