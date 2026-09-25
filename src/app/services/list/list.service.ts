@@ -130,6 +130,20 @@ export class ListService {
     );
   }
 
+  searchChecklistsByName(query: string): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/checklists/search/name?query=${query}`,
+      this.sessionService.getAuthHeaders()
+    );
+  }
+
+  searchChecklistsByCreator(query: string): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/checklists/search/creator?query=${query}`,
+      this.sessionService.getAuthHeaders()
+    );
+  }
+
 
   getNameOfListCreated(data: any): string {
     if (!data) return '';

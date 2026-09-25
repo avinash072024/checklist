@@ -15,6 +15,25 @@
         [checklistCount]="listItemsCount">
     </app-common-top-section>
 
+    <!-- Search Section -->
+    <div class="row mb-4">
+        <div class="col-md-8 col-lg-6 d-flex gap-2">
+
+            <div class="input-group shadow-sm border-0 rounded-pill bg-body">
+                <span class="input-group-text bg-transparent border-0 text-muted ps-3">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Search..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+                @if (searchQuery) {
+                    <button class="btn border-0 text-muted pe-3" type="button" (click)="searchQuery = ''; getLists(true)">
+                        <i class="bi bi-x"></i>
+                    </button>
+                }
+            </div>
+            <button class="btn btn-primary rounded-pill shadow-sm d-flex justify-content-center align-items-center gap-2 px-md-4" (click)="onSearch()"><i class="bi bi-search"></i> <span class="d-none d-sm-block">Search</span></button>
+        </div>
+    </div>
+
     <!-- Cards Grid -->
     <div class="row g-4">
         @for (item of listItems; track $index) {
