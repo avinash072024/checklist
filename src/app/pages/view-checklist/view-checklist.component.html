@@ -17,7 +17,7 @@
     </app-common-top-section>
 
     <div class="row g-4">
-        @if(checklistDetails?.listItems?.length) {
+        @if(checklistDetails?._id) {
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
             <!-- Main Details Card -->
             <div class="card border-0 shadow-sm rounded-4 border-top border-4 border-primary mb-4">
@@ -87,6 +87,7 @@
 
             <!-- Checklist Items -->
             <!-- Checklist Items Container -->
+            @if(checklistDetails?.listItems?.length) {
             <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="checklistDetails?.isFreeze">
                 @for (item of checklistDetails?.listItems; track $index) {
                 <div cdkDrag class="card border-0 shadow-sm rounded-4 mb-3 border-start border-end border-4"
@@ -136,6 +137,14 @@
                 </div>
                 }
             </div>
+            } @else {
+            <div class="text-center py-5 bg-light rounded-4 mb-4 border border-dashed">
+                <div class="text-muted">
+                    <i class="bi bi-card-checklist display-4 text-secondary opacity-50"></i>
+                    <p class="mt-2 mb-0">No items added to this checklist yet.</p>
+                </div>
+            </div>
+            }
 
             <!-- Items Summary Card -->
             @if (checklistDetails?.listItems?.length > 0) {
@@ -170,11 +179,9 @@
             }
             }
 
-            @if (checklistDetails?.listItems?.length > 0) {
             <div class="mt-4">
                 <app-back-button></app-back-button>
             </div>
-            }
         </div>
         } @else {
         <div class="col-md-7 col-lg-6 col-xl-5 mx-auto text-center py-5">

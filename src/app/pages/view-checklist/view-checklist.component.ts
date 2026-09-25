@@ -91,7 +91,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         if (res?.success) {
           this.checklistDetails = res?.data || [];
           this.heading = this.checklistDetails?.isPrivate ? `View Checklist (Private)` : `View Checklist`;
-          this.subHeading = this.checklistDetails?.freeze ? "`The checklist is completed, now you can't modify the list.`" : 'You can add items here until the list is complete.';
+          this.subHeading = this.checklistDetails?.isFreeze ? `The checklist is completed, now you can't modify the list.` : 'You can add items here until the list is complete.';
           this.spinner.hide();
         } else {
           this.spinner.hide();
