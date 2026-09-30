@@ -120,6 +120,57 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Cleans one pasted line: removes bullets, numbering ("1.", "2)") and checkbox markers ("[ ]", "[x]")
+  private cleanPastedLine(line: string): string {
+    return line
+      .replace(/^\s*[-*•●▪◦‣☐☑✓✔□]+\s*/, '')
+      .replace(/^\s*\[[ xX]?\]\s*/, '')
+      .replace(/^\s*\d+[.)]\s+/, '')
+      .trim();
+  }
+
+  private capitalizeFirst(text: string): string {
+    return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+  }
+
+  private parseItems(text: string): string[] {
+    return text
+      .split(/\r?\n/)
+      .map(line => this.capitalizeFirst(this.cleanPastedLine(line)))
+      .filter(line => line.length > 0);
+  }
+
+  // Pasting several lines into the item box saves every line as its own item
+  onPasteItems(event: ClipboardEvent): void {
+    const pasted = event.clipboardData?.getData('text') ?? '';
+    const items = this.parseItems(pasted);
+
+    // Single line: let the browser paste normally into the input
+    if (items.length <= 1) return;
+
+    event.preventDefault();
+    this.saveBulkItems(items);
+  }
+
+  private saveBulkItems(items: string[]): void {
+    this.listService.addItemsToChecklist(this.checkListId, items).subscribe({
+      next: (res: any) => {
+        if (res?.success) {
+          this.newItemName = '';
+          this.toastr.success(res?.message);
+          this.getChecklistById(this.checkListId, false);
+        } else {
+          this.toastr.error(res?.message);
+        }
+        this.itemTextInput()?.nativeElement.focus();
+      },
+      error: (err: any) => {
+        this.toastr.error(err?.error?.message || err?.message);
+        this.itemTextInput()?.nativeElement.focus();
+      }
+    });
+  }
+
   completeListItem(itemId: string, event: Event): void {
     const checkbox = event.target as HTMLInputElement;
     const isChecked = checkbox.checked;
