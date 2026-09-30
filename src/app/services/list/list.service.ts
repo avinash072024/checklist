@@ -32,6 +32,14 @@ export class ListService {
     );
   }
 
+  addItemsToChecklist(checklistId: string, items: string[]): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/checklists/${checklistId}/items/bulk`,
+      { items },
+      this.sessionService.getAuthHeaders()
+    );
+  }
+
   getChecklistById(checklistId: string): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/${checklistId}`,

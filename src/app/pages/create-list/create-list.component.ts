@@ -158,6 +158,62 @@ export class CreateListComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Cleans one pasted line: removes bullets, numbering ("1.", "2)") and checkbox markers ("[ ]", "[x]")
+  private cleanPastedLine(line: string): string {
+    return line
+      .replace(/^\s*[-*•●▪◦‣☐☑✓✔□]+\s*/, '')
+      .replace(/^\s*\[[ xX]?\]\s*/, '')
+      .replace(/^\s*\d+[.)]\s+/, '')
+      .trim();
+  }
+
+  private capitalizeFirst(text: string): string {
+    return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+  }
+
+  private parseItems(text: string): string[] {
+    return text
+      .split(/\r?\n/)
+      .map(line => this.capitalizeFirst(this.cleanPastedLine(line)))
+      .filter(line => line.length > 0);
+  }
+
+  // Pasting several lines into the item box saves every line as its own item
+  onPasteItems(event: ClipboardEvent): void {
+    const pasted = event.clipboardData?.getData('text') ?? '';
+    const items = this.parseItems(pasted);
+
+    // Single line: let the browser paste normally into the input
+    if (items.length <= 1) return;
+
+    event.preventDefault();
+    this.saveBulkItems(items);
+  }
+
+  private saveBulkItems(items: string[]): void {
+    if (!this.listDetails || !this.listDetails._id || this.isSubmitting()) return;
+
+    this.isSubmitting.set(true);
+    this.listService.addItemsToChecklist(this.listDetails._id, items).subscribe({
+      next: (res: any) => {
+        this.isSubmitting.set(false);
+        if (res?.success) {
+          this.newItemName = '';
+          this.toastr.success(res?.message);
+          this.getChecklistById(this.listDetails._id);
+        } else {
+          this.toastr.error(res?.message);
+        }
+        this.itemTextInput()?.nativeElement.focus();
+      },
+      error: (err: any) => {
+        this.isSubmitting.set(false);
+        this.toastr.error(err?.error?.message || err?.message);
+        this.itemTextInput()?.nativeElement.focus();
+      }
+    });
+  }
+
   getChecklistById(checklistId: string): void {
     if (!checklistId) return;
     this.listService.getChecklistById(checklistId).subscribe({
@@ -195,23 +251,23 @@ export class CreateListComponent implements OnInit, OnDestroy {
     if (this.listDetails?.isFreeze) return;
 
     // Locally reorder the array instantly for smooth UI feedback
-    moveItemInArray(this.listDetails.listItems, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.listItems, event.previousIndex, event.currentIndex);
 
     // Extract the new order of IDs to send to your backend API
-    const orderedIds = this.listDetails.listItems.map((item: any) => item._id);
+    const orderedIds = this.listItems.map((item: any) => item._id);
 
-    this.listService.reorderChecklistItems(this.listDetails.id, orderedIds).subscribe({
+    this.listService.reorderChecklistItems(this.listDetails._id, orderedIds).subscribe({
       next: (res: any) => {
         if (!res?.success) {
           this.toastr.error(res?.message);
           // Revert locally if failed
-          moveItemInArray(this.listDetails.listItems, event.currentIndex, event.previousIndex);
+          moveItemInArray(this.listItems, event.currentIndex, event.previousIndex);
         }
       },
       error: (err: any) => {
         this.toastr.error(err?.message);
         // Revert locally if failed
-        moveItemInArray(this.listDetails.listItems, event.currentIndex, event.previousIndex);
+        moveItemInArray(this.listItems, event.currentIndex, event.previousIndex);
       }
     });
   }
