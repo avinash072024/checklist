@@ -96,8 +96,8 @@ export class ChecklistCardComponent {
   downloadPdf(): void {
     if (!this.item?._id || this.isDownloading) return;
     this.isDownloading = true;
-
-    this.listService.downloadChecklistPdf(this.item._id).subscribe({
+    const customDateTime = new Date().toLocaleString('en-IN');
+    this.listService.downloadChecklistPdf(this.item._id, customDateTime).subscribe({
       next: (blob: Blob) => {
         const url = window.URL.createObjectURL(blob);
         const anchor = document.createElement('a');

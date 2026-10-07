@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -127,12 +127,20 @@ export class ListService {
     );
   }
 
-  downloadChecklistPdf(checklistId: string): Observable<Blob> {
+  downloadChecklistPdf(checklistId: string, clientTime?: string): Observable<Blob> {
+    debugger;
     const token = this.sessionService.getCookie(Constants.token) || '';
+
+    let params = new HttpParams();
+    if (clientTime) {
+      params = params.set('clientTime', clientTime);
+    }
+
     return this.http.get(
       `${environment.apiUrl}/checklists/${checklistId}/pdf`,
       {
         headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+        params: params,
         responseType: 'blob'
       }
     );
