@@ -16,7 +16,7 @@
     <!-- Card Body -->
     <div class="card-body px-4 py-3 cursor-pointer" (click)="viewClicked.emit()">
         <!-- Progress Bar -->
-        <!-- <div class="mb-3">
+        <div class="bg-body-tertiary rounded-4 p-3 mb-3">
             <div class="d-flex justify-content-between small text-muted mb-1">
                 <span class="fs-6">Progress</span>
                 <span class="fw-medium fs-6">{{item?.completedItems || 0}}/{{item?.totalItems || 0}}</span>
@@ -25,28 +25,28 @@
                 <div class="progress-bar rounded-pill" [ngClass]="progressBarClass" [style.width.%]="progressPercent">
                 </div>
             </div>
-        </div> -->
+        </div>
 
         <!-- Meta Details -->
         <div class="meta-list d-flex flex-column gap-2 small">
 
             <!-- Created By (hidden for private lists when createdByLabel is undefined) -->
             @if (createdByLabel !== undefined) {
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-1">
+            <div class="d-flex justify-content-between align-items-center">
                 <span class="text-muted fs-6"><i class="bi bi-person me-1"></i> Created By</span>
                 <span class="fw-medium fs-6 text-truncate max-w-150">{{createdByLabel}}</span>
             </div>
             }
 
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-1">
+            <div class="d-flex justify-content-between align-items-center">
                 <span class="text-muted fs-6"><i class="bi bi-clock me-1"></i> Created Date</span>
                 <span class="fw-medium fs-6">{{item?.createdAt | date: 'dd MMM, yyyy'}}</span>
             </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-1">
+            <div class="d-flex justify-content-between align-items-center">
                 <span class="text-muted fs-6"><i class="bi bi-list-check me-1"></i> Total Items</span>
                 <span class="fw-medium fs-6">{{item?.totalItems || 0}}</span>
             </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-1">
+            <div class="d-flex justify-content-between align-items-center">
                 <span class="text-muted fs-6"><i class="bi bi-check2-circle me-1"></i> Complete Items</span>
                 <span class="fw-medium fs-6 text-success">{{item?.completedItems || 0}}</span>
             </div>
@@ -55,7 +55,7 @@
                 <span class="fw-medium fs-6 text-danger">{{item?.pendingItems || 0}}</span>
             </div>
             @if (item?.isFreeze && item?.frozenAt) {
-            <div class="d-flex justify-content-between align-items-center border-top py-1">
+            <div class="d-flex justify-content-between align-items-center">
                 <span class="text-muted fs-6"><i class="bi bi-calendar-check me-1"></i> Closed Date</span>
                 <span class="fw-medium fs-6 text-danger">{{item?.frozenAt | date: 'dd MMM, yyyy'}}</span>
             </div>
