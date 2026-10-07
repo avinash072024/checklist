@@ -178,7 +178,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
     this.listService.toggleItemComplete(this.checkListId, itemId, isChecked).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          this.toastr.success(res?.message);
+          // this.toastr.success(res?.message);
         } else {
           this.toastr.error(res?.message);
         }

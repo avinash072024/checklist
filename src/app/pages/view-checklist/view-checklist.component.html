@@ -1,18 +1,5 @@
 <div class="container py-0 py-md-1">
-    <!-- <div class="row mb-3">
-        <div class="col-md-7 col-lg-6 col-xl-5 mx-auto">
-            <app-back-button class="d-inline-block mb-2"></app-back-button>
-            <h3 class="fw-bold mb-1 display-6 tracking-tight">
-                View Checklist {{checklistDetails?.isPrivate ? '(Private)' : ''}}
-            </h3>
-            @if (!checklistDetails?.isFreeze) {
-            <p class="text-muted mb-0">You can add items here until the list is complete.</p>
-            } @else {
-            <p class="text-muted mb-0">The checklist is completed, now you can't modify the list.</p>
-            }
-        </div>
-    </div> -->
-
+    
     <app-common-top-section [heading]="heading" [subheading]="subHeading" [showCreateButton]="false">
     </app-common-top-section>
 
@@ -50,12 +37,17 @@
                                 class="fw-medium fs-6 text-truncate max-w-150">{{listService.getNameOfListCreated(checklistDetails?.createdBy)}}</span>
                         </div>
 
-                        @if (checklistDetails?.frozenAt) {
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted fs-6"><i class="bi bi-clock me-1"></i> Created Date</span>
                             <span class="fw-medium fs-6">{{checklistDetails?.createdAt | date: 'dd MMM, yyyy'}}</span>
                         </div>
-                        }
+
+                        <!-- @if (checklistDetails?.frozenAt) {
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted fs-6"><i class="bi bi-clock me-1"></i> Created Date</span>
+                            <span class="fw-medium fs-6">{{checklistDetails?.createdAt | date: 'dd MMM, yyyy'}}</span>
+                        </div>
+                        } -->
                         @if (checklistDetails?.isFreeze) {
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted fs-6"><i class="bi bi-info-circle me-1"></i> Status</span>
@@ -74,8 +66,8 @@
                     @if (!checklistDetails?.isFreeze) {
                     <div class="input-group mt-3">
                         <input type="text" class="form-control rounded-pill-start py-2 px-3" #itemInputBox
-                            appCapitalizeFirst placeholder="Enter item (or paste multiple lines)" [(ngModel)]="newItemName" 
-                            (paste)="onPasteItems($event)" name="newItem">
+                            appCapitalizeFirst placeholder="Enter item (or paste multiple lines)"
+                            [(ngModel)]="newItemName" (paste)="onPasteItems($event)" name="newItem">
                         <button
                             class="btn btn-primary px-3 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
                             (click)="addListItem()">
@@ -88,55 +80,135 @@
 
             <!-- Checklist Items -->
             <!-- Checklist Items Container -->
+            <!-- Checklist Items -->
             @if(checklistDetails?.listItems?.length) {
-            <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="checklistDetails?.isFreeze">
-                @for (item of checklistDetails?.listItems; track $index) {
-                <div cdkDrag class="card border-0 shadow-sm rounded-4 mb-3 border-start border-end border-4"
-                    [ngClass]="item?.completed ? 'border-primary' : 'border-danger'">
+            <div class="mb-4">
+                <!-- Pending Items Section -->
+                <h6 class="fw-bold text-danger mb-3">Pending Items ({{checklistDetails?.pendingItems || 0}})</h6>
 
-                    @if (!checklistDetails?.isPrivate) {
-                    <div class="card-header small fs-6">
-                        <i class="bi bi-person me-1"></i> Created By : <span
-                            class="fw-medium text-body">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
+                @if (checklistDetails?.pendingItems > 0) {
+                <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="checklistDetails?.isFreeze">
+                    @for (item of checklistDetails?.listItems; track $index) {
+                    @if (!item?.completed) {
+                    <div cdkDrag
+                        class="card border-0 shadow-sm rounded-4 mb-3 border-start border-end border-4 border-danger">
+
+                        @if (!checklistDetails?.isPrivate) {
+                        <div class="card-header small fs-6">
+                            <i class="bi bi-person me-1"></i> Created By : <span
+                                class="fw-medium text-body">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
+                        </div>
+                        }
+
+                        <div class="card-body py-2 d-flex justify-content-between align-items-center gap-3"
+                            [ngClass]="checklistDetails?.isFreeze ? '' : 'pe-1'">
+                            <!-- Checkbox and Text -->
+                            <div class="form-check w-75 mb-0">
+                                <input class="form-check-input mt-1" type="checkbox" [value]="item?._id"
+                                    [id]="item?._id" [checked]="item?.completed" [disabled]="checklistDetails?.isFreeze"
+                                    (change)="completeListItem(item?._id, $event)">
+                                <label class="form-check-label fw-medium text-break" [for]="item?._id">
+                                    {{item.text}}
+                                </label>
+                            </div>
+
+                            <!-- Right-side Actions: Delete Button & Drag Handle -->
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button"
+                                    class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
+                                    (click)="deleteItem(item?._id)" [disabled]="checklistDetails?.isFreeze">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+
+                                @if (!checklistDetails?.isFreeze) {
+                                <span cdkDragHandle class="cursor-grab text-muted px-1 d-flex align-items-center"
+                                    title="Drag to reorder">
+                                    <i class="bi bi-grip-vertical mt-1 fs-5"></i>
+                                </span>
+                                }
+                            </div>
+                        </div>
+
+                        @if (!checklistDetails?.isPrivate) {
+                        <div class="card-footer small fs-6">
+                            <i class="bi bi-check2-circle me-1"></i> Completed By : <span
+                                class="fw-medium text-body">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
+                        </div>
+                        }
                     </div>
                     }
-
-                    <div class="card-body py-2 d-flex justify-content-between align-items-center gap-3" [ngClass]="checklistDetails?.isFreeze ? '' : 'pe-1'">
-                        <!-- Checkbox and Text -->
-                        <div class="form-check w-75 mb-0">
-                            <input class="form-check-input mt-1" type="checkbox" [value]="item?._id" [id]="item?._id"
-                                [checked]="item?.completed" [disabled]="checklistDetails?.isFreeze"
-                                (change)="completeListItem(item?._id, $event)">
-                            <label class="form-check-label fw-medium text-break" [for]="item?._id">
-                                {{item.text}}
-                            </label>
-                        </div>
-
-                        <!-- Right-side Actions: Delete Button & Drag Handle -->
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="button"
-                                class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
-                                (click)="deleteItem(item?._id)" [disabled]="checklistDetails?.isFreeze">
-                                <i class="bi bi-trash3"></i>
-                            </button>
-
-                            @if (!checklistDetails?.isFreeze) {
-                            <span cdkDragHandle class="cursor-grab text-muted px-1 d-flex align-items-center"
-                                title="Drag to reorder">
-                                <i class="bi bi-grip-vertical mt-1 fs-5"></i>
-                            </span>
-                            }
-                        </div>
-                    </div>
-
-                    @if (!checklistDetails?.isPrivate) {
-                    <div class="card-footer small fs-6">
-                        <i class="bi bi-check2-circle me-1"></i> Completed By : <span
-                            class="fw-medium text-body">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
-                    </div>
                     }
                 </div>
+                } @else {
+                <div class="card text-center py-2 rounded-4 mb-3 border border-dashed">
+                    No Pending Item
+                </div>
                 }
+
+                <!-- Completed Items Section -->
+                <h6 class="fw-bold text-success mt-4 mb-3">Completed Items ({{checklistDetails?.completedItems || 0}})</h6>
+
+                @if (checklistDetails?.completedItems > 0) {
+                <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="checklistDetails?.isFreeze">
+                    @for (item of checklistDetails?.listItems; track $index) {
+                    @if (item?.completed) {
+                    <div cdkDrag
+                        class="card border-0 shadow-sm rounded-4 mb-3 border-start border-end border-4 border-primary">
+
+                        @if (!checklistDetails?.isPrivate) {
+                        <div class="card-header small fs-6">
+                            <i class="bi bi-person me-1"></i> Created By : <span
+                                class="fw-medium text-body">{{listService.getNameOfListCreated(item?.createdBy)}}</span>
+                        </div>
+                        }
+
+                        <div class="card-body py-2 d-flex justify-content-between align-items-center gap-3"
+                            [ngClass]="checklistDetails?.isFreeze ? '' : 'pe-1'">
+                            <!-- Checkbox and Text -->
+                            <div class="form-check w-75 mb-0">
+                                <input class="form-check-input mt-1" type="checkbox" [value]="item?._id"
+                                    [id]="item?._id" [checked]="item?.completed" [disabled]="checklistDetails?.isFreeze"
+                                    (change)="completeListItem(item?._id, $event)">
+                                <label
+                                    class="form-check-label fw-medium text-break"
+                                    [for]="item?._id">
+                                    {{item.text}}
+                                </label>
+                            </div>
+
+                            <!-- Right-side Actions: Delete Button & Drag Handle -->
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button"
+                                    class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
+                                    (click)="deleteItem(item?._id)" [disabled]="checklistDetails?.isFreeze">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+
+                                @if (!checklistDetails?.isFreeze) {
+                                <span cdkDragHandle class="cursor-grab text-muted px-1 d-flex align-items-center"
+                                    title="Drag to reorder">
+                                    <i class="bi bi-grip-vertical mt-1 fs-5"></i>
+                                </span>
+                                }
+                            </div>
+                        </div>
+
+                        @if (!checklistDetails?.isPrivate) {
+                        <div class="card-footer small fs-6">
+                            <i class="bi bi-check2-circle me-1"></i> Completed By : <span
+                                class="fw-medium text-body">{{listService.getNameOfListCreated(item?.completedBy)}}</span>
+                        </div>
+                        }
+                    </div>
+                    }
+                    }
+                </div>
+                } @else {
+                <div class="card text-center py-2 rounded-4 mb-3 border border-dashed">
+                    No Completed Item
+                </div>
+                }
+
             </div>
             } @else {
             <div class="text-center py-5 bg-light rounded-4 mb-4 border border-dashed">
@@ -149,7 +221,7 @@
 
             <!-- Items Summary Card -->
             @if (checklistDetails?.listItems?.length > 0) {
-            <div class="card border-0 shadow-sm rounded-4 mt-4 border-top border-4 border-primary">
+            <div class="card border-0 shadow-sm rounded-4 mt-5 border-top border-4 border-primary">
                 <div class="card-header fw-bold">Items Summary</div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
