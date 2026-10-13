@@ -32,6 +32,8 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   heading: string = 'View Checklist';
   subHeading!: string;
 
+  isDownloading = false;
+
   listService = inject(ListService);
   socketService = inject(SocketService);
   sessionService = inject(SessionService);
@@ -237,6 +239,28 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
         this.toastr.error(err?.message);
         // Revert locally if failed
         moveItemInArray(this.checklistDetails.listItems, event.currentIndex, event.previousIndex);
+      }
+    });
+  }
+
+  downloadPdf(): void {
+    if (!this.checkListId || this.isDownloading) return;
+    this.isDownloading = true;
+    const customDateTime = new Date().toLocaleString('en-IN');
+    this.listService.downloadChecklistPdf(this.checkListId, customDateTime).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = `${this.checklistDetails?.title || 'checklist'}.pdf`;
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+        this.isDownloading = false;
+        this.toastr.success('Checklist downloaded successfully');
+      },
+      error: () => {
+        this.isDownloading = false;
+        this.toastr.error('Failed to download checklist');
       }
     });
   }

@@ -1,5 +1,5 @@
 <div class="container py-0 py-md-1">
-    
+
     <app-common-top-section [heading]="heading" [subheading]="subHeading" [showCreateButton]="false">
     </app-common-top-section>
 
@@ -146,7 +146,8 @@
                 }
 
                 <!-- Completed Items Section -->
-                <h6 class="fw-bold text-success mt-4 mb-3">Completed Items ({{checklistDetails?.completedItems || 0}})</h6>
+                <h6 class="fw-bold text-success mt-4 mb-3">Completed Items ({{checklistDetails?.completedItems || 0}})
+                </h6>
 
                 @if (checklistDetails?.completedItems > 0) {
                 <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="checklistDetails?.isFreeze">
@@ -169,9 +170,7 @@
                                 <input class="form-check-input mt-1" type="checkbox" [value]="item?._id"
                                     [id]="item?._id" [checked]="item?.completed" [disabled]="checklistDetails?.isFreeze"
                                     (change)="completeListItem(item?._id, $event)">
-                                <label
-                                    class="form-check-label fw-medium text-break"
-                                    [for]="item?._id">
+                                <label class="form-check-label fw-medium text-break" [for]="item?._id">
                                     {{item.text}}
                                 </label>
                             </div>
@@ -244,7 +243,7 @@
             @if(listService.getNameOfListCreated(checklistDetails?.createdBy) === 'You') {
             <div class="text-center mt-4">
                 <button type="button"
-                    class="btn btn-primary rounded-pill px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2"
+                    class="btn btn-primary rounded-pill px-4 shadow-sm d-inline-flex align-items-center gap-2"
                     (click)="openModal(checklistDetails)">
                     <i class="bi bi-check-lg fs-5 position-relative top-1px"></i> Close List
                 </button>
@@ -252,8 +251,21 @@
             }
             }
 
-            <div class="mt-4">
+            <div class="mt-4 d-flex justify-content-between align-items-center gap-2">
                 <app-back-button></app-back-button>
+                <!-- <button type="button" class="btn btn-link text-decoration-none" (click)="downloadPdf()">
+                    <i class="bi bi-download me-1"></i> Download
+                </button> -->
+                <button type="button"
+                    class="btn btn-link text-decoration-none"
+                    title="Download PDF" [disabled]="isDownloading" (click)="downloadPdf()">
+                    @if (isDownloading) {
+                    <span class="spinner-border spinner-border-sm me-1" style="width: 1rem; height: 1rem;" role="status"
+                        aria-hidden="true"></span> Downloading...
+                    } @else {
+                    <i class="bi bi-download"></i><span class="ms-1">Download</span>
+                    }
+                </button>
             </div>
         </div>
         } @else {
