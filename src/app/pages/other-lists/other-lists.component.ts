@@ -117,7 +117,6 @@ export class OtherListsComponent implements OnInit, OnDestroy {
   // }
 
   onSearch(): void {
-    debugger;
     const query = this.searchQuery.trim().toLowerCase();
 
     if (!query) {

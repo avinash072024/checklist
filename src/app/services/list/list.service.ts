@@ -128,7 +128,6 @@ export class ListService {
   }
 
   downloadChecklistPdf(checklistId: string, clientTime?: string): Observable<Blob> {
-    debugger;
     const token = this.sessionService.getCookie(Constants.token) || '';
 
     let params = new HttpParams();
