@@ -1,16 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
-// @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
-// @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+// /* You can add global styles to this file, and also import other style files */
+// // @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap');
+// // @import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+
+// :root {
+//     // --font-family: "Outfit", sans-serif;
+//     --font-family: "Baloo 2", sans-serif;
+//     // --font-family: "League Spartan", sans-serif;
+// }
+
+// body {
+//     font-family: var(--font-family) !important;
+// }
+
+@font-face {
+  font-family: 'Baloo 2';
+  src: url('./assets/fonts/baloo-2/Baloo2[wght].ttf')
+    format('truetype');
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
 
 :root {
-    // --font-family: "Outfit", sans-serif;
-    --font-family: "Baloo 2", sans-serif;
-    // --font-family: "League Spartan", sans-serif;
+  --font-family: 'Baloo 2', sans-serif;
 }
 
 body {
-    font-family: var(--font-family) !important;
+  font-family: var(--font-family) !important;
 }
 
 .bg-transparent {
