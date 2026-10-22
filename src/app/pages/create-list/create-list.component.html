@@ -33,7 +33,7 @@
                     </div>
                     <div class="input-group">
                         <input type="text" class="form-control rounded-pill-start py-2 px-3" appCapitalizeFirst
-                            placeholder="Enter list name" [(ngModel)]="listName">
+                            placeholder="Enter list name" [(ngModel)]="listName" (keyup.enter)="enableStepTwo()">
                         <button
                             class="btn btn-primary px-2 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
                             (click)="enableStepTwo()" [disabled]="isSubmitting()">
@@ -64,9 +64,9 @@
                     <div class="input-group">
                         <input type="text" class="form-control rounded-pill-start py-2 px-3" #itemInputBox
                             appCapitalizeFirst placeholder="Enter item (or paste multiple lines)" [(ngModel)]="newItemName"
-                            (paste)="onPasteItems($event)" name="newItem">
+                            (paste)="onPasteItems($event)" (keyup.enter)="addListItem()" name="newItem">
                         <button
-                            class="btn btn-primary px-3 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
+                            class="btn btn-primary px-3 py-2 shadow-sm d-flex align-items-center gap-1"
                             (click)="addListItem()" [disabled]="isSubmitting()">
                             <i class="bi bi-plus-circle"></i> Add
                         </button>
@@ -82,7 +82,7 @@
                     <li cdkDrag class="list-group-item d-flex justify-content-between align-items-center gap-3">
                         <p class="mb-0 fw-medium text-break">{{item.text}}</p>
                         <div class="d-flex gap-2">
-                            <button type="button"
+                            <button type="button" [disabled]="isDeleting()"
                                 class="btn btn-outline-danger btn-sm rounded-3 d-flex align-items-center gap-1"
                                 (click)="deleteItem(item?._id)">
                                 <i class="bi bi-trash3"></i>

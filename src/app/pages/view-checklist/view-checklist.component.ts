@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, signal, viewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ListService } from '../../services/list/list.service';
 import { SocketService } from '../../services/socket/socket.service';
@@ -33,6 +33,7 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
   subHeading!: string;
 
   isDownloading = false;
+  isSubmitting = signal(false);
 
   listService = inject(ListService);
   socketService = inject(SocketService);
@@ -65,20 +66,24 @@ export class ViewChecklistComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.isSubmitting.set(true);
     this.listService.addItemToChecklist(this.checkListId, itemText).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
           this.newItemName = '';
           this.itemTextInput()?.nativeElement.focus();
+          this.isSubmitting.set(false);
         } else {
           this.toastr.error(res?.message);
           this.itemTextInput()?.nativeElement.focus();
+          this.isSubmitting.set(false);
         }
       },
       error: (err: any) => {
         this.toastr.error(err?.error?.message || err?.message);
         this.itemTextInput()?.nativeElement.focus();
+        this.isSubmitting.set(false);
       }
     });
   }

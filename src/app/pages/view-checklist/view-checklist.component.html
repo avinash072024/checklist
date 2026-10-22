@@ -67,8 +67,8 @@
                     <div class="input-group mt-3">
                         <input type="text" class="form-control rounded-pill-start py-2 px-3" #itemInputBox
                             appCapitalizeFirst placeholder="Enter item (or paste multiple lines)"
-                            [(ngModel)]="newItemName" (paste)="onPasteItems($event)" name="newItem">
-                        <button
+                            [(ngModel)]="newItemName" (paste)="onPasteItems($event)" (keyup.enter)="addListItem()" name="newItem">
+                        <button [disabled]="isSubmitting()"
                             class="btn btn-primary px-3 py-2 rounded-pill-end shadow-sm d-flex align-items-center gap-1"
                             (click)="addListItem()">
                             <i class="bi bi-plus-circle"></i> Add

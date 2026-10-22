@@ -27,6 +27,7 @@ export class CreateListComponent implements OnInit, OnDestroy {
   router = inject(Router);
 
   isSubmitting = signal(false);
+  isDeleting = signal(false);
 
   listItems: any[] = [];
   listName = '';
@@ -231,17 +232,21 @@ export class CreateListComponent implements OnInit, OnDestroy {
 
   deleteItem(itemId: string): void {
     if (!this.listDetails || !this.listDetails._id) return;
+    this.isDeleting.set(true)
     this.listService.deleteChecklistItem(this.listDetails._id, itemId).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.toastr.success(res?.message);
           this.getChecklistById(this.listDetails._id);
+          this.isDeleting.set(false);
         } else {
           this.toastr.error(res?.message);
+          this.isDeleting.set(false);
         }
       },
       error: (err) => {
         this.toastr.error(err?.message);
+        this.isDeleting.set(false);
       }
     });
   }
