@@ -26,12 +26,4 @@ export class ValidationsService {
       .join(' ');
   }
 
-  // Capitalize after period
-  capitalizeSentence(value: string): string {
-    return value
-      .toLowerCase()
-      .split('. ')
-      .map(sentence => sentence.charAt(0).toUpperCase() + sentence.slice(1))
-      .join('. ');
-  }
 }

@@ -107,11 +107,6 @@ export class SessionService {
     }
   }
 
-  clearAuth(): void {
-    this.deleteCookie(Constants.token);
-    this.currentUserSubject.next(null);
-  }
-
   logout(): void {
     if (this.isBrowser) {
       this.deleteCookie(Constants.token);

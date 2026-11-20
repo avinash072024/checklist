@@ -11,8 +11,8 @@ export class CapitalizeFirstDirective {
     private control: NgControl
   ) { }
 
-  @HostListener('input', ['$event'])
-  onInput(event: Event): void {
+  @HostListener('input')
+  onInput(): void {
     const value = this.el.nativeElement.value;
     if (!value) return;
 

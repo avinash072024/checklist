@@ -3,14 +3,9 @@ import { CanActivateFn, Router } from '@angular/router';
 import { SessionService } from '../services/session/session.service';
 import { Constants } from '../models/constants';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
   const sessionService = inject(SessionService);
-  // const token = localStorage.getItem('token');
-
-  // if (token) {
-  //   return true; // Token exists, proceed securely
-  // }
   
   const token = sessionService.getCookie(Constants.token);
   if (token) {

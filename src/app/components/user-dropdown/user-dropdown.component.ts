@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { SessionService } from '../../services/session/session.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../models/user.model';
-import { Constants } from '../../models/constants';
 import { ThemeSwitcherComponent } from '../theme-switcher/theme-switcher.component';
 import { AvatarService } from '../../services/avatar/avatar.service';
 

@@ -34,16 +34,8 @@ body {
     background-color: transparent !important;
 }
 
-.text-transparent {
-    color: transparent !important;
-}
-
 .cursor-pointer {
     cursor: pointer !important;
-}
-
-.text-justify {
-    text-align: justify !important;
 }
 
 .card {
@@ -99,14 +91,6 @@ body {
     max-width: 150px;
 }
 
-.create-btn {
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-        transform: translateY(-2px);
-    }
-}
-
 // checklist card end
 
 .fs-7 {
@@ -115,10 +99,6 @@ body {
 
 .top-1px {
     top: 1px !important;
-}
-
-.top-15px {
-    top: 1.5px !important;
 }
 
 .top-2px {

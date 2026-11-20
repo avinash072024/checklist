@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SessionService } from '../../services/session/session.service';
 import { AuthService } from '../../services/auth/auth.service';
@@ -220,11 +220,7 @@ export class MyProfileComponent implements OnInit {
     });
   }
 
-  openModal(data: any): void {
-    // if (data) {
-    //   // this.deleteDetails = data;
-    //   $('#deleteStaticBackdrop').modal('show');
-    // }
+  openModal(): void {
     $('#deleteStaticBackdrop').modal('show');
   }
 

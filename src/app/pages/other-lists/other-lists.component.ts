@@ -3,12 +3,9 @@ import { ListService } from '../../services/list/list.service';
 import { SocketService } from '../../services/socket/socket.service';
 import { ToastrService } from 'ngx-toastr';
 import { SessionService } from '../../services/session/session.service';
-import { Constants } from '../../models/constants';
-import { jwtDecode } from 'jwt-decode';
-import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ListNotFoundCardComponent } from "../../components/list-not-found-card/list-not-found-card.component";
 import { ChecklistCardComponent } from "../../components/checklist-card/checklist-card.component";
 import { CommonTopSectionComponent } from "../../components/common-top-section/common-top-section.component";
@@ -26,7 +23,6 @@ export class OtherListsComponent implements OnInit, OnDestroy {
 
   listItems: any[] = [];
   deleteDetails: any;
-  userDetails: any;
   searchQuery: string = '';
 
   listService = inject(ListService);
@@ -40,10 +36,6 @@ export class OtherListsComponent implements OnInit, OnDestroy {
   listItemsCount!: number;
 
   ngOnInit(): void {
-    const token = this.sessionService.getCookie(Constants.token);
-    if (token) {
-      this.userDetails = jwtDecode<User>(token);
-    }
     this.getLists(true);
 
     this.socketSub = this.socketService.onChecklistChange().subscribe(() => {
@@ -75,47 +67,6 @@ export class OtherListsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // onSearch(): void {
-  //   if (!this.searchQuery.trim()) {
-  //     this.getLists(true);
-  //     return;
-  //   }
-
-  //   this.spinner.show();
-
-  //   forkJoin({
-  //     name: this.listService.searchChecklistsByName(this.searchQuery),
-  //     creator: this.listService.searchChecklistsByCreator(this.searchQuery)
-  //   }).subscribe({
-  //     next: (res: any) => {
-  //       const nameRes = res.name;
-  //       const creatorRes = res.creator;
-
-  //       let allItems: any[] = [];
-  //       if (nameRes?.success && nameRes?.data) {
-  //         allItems = [...allItems, ...nameRes.data];
-  //       }
-  //       if (creatorRes?.success && creatorRes?.data) {
-  //         allItems = [...allItems, ...creatorRes.data];
-  //       }
-
-  //       const uniqueItemsMap = new Map();
-  //       allItems.forEach(item => {
-  //         uniqueItemsMap.set(item._id || item.id, item);
-  //       });
-
-  //       this.listItems = Array.from(uniqueItemsMap.values());
-  //       this.listItemsCount = this.listItems.length;
-
-  //       this.spinner.hide();
-  //     },
-  //     error: (err) => {
-  //       this.spinner.hide();
-  //       this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
-  //     }
-  //   });
-  // }
-
   onSearch(): void {
     const query = this.searchQuery.trim().toLowerCase();
 
@@ -136,10 +87,6 @@ export class OtherListsComponent implements OnInit, OnDestroy {
     }
 
     this.listItemsCount = this.listItems.length;
-  }
-
-  getNameOfListCreated(data: any): string {
-    return this.userDetails?.id == data?.id ? 'You' : data?.fullname;
   }
 
   deleteChecklist(): void {

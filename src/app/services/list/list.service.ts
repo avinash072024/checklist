@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment.development';
 import { SessionService } from '../session/session.service';
 import { Constants } from '../../models/constants';
 import { jwtDecode } from 'jwt-decode';
-import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +17,6 @@ export class ListService {
 
   createChecklist(payload: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}/checklists/`, payload, this.sessionService.getAuthHeaders());
-  }
-
-  updateChecklist(id: string, payload: { title?: string; listItems?: any[]; isFreeze?: boolean }): Observable<any> {
-    return this.http.put<any>(`${environment.apiUrl}/checklists/${id}`, payload, this.sessionService.getAuthHeaders());
   }
 
   addItemToChecklist(checklistId: string, text: string): Observable<any> {

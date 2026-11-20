@@ -16,19 +16,6 @@ export class SocketService {
     });
   }
 
-  // Listen to a specific event and return an Observable
-  onEvent(eventName: string): Observable<any> {
-    return new Observable((subscriber) => {
-      this.socket.on(eventName, (data: any) => {
-        subscriber.next(data);
-      });
-
-      return () => {
-        this.socket.off(eventName);
-      };
-    });
-  }
-
   // Helper stream to listen to all checklist mutations
   onChecklistChange(): Observable<any> {
     return new Observable((subscriber) => {

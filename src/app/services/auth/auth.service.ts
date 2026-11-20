@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
   AuthResponse,
@@ -17,7 +17,6 @@ import {
 } from '../../models/auth.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { Constants } from '../../models/constants';
 import { SessionService } from '../session/session.service';
 
 @Injectable({

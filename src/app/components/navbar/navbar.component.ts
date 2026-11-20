@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { UserDropdownComponent } from "../user-dropdown/user-dropdown.component";
@@ -20,8 +20,6 @@ interface NavLinks {
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  isScrolled = false;
-  isLoggedIn = false; // Bind to Auth Service later
   appName: string = Constants.appName;
   navbarCollapsed: boolean = false;
 
@@ -38,12 +36,6 @@ export class NavbarComponent {
 
   collapseNavbar(): void {
     this.navbarCollapsed = !this.navbarCollapsed;
-  }
-
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    // If window scrolls past 50px, add active visual effects
-    this.isScrolled = window.scrollY > 50;
   }
 
   logout(): void {
