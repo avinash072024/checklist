@@ -11,22 +11,26 @@
         </div>
     </div> -->
 
-    <app-common-top-section [heading]="'My Private Checklists'" [subheading]="`Here's a quick overview of your private checklists`"
+    <app-common-top-section [heading]="'Private Checklists'" [subheading]="'Your private checklists and those shared with you'"
         [checklistCount]="listItemsCount"></app-common-top-section>
 
         <!-- Search Section -->
     <app-search-box [(searchQuery)]="searchQuery" (search)="onSearch()" (clear)="getLists(true)"></app-search-box>
 
+    <!-- /* [createdByLabel]="item?.isOwnedByCurrentUser ? undefined : listService.getNameOfListCreated(item?.createdBy)" */ -->
     <!-- Cards Grid -->
     <div class="row g-4">
         @for (item of listItems; track $index) {
         <div class="col-md-6 col-xl-4">
             <app-checklist-card
                 [item]="item"
-                variant="warning"
+                variant="danger"
                 icon="bi-lock-fill"
-                [showDelete]="true"
+                [createdByLabel]="listService.getNameOfListCreated(item?.createdBy)"
+                [showDelete]="item?.isOwnedByCurrentUser"
                 (deleteClicked)="openModal(item)"
+                [showShare]="item?.isOwnedByCurrentUser"
+                (shareClicked)="openShareModal(item)"
                 (viewClicked)="viewChecklist(item?._id)">
             </app-checklist-card>
         </div>
@@ -37,6 +41,65 @@
             <app-list-not-found-card></app-list-not-found-card>
         </div>
         }
+    </div>
+</div>
+
+<!-- Share Checklist Modal -->
+<div class="modal fade" id="shareChecklistModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="shareChecklistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 fw-bold" id="shareChecklistModalLabel">
+                    Share {{shareDetails?.title}}
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="closeShareModal()"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Select the verified users who can access this private checklist.</p>
+                @if (isLoadingUsers) {
+                <div class="text-center py-4">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="ms-2">Loading users...</span>
+                </div>
+                } @else if (shareUsersError) {
+                <p class="text-danger text-center py-3 mb-0">{{shareUsersError}}</p>
+                } @else if (users.length === 0) {
+                <p class="text-muted text-center py-3 mb-0">No other verified users are available.</p>
+                } @else {
+                <div class="list-group">
+                    @for (user of users; track getUserId(user)) {
+                    <label class="list-group-item d-flex align-items-center gap-3">
+                        <input class="form-check-input m-0" type="checkbox"
+                            [checked]="selectedUserIds.includes(getUserId(user) || '')"
+                            (change)="onRecipientChange($event, user)">
+                        <span class="flex-grow-1">
+                            <span class="d-block fw-medium">
+                                {{user?.fullname || ((user?.firstName || '') + ' ' + (user?.lastName || '')).trim() || user?.name || 'User'}}
+                            </span>
+                            @if (user?.email) {
+                            <small class="text-muted">{{user.email}}</small>
+                            }
+                        </span>
+                    </label>
+                    }
+                </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4"
+                    data-bs-dismiss="modal" (click)="closeShareModal()">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4"
+                    [disabled]="isLoadingUsers || !!shareUsersError || isSavingShare" (click)="saveSharing()">
+                    @if (isSavingShare) {
+                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    Saving...
+                    } @else {
+                    Save sharing
+                    }
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 

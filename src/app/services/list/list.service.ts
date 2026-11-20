@@ -90,9 +90,22 @@ export class ListService {
     );
   }
 
+  getSharedChecklists(): Observable<any> {
+    return this.http.get<any>(
+      `${environment.apiUrl}/checklists/shared-with-me`
+    );
+  }
+
   getPrivateChecklists(): Observable<any> {
     return this.http.get<any>(
       `${environment.apiUrl}/checklists/my-private-lists`
+    );
+  }
+
+  sharePrivateChecklist(checklistId: string, userIds: string[]): Observable<any> {
+    return this.http.put<any>(
+      `${environment.apiUrl}/checklists/${checklistId}/share`,
+      { userIds }
     );
   }
 

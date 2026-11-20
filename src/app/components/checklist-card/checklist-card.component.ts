@@ -22,9 +22,9 @@ export class ChecklistCardComponent {
   /**
    * Card colour variant.
    * 'primary' (default) → blue  (lists / my-lists / other-lists)
-   * 'warning'           → yellow (private-lists)
+   * 'danger'            → red (private-lists)
    */
-  @Input() variant: 'primary' | 'warning' = 'primary';
+  @Input() variant: 'primary' | 'danger' = 'primary';
 
   /**
    * Icon shown in the card header icon-box.
@@ -45,10 +45,17 @@ export class ChecklistCardComponent {
   @Input() showDelete: boolean = true;
 
   /**
+   * Whether to show the Share button.
+   */
+  @Input() showShare: boolean = false;
+
+  /**
    * Emitted when the user clicks the Delete button.
    * Parent opens the confirmation modal.
    */
   @Output() deleteClicked = new EventEmitter<void>();
+
+  @Output() shareClicked = new EventEmitter<void>();
 
   /**
    * Emitted when the user clicks the View button.
@@ -58,31 +65,31 @@ export class ChecklistCardComponent {
   toastr = inject(ToastrService);
 
   get activeCardClass(): string {
-    return this.variant === 'warning' ? 'warning-card' : '';
+    return this.variant === 'danger' ? 'danger-card' : '';
   }
 
   get iconBoxClass(): string {
     if (this.item?.isFreeze) return 'bg-danger-subtle text-danger';
-    return this.variant === 'warning'
-      ? 'bg-warning-subtle text-warning'
+    return this.variant === 'danger'
+      ? 'bg-danger-subtle text-danger'
       : 'bg-primary-subtle text-primary';
   }
 
   get badgeClass(): string {
     if (this.item?.isFreeze) return 'bg-danger-subtle text-danger';
-    return this.variant === 'warning'
-      ? 'bg-warning-subtle text-warning'
+    return this.variant === 'danger'
+      ? 'bg-danger-subtle text-danger'
       : 'bg-success-subtle text-success';
   }
 
   get progressBarClass(): string {
     if (this.item?.isFreeze) return 'bg-danger';
-    return this.variant === 'warning' ? 'bg-warning' : 'bg-primary';
+    return this.variant === 'danger' ? 'bg-danger' : 'bg-primary';
   }
 
   get viewBtnClass(): string {
-    if (this.variant === 'warning') {
-      return this.item?.isPrivate ? 'btn-warning text-dark' : 'btn-outline-primary';
+    if (this.variant === 'danger') {
+      return this.item?.isPrivate ? 'btn-danger text-white' : 'btn-outline-primary';
     }
     return 'btn-primary';
   }

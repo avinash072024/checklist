@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SessionService } from '../../services/session/session.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { ListNotFoundCardComponent } from "../../components/list-not-found-card/list-not-found-card.component";
 import { ChecklistCardComponent } from "../../components/checklist-card/checklist-card.component";
 import { CommonTopSectionComponent } from "../../components/common-top-section/common-top-section.component";
@@ -23,6 +23,13 @@ export class PrivateListsComponent implements OnInit, OnDestroy {
   listItems: any[] = [];
   listItemsCount!: number;
   deleteDetails: any;
+  shareDetails: any;
+  users: any[] = [];
+  selectedUserIds: string[] = [];
+  isLoadingUsers = false;
+  shareUsersError: string | null = null;
+  isSavingShare = false;
+  currentUserId: string | null = null;
   searchQuery: string = '';
 
   listService = inject(ListService);
@@ -35,6 +42,10 @@ export class PrivateListsComponent implements OnInit, OnDestroy {
   private socketSub!: Subscription;
 
   ngOnInit(): void {
+    this.sessionService.currentUser$.subscribe((user) => {
+      this.currentUserId = user?.id || user?.userId || null;
+    }).unsubscribe();
+
     this.getLists(true);
 
     this.socketSub = this.socketService.onChecklistChange().subscribe(() => {
@@ -47,21 +58,35 @@ export class PrivateListsComponent implements OnInit, OnDestroy {
       this.spinner.show();
     }
 
-    this.listService.getPrivateChecklists().subscribe({
-      next: (res: any) => {
-        if (res?.success) {
-          this.listItems = res?.data || [];
-          this.listItemsCount = res?.count;
+    forkJoin({
+      ownedLists: this.listService.getPrivateChecklists(),
+      sharedLists: this.listService.getSharedChecklists()
+    }).subscribe({
+      next: ({ ownedLists, sharedLists }: any) => {
+        if (!ownedLists?.success || !sharedLists?.success) {
           if (showSpinner) this.spinner.hide();
-        } else {
-          if (showSpinner) this.spinner.hide();
-          this.toastr.error(res?.message);
+          this.toastr.error(
+            ownedLists?.message || sharedLists?.message || 'Unable to load private checklists.'
+          );
+          return;
         }
+
+        const ownedItems = (Array.isArray(ownedLists.data) ? ownedLists.data : [])
+          .map((item: any) => ({ ...item, isOwnedByCurrentUser: true }));
+        const ownedIds = new Set(ownedItems.map((item: any) => item?._id));
+        const sharedItems = (Array.isArray(sharedLists.data) ? sharedLists.data : [])
+          .filter((item: any) => !ownedIds.has(item?._id))
+          .map((item: any) => ({ ...item, isOwnedByCurrentUser: false }));
+
+        this.listItems = [...ownedItems, ...sharedItems].sort((a, b) =>
+          new Date(b?.createdAt || 0).getTime() - new Date(a?.createdAt || 0).getTime()
+        );
+        this.listItemsCount = this.listItems.length;
+        if (showSpinner) this.spinner.hide();
       },
       error: (err) => {
         if (showSpinner) this.spinner.hide();
-        // this.toastr.error(err?.message);
-        this.toastr.error(err?.error?.message || 'Something went wrong.', err?.statusText);
+        this.toastr.error(err?.error?.message || 'Unable to load private checklists.', err?.statusText);
       }
     });
   }
@@ -113,6 +138,84 @@ export class PrivateListsComponent implements OnInit, OnDestroy {
   closeModal(): void {
     this.deleteDetails = null;
     $('#staticBackdrop').modal('hide');
+  }
+
+  openShareModal(item: any): void {
+    this.shareDetails = item;
+    this.selectedUserIds = (Array.isArray(item?.sharedWith) ? item.sharedWith : [])
+      .map((user: any) => this.getUserId(user))
+      .filter((userId: string | null): userId is string => !!userId);
+    this.users = [];
+    this.isLoadingUsers = true;
+    this.shareUsersError = null;
+    $('#shareChecklistModal').modal('show');
+
+    this.listService.getUserList().subscribe({
+      next: (res: any) => {
+        this.isLoadingUsers = false;
+        if (res?.success && Array.isArray(res.data)) {
+          this.users = res.data.filter((user: any) =>
+            user?.isVerified !== false && this.getUserId(user) !== this.currentUserId
+          );
+        } else {
+          const errorMessage = res?.message || 'Unable to load users.';
+          this.shareUsersError = errorMessage;
+          this.toastr.error(errorMessage);
+        }
+      },
+      error: (err: any) => {
+        this.isLoadingUsers = false;
+        const errorMessage = err?.error?.message || 'Unable to load users.';
+        this.shareUsersError = errorMessage;
+        this.toastr.error(errorMessage);
+      }
+    });
+  }
+
+  getUserId(user: any): string | null {
+    const userId = typeof user === 'string' ? user : user?._id || user?.id;
+    return userId ? userId.toString() : null;
+  }
+
+  toggleShareRecipient(userId: string | null, checked: boolean): void {
+    if (!userId) return;
+    this.selectedUserIds = checked
+      ? [...new Set([...this.selectedUserIds, userId])]
+      : this.selectedUserIds.filter((selectedId) => selectedId !== userId);
+  }
+
+  onRecipientChange(event: Event, user: any): void {
+    this.toggleShareRecipient(this.getUserId(user), (event.target as HTMLInputElement).checked);
+  }
+
+  saveSharing(): void {
+    const checklistId = this.shareDetails?._id;
+    if (!checklistId || this.isSavingShare) return;
+
+    this.isSavingShare = true;
+    this.listService.sharePrivateChecklist(checklistId, this.selectedUserIds).subscribe({
+      next: (res: any) => {
+        this.isSavingShare = false;
+        if (res?.success) {
+          this.closeShareModal();
+          this.toastr.success(res?.message || 'Checklist sharing updated successfully');
+          this.getLists(false);
+        } else {
+          this.toastr.error(res?.message || 'Unable to update checklist sharing.');
+        }
+      },
+      error: (err: any) => {
+        this.isSavingShare = false;
+        this.toastr.error(err?.error?.message || 'Unable to update checklist sharing.');
+      }
+    });
+  }
+
+  closeShareModal(): void {
+    this.shareDetails = null;
+    this.selectedUserIds = [];
+    this.shareUsersError = null;
+    $('#shareChecklistModal').modal('hide');
   }
 
   ngOnDestroy(): void {
