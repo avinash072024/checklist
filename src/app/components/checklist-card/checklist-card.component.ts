@@ -22,9 +22,9 @@ export class ChecklistCardComponent {
   /**
    * Card colour variant.
    * 'primary' (default) → blue  (lists / my-lists / other-lists)
-   * 'danger'            → red (private-lists)
+   * 'warning'           → yellow (private-lists)
    */
-  @Input() variant: 'primary' | 'danger' = 'primary';
+  @Input() variant: 'primary' | 'warning' = 'primary';
 
   /**
    * Icon shown in the card header icon-box.
@@ -65,31 +65,31 @@ export class ChecklistCardComponent {
   toastr = inject(ToastrService);
 
   get activeCardClass(): string {
-    return this.variant === 'danger' ? 'danger-card' : '';
+    return this.variant === 'warning' ? 'warning-card' : '';
   }
 
   get iconBoxClass(): string {
     if (this.item?.isFreeze) return 'bg-danger-subtle text-danger';
-    return this.variant === 'danger'
-      ? 'bg-danger-subtle text-danger'
+    return this.variant === 'warning'
+      ? 'bg-warning-subtle text-warning'
       : 'bg-primary-subtle text-primary';
   }
 
   get badgeClass(): string {
     if (this.item?.isFreeze) return 'bg-danger-subtle text-danger';
-    return this.variant === 'danger'
-      ? 'bg-danger-subtle text-danger'
+    return this.variant === 'warning'
+      ? 'bg-warning-subtle text-warning'
       : 'bg-success-subtle text-success';
   }
 
   get progressBarClass(): string {
     if (this.item?.isFreeze) return 'bg-danger';
-    return this.variant === 'danger' ? 'bg-danger' : 'bg-primary';
+    return this.variant === 'warning' ? 'bg-warning' : 'bg-primary';
   }
 
   get viewBtnClass(): string {
-    if (this.variant === 'danger') {
-      return this.item?.isPrivate ? 'btn-danger text-white' : 'btn-outline-primary';
+    if (this.variant === 'warning') {
+      return this.item?.isPrivate ? 'btn-warning text-dark' : 'btn-outline-primary';
     }
     return 'btn-primary';
   }
