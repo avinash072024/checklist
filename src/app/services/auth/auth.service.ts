@@ -16,7 +16,7 @@ import {
   DeleteAccountPayload
 } from '../../models/auth.model';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { SessionService } from '../session/session.service';
 
 @Injectable({
