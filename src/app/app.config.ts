@@ -1,10 +1,11 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
+import { tokenInterceptor } from './interceptors/token/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +16,10 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top' // Force scroll to top on every navigation
       })
     ),
-    provideHttpClient(),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([tokenInterceptor])
+    ),
     provideAnimations(),
     provideToastr({
       timeOut: 5000,

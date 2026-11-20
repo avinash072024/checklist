@@ -115,12 +115,12 @@ export class SessionService {
     this.currentUserSubject.next(null);
   }
 
-  getAuthHeaders() {
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.getCookie(Constants.token) || ''}`
-      })
-    };
-  }
+  // getAuthHeaders() {
+  //   return {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${this.getCookie(Constants.token) || ''}`
+  //     })
+  //   };
+  // }
 
 }

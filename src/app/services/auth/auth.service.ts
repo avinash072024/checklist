@@ -82,8 +82,7 @@ export class AuthService {
   sendChangePasswordOTP(): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/auth/send-change-password-otp`,
-      {},
-      this.sessionService.getAuthHeaders()
+      {}
     );
   }
 
@@ -93,8 +92,7 @@ export class AuthService {
   changePassword(payload: ChangePasswordPayload): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
       `${environment.apiUrl}/auth/change-password`,
-      payload,
-      this.sessionService.getAuthHeaders()
+      payload
     );
   }
 
@@ -103,8 +101,7 @@ export class AuthService {
    */
   getProfile(): Observable<ProfileResponse> {
     return this.http.get<ProfileResponse>(
-      `${environment.apiUrl}/auth/profile`,
-      this.sessionService.getAuthHeaders()
+      `${environment.apiUrl}/auth/profile`
     );
   }
 
@@ -115,8 +112,7 @@ export class AuthService {
     return this.http.delete<AuthResponse>(
       `${environment.apiUrl}/auth/profile`,
       {
-        body: payload,
-        ...this.sessionService.getAuthHeaders()
+        body: payload
       }
     );
   }
@@ -127,8 +123,7 @@ export class AuthService {
   updateProfile(payload: UpdateProfilePayload): Observable<ProfileResponse> {
     return this.http.put<ProfileResponse>(
       `${environment.apiUrl}/auth/profile`,
-      payload,
-      this.sessionService.getAuthHeaders()
+      payload
     );
   }
 }
