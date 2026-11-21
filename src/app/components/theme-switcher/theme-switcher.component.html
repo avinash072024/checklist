@@ -2,14 +2,9 @@
     [title]="currentTheme === 'dark' ? 'Switch to light' : 'Switch to dark'"
     [attr.aria-label]="currentTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
     (click)="toggleTheme()">
-    <!-- @if(currentTheme === 'light'){
+    @if(currentTheme === 'light'){
         <i class="bi bi-moon-stars-fill position-relative top-2px"></i>
     } @else {
         <i class="bi bi-sun-fill text-warning position-relative top-2px"></i>
-    } -->
-    @if(currentTheme === 'light'){
-    <i class="bi bi-moon-stars-fill"></i>
-    } @else {
-    <i class="bi bi-sun-fill text-warning"></i>
     }
 </button>
