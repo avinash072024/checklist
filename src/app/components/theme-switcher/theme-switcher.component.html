@@ -2,13 +2,14 @@
     [title]="currentTheme === 'dark' ? 'Switch to light' : 'Switch to dark'"
     [attr.aria-label]="currentTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
     (click)="toggleTheme()">
-    @if(currentTheme === 'light'){
+    <!-- @if(currentTheme === 'light'){
         <i class="bi bi-moon-stars-fill position-relative top-2px"></i>
     } @else {
         <i class="bi bi-sun-fill text-warning position-relative top-2px"></i>
+    } -->
+    @if(currentTheme === 'light'){
+    <i class="bi bi-moon-stars-fill"></i>
+    } @else {
+    <i class="bi bi-sun-fill text-warning"></i>
     }
 </button>
-
-<!-- <button type="button" class="btn btn-primary btn-sm d-flex align-items-center gap-1 border border-white rounded-pill px-3" [title]="currentTheme === 'dark' ? 'Light' : 'Dark'" (click)="toggleTheme();">
-    <i class="bi" [ngClass]="currentTheme === 'light' ? 'bi-moon-stars-fill' : 'bi-sun-fill'"></i> <span class="position-relative">{{currentTheme === 'dark' ? 'Light': 'Dark'}}</span>
-</button> -->
