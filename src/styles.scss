@@ -109,6 +109,46 @@ body {
     top: 3px !important;
 }
 
+.navbar .navbar-icon-button {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.14);
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.3);
+        background-color: rgba(255, 255, 255, 0.24);
+    }
+
+    &:focus-visible {
+        outline: 0;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+    }
+
+    &:active {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar .navbar-icon-button {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+}
+
 
 /* ==========================================================================
    Modern ngx-toastr Customization

@@ -21,7 +21,7 @@ interface NavLinks {
 })
 export class NavbarComponent {
   appName: string = Constants.appName;
-  navbarCollapsed: boolean = false;
+  navbarExpanded: boolean = false;
 
   sessionService = inject(SessionService);
   toastr = inject(ToastrService);
@@ -35,7 +35,7 @@ export class NavbarComponent {
   constructor(private router: Router) { }
 
   collapseNavbar(): void {
-    this.navbarCollapsed = !this.navbarCollapsed;
+    this.navbarExpanded = !this.navbarExpanded;
   }
 
   logout(): void {
